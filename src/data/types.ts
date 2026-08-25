@@ -1,5 +1,13 @@
 export type TenantStatus = "active" | "provisional" | "suspended";
-export type Credential = "BSc" | "MSc" | "PGD" | "Professional Certificate";
+export type Credential =
+  | "BSc"
+  | "BEng"
+  | "LLB"
+  | "MSc"
+  | "MBA"
+  | "MPH"
+  | "PGD"
+  | "Professional Certificate";
 export type StudyMode = "Part-time" | "Full-time";
 export type DeliveryMode = "Fully online" | "Online + OEC exams";
 
@@ -8,14 +16,19 @@ export type Institution = {
   slug: string;
   name: string;
   shortName: string;
+  city: string;
   country: string;
   countryCode: string;
+  region: string;
+  founded: number;
   accreditationBody: string;
   accreditationStatus: string;
   tenantStatus: TenantStatus;
   about: string;
   admissionsPortalUrl: string;
-  brandAccent?: string;
+  accent: string;
+  logo: string;
+  campusImage: string;
 };
 
 export type Programme = {
@@ -30,11 +43,23 @@ export type Programme = {
   studyMode: StudyMode;
   deliveryMode: DeliveryMode;
   language: string;
+  nextIntake: string;
+  tuitionFrom: number;
+  tuitionCurrency: string;
+  tuitionPeriod: string;
   tuitionNote: string;
   entryRequirements: string[];
   modules: string[];
   assessmentNote: string;
   requiresOecExam: boolean;
+  image: string;
+};
+
+export type Discipline = {
+  name: string;
+  slug: string;
+  icon: string;
+  image: string;
 };
 
 export type Center = {
@@ -43,6 +68,8 @@ export type Center = {
   city: string;
   country: string;
   countryCode: string;
+  region: string;
   facilities: string[];
+  seats: number;
   status: string;
 };

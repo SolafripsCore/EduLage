@@ -1,14 +1,19 @@
-export const disciplines = [
-  { name: "Business & Management", count: 4, icon: "BriefcaseBusiness" },
-  { name: "Computer Science & IT", count: 4, icon: "Monitor" },
-  { name: "Engineering", count: 2, icon: "Cog" },
-  { name: "Health & Medical Sciences", count: 2, icon: "HeartPulse" },
-  { name: "Education", count: 2, icon: "GraduationCap" },
-  { name: "Law", count: 2, icon: "Scale" },
-  { name: "Agriculture & Food Security", count: 2, icon: "Sprout" },
-  { name: "Social Sciences", count: 2, icon: "Users" },
-  { name: "Natural Sciences", count: 1, icon: "Atom" },
-  { name: "Arts & Humanities", count: 1, icon: "Palette" },
-  { name: "Public Administration", count: 1, icon: "Landmark" },
-  { name: "Data & AI", count: 1, icon: "BrainCircuit" },
-] as const;
+import type { Discipline } from "./types";
+
+export const disciplines: Discipline[] = [
+  { name: "Business & Management", slug: "business-management", icon: "BriefcaseBusiness", image: "/media/discipline-business.jpg" },
+  { name: "Computer Science & IT", slug: "computer-science-it", icon: "Monitor", image: "/media/discipline-computing.jpg" },
+  { name: "Data & AI", slug: "data-ai", icon: "BrainCircuit", image: "/media/discipline-data.jpg" },
+  { name: "Engineering", slug: "engineering", icon: "Cog", image: "/media/discipline-engineering.jpg" },
+  { name: "Health & Medical Sciences", slug: "health-medical-sciences", icon: "HeartPulse", image: "/media/discipline-health.jpg" },
+  { name: "Education", slug: "education", icon: "GraduationCap", image: "/media/discipline-education.jpg" },
+  { name: "Law", slug: "law", icon: "Scale", image: "/media/discipline-law.jpg" },
+  { name: "Public Administration", slug: "public-administration", icon: "Landmark", image: "/media/discipline-publicadmin.jpg" },
+  { name: "Social Sciences", slug: "social-sciences", icon: "Users", image: "/media/discipline-social.jpg" },
+  { name: "Natural Sciences", slug: "natural-sciences", icon: "Atom", image: "/media/discipline-sciences.jpg" },
+  { name: "Environment & Sustainability", slug: "environment-sustainability", icon: "Leaf", image: "/media/discipline-environment.jpg" },
+  { name: "Agriculture & Food Security", slug: "agriculture-food-security", icon: "Sprout", image: "/media/discipline-agriculture.jpg" },
+  { name: "Arts & Humanities", slug: "arts-humanities", icon: "Palette", image: "/media/discipline-arts.jpg" },
+];
+
+export const disciplineByName = new Map(disciplines.map((item) => [item.name, item]));
