@@ -118,7 +118,7 @@ export const institutions: Institution[] = [
       "A comprehensive research university and a hub for computing, business and health sciences in South East Asia.",
     admissionsPortalUrl: "https://admissions.example.edu/nus",
     accent: "#003D7C",
-    logo: "/institutions/nus.svg",
+    logo: "/institutions/nus-logo.png",
     campusImage: "/media/campus-east-asia.jpg",
   },
   {
@@ -138,7 +138,7 @@ export const institutions: Institution[] = [
       "A research university with major strengths in engineering, architecture, economics and data science.",
     admissionsPortalUrl: "https://admissions.example.edu/tsinghua",
     accent: "#5D1268",
-    logo: "/institutions/tsinghua.svg",
+    logo: "/institutions/tsinghua-logo.png",
     campusImage: "/media/campus-tsinghua.jpg",
   },
   {
@@ -178,7 +178,7 @@ export const institutions: Institution[] = [
       "An institute of national importance for engineering and technology, with large-scale online and continuing education provision.",
     admissionsPortalUrl: "https://admissions.example.edu/iitb",
     accent: "#00417D",
-    logo: "/institutions/iitb.svg",
+    logo: "/institutions/iitb-logo.png",
     campusImage: "/media/campus-south-asia.jpg",
   },
   {
@@ -198,7 +198,7 @@ export const institutions: Institution[] = [
       "A research-intensive university with a broad professional and graduate portfolio and a long record of distance provision.",
     admissionsPortalUrl: "https://admissions.example.edu/toronto",
     accent: "#002A5C",
-    logo: "/institutions/toronto.svg",
+    logo: "/institutions/toronto-logo.png",
     campusImage: "/media/campus-toronto.jpg",
   },
   {
@@ -218,7 +218,7 @@ export const institutions: Institution[] = [
       "Australia's leading research university, offering graduate professional degrees across education, health and management.",
     admissionsPortalUrl: "https://admissions.example.edu/melbourne",
     accent: "#0B2A4A",
-    logo: "/institutions/melbourne.svg",
+    logo: "/institutions/melbourne-logo.png",
     campusImage: "/media/campus-oceania.jpg",
   },
   {
@@ -238,7 +238,7 @@ export const institutions: Institution[] = [
       "Africa's most research-productive university, with a strong record in public health, commerce and data science.",
     admissionsPortalUrl: "https://admissions.example.edu/uct",
     accent: "#00447C",
-    logo: "/institutions/uct.svg",
+    logo: "/institutions/uct-logo.png",
     campusImage: "/media/campus-africa-south.jpg",
   },
   {
@@ -258,7 +258,7 @@ export const institutions: Institution[] = [
       "Nigeria's first university, with faculties spanning medicine, agriculture, the social sciences and education.",
     admissionsPortalUrl: "https://admissions.example.edu/ibadan",
     accent: "#0B6E4F",
-    logo: "/institutions/ibadan.svg",
+    logo: "/institutions/ibadan-logo.png",
     campusImage: "/media/campus-africa-west.jpg",
   },
   {
@@ -278,7 +278,7 @@ export const institutions: Institution[] = [
       "Kenya's largest university, delivering professional and postgraduate programmes across East Africa.",
     admissionsPortalUrl: "https://admissions.example.edu/nairobi",
     accent: "#0E4B3A",
-    logo: "/institutions/nairobi.svg",
+    logo: "/institutions/nairobi-logo.png",
     campusImage: "/media/campus-africa-east.jpg",
   },
   {
@@ -318,7 +318,7 @@ export const institutions: Institution[] = [
       "A graduate research university focused on water, energy, environment and computational science.",
     admissionsPortalUrl: "https://admissions.example.edu/kaust",
     accent: "#0E5C6B",
-    logo: "/institutions/kaust.svg",
+    logo: "/institutions/kaust-logo.png",
     campusImage: "/media/campus-middle-east.jpg",
   },
 ];
