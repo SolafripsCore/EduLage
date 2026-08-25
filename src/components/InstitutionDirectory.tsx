@@ -29,8 +29,8 @@ export function InstitutionDirectory() {
             </div>
             <div className="flex flex-1 flex-col justify-between p-5">
               <span className="flex items-center gap-3">
-                <span className="flex size-12 items-center justify-center overflow-hidden rounded-md border border-line bg-white">
-                  <Image src={institution.logo} alt={`${institution.shortName} mark`} width={40} height={40} className="size-9 object-contain" />
+                <span className="flex size-12 items-center justify-center overflow-hidden rounded-md border border-line bg-white p-1">
+                  <Image src={institution.logo} alt={`${institution.shortName} mark`} width={40} height={40} className="size-full object-contain" />
                 </span>
                 <span className="text-xs font-semibold text-teal-600">{institution.tenantStatus === "active" ? "Active tenant" : "Provisional tenant"}</span>
               </span>

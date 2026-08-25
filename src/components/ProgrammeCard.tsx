@@ -19,7 +19,7 @@ export function ProgrammeCard({ programme, priority = false }: { programme: Prog
       <Image src={programme.image} alt="" fill priority={priority} sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw" className="object-cover" />
       <div className="image-scrim absolute inset-0" />
       <div className="absolute right-3 top-3"><Pill image>{programme.credential}</Pill></div>
-      <span className="absolute -bottom-5 left-4 flex size-11 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-white shadow-sm"><Image src={institution.logo} alt="" width={36} height={36} className="size-full object-contain" /></span>
+      <span className="absolute -bottom-5 left-4 flex size-11 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-white p-1 shadow-sm"><Image src={institution.logo} alt="" width={36} height={36} className="size-full object-contain" /></span>
     </div>
     <div className="flex flex-1 flex-col p-5 pt-8">
       <p className="text-xs font-semibold text-teal-600">{institution.name}</p>

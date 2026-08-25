@@ -43,7 +43,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
       <Container>
         <Link href="/programmes" className="text-sm text-white/75 hover:text-white">← All programmes</Link>
         <div className="mt-9 flex items-start gap-4">
-          <span className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-white">
+            <span className="flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-white p-2">
             <Image src={institution.logo} alt={`${institution.shortName} mark`} width={44} height={44} className="size-full object-contain" />
           </span>
           <div>

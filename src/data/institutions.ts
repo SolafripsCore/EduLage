@@ -18,7 +18,7 @@ export const institutions: Institution[] = [
       "A research university built around science, engineering and enterprise, with a long tradition of open courseware and public knowledge.",
     admissionsPortalUrl: "https://admissions.example.edu/mit",
     accent: "#8A1B2E",
-    logo: "/institutions/mit.svg",
+    logo: "/institutions/mit-logo.png",
     campusImage: "/media/campus-mit.jpg",
   },
   {
@@ -38,7 +38,7 @@ export const institutions: Institution[] = [
       "One of the oldest universities in the world, combining tutorial teaching with graduate research across the humanities, sciences and medicine.",
     admissionsPortalUrl: "https://admissions.example.edu/oxford",
     accent: "#002147",
-    logo: "/institutions/oxford.svg",
+    logo: "/institutions/oxford-logo.png",
     campusImage: "/media/campus-britain.jpg",
   },
   {
@@ -58,7 +58,7 @@ export const institutions: Institution[] = [
       "A federal institute of technology known for engineering, computing and the natural sciences, with strong industry and public research links.",
     admissionsPortalUrl: "https://admissions.example.edu/ethz",
     accent: "#1F407A",
-    logo: "/institutions/ethz.svg",
+    logo: "/institutions/ethz-logo.png",
     campusImage: "/media/campus-europe.jpg",
   },
   {
@@ -78,7 +78,7 @@ export const institutions: Institution[] = [
       "A technical university focused on engineering, design and applied science, and an early adopter of large-scale open online education.",
     admissionsPortalUrl: "https://admissions.example.edu/delft",
     accent: "#0C6E8F",
-    logo: "/institutions/delft.svg",
+    logo: "/institutions/delft-logo.png",
     campusImage: "/media/campus-delft.jpg",
   },
   {
@@ -98,7 +98,7 @@ export const institutions: Institution[] = [
       "A social sciences university specialising in government, international affairs, economics and public policy.",
     admissionsPortalUrl: "https://admissions.example.edu/sciencespo",
     accent: "#1B3A6B",
-    logo: "/institutions/sciencespo.svg",
+    logo: "/institutions/sciencespo-logo.png",
     campusImage: "/media/campus-france.jpg",
   },
   {
@@ -158,7 +158,7 @@ export const institutions: Institution[] = [
       "Japan's oldest national university, with research programmes spanning science, engineering, medicine and public policy.",
     admissionsPortalUrl: "https://admissions.example.edu/tokyo",
     accent: "#1E3A5F",
-    logo: "/institutions/tokyo.svg",
+    logo: "/institutions/tokyo-logo.png",
     campusImage: "/media/campus-tokyo.jpg",
   },
   {
@@ -298,7 +298,7 @@ export const institutions: Institution[] = [
       "The largest public university in Brazil, with research strength in agriculture, health and environmental science.",
     admissionsPortalUrl: "https://admissions.example.edu/usp",
     accent: "#1A5632",
-    logo: "/institutions/usp.svg",
+    logo: "/institutions/usp-logo.png",
     campusImage: "/media/campus-latin-america.jpg",
   },
   {
