@@ -1,4 +1,5 @@
 import { centers } from "@/data/centers";
+import { disciplines } from "@/data/disciplines";
 import { institutions } from "@/data/institutions";
 import { programmes } from "@/data/programmes";
 import type { Programme } from "@/data/types";
@@ -26,4 +27,30 @@ export function getInstitutions(query?: string) {
 }
 export function getInstitutionBySlug(slug: string) { return institutions.find((item) => item.slug === slug); }
 export function getCenters() { return centers; }
+
+export function getDisciplineCounts() {
+  return disciplines.map((discipline) => ({
+    ...discipline,
+    count: programmes.filter((programme) => programme.discipline === discipline.name).length,
+  }));
+}
+
+export function getMarketplaceStats() {
+  return {
+    institutions: institutions.length,
+    programmes: programmes.length,
+    countries: new Set(institutions.map((institution) => institution.country)).size,
+    centers: centers.length,
+  };
+}
+
+export function getFeaturedProgrammes(limit: number) {
+  const seen = new Set<string>();
+  const spread = programmes.filter((programme) => {
+    if (seen.has(programme.institutionId)) return false;
+    seen.add(programme.institutionId);
+    return true;
+  });
+  return [...spread, ...programmes.filter((programme) => !spread.includes(programme))].slice(0, limit);
+}
 export function getInstitutionProgrammes(id: string) { return programmes.filter((item) => item.institutionId === id); }
