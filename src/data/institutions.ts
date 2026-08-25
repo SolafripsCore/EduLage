@@ -19,7 +19,7 @@ export const institutions: Institution[] = [
     admissionsPortalUrl: "https://admissions.example.edu/mit",
     accent: "#8A1B2E",
     logo: "/institutions/mit.svg",
-    campusImage: "/media/campus-north-america.jpg",
+    campusImage: "/media/campus-mit.jpg",
   },
   {
     id: "inst-oxford",
@@ -79,7 +79,7 @@ export const institutions: Institution[] = [
     admissionsPortalUrl: "https://admissions.example.edu/delft",
     accent: "#0C6E8F",
     logo: "/institutions/delft.svg",
-    campusImage: "/media/campus-europe.jpg",
+    campusImage: "/media/campus-delft.jpg",
   },
   {
     id: "inst-sciencespo",
@@ -139,7 +139,7 @@ export const institutions: Institution[] = [
     admissionsPortalUrl: "https://admissions.example.edu/tsinghua",
     accent: "#5D1268",
     logo: "/institutions/tsinghua.svg",
-    campusImage: "/media/campus-east-asia.jpg",
+    campusImage: "/media/campus-tsinghua.jpg",
   },
   {
     id: "inst-tokyo",
@@ -159,7 +159,7 @@ export const institutions: Institution[] = [
     admissionsPortalUrl: "https://admissions.example.edu/tokyo",
     accent: "#1E3A5F",
     logo: "/institutions/tokyo.svg",
-    campusImage: "/media/campus-east-asia.jpg",
+    campusImage: "/media/campus-tokyo.jpg",
   },
   {
     id: "inst-iitb",
@@ -199,7 +199,7 @@ export const institutions: Institution[] = [
     admissionsPortalUrl: "https://admissions.example.edu/toronto",
     accent: "#002A5C",
     logo: "/institutions/toronto.svg",
-    campusImage: "/media/campus-north-america.jpg",
+    campusImage: "/media/campus-toronto.jpg",
   },
   {
     id: "inst-melbourne",
