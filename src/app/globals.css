@@ -160,13 +160,13 @@ h1, h2, h3, p {
 }
 
 .logo-muted {
-  filter: saturate(0.35) opacity(0.78);
-  transition: filter 220ms ease-out;
+  opacity: 0.9;
+  transition: opacity 220ms ease-out;
 }
 
 .group:hover .logo-muted,
 .logo-muted:hover {
-  filter: saturate(1) opacity(1);
+  opacity: 1;
 }
 
 .glass-chip {
@@ -177,7 +177,7 @@ h1, h2, h3, p {
 }
 
 .step-rail {
-  background: linear-gradient(to bottom, var(--teal-500), var(--teal-400) 45%, transparent);
+  background: linear-gradient(to bottom, var(--teal-500), var(--teal-400) 45%, color-mix(in srgb, var(--teal-400) 20%, transparent));
 }
 
 .line-clamp-2 {
