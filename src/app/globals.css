@@ -114,6 +114,13 @@ h1, h2, h3, p {
   background: linear-gradient(to top, color-mix(in srgb, var(--navy-900) 94%, transparent), color-mix(in srgb, var(--navy-900) 12%, transparent) 70%);
 }
 
+@media (min-width: 1024px) {
+  .discipline-tile:last-child {
+    grid-column: span 3;
+    aspect-ratio: 3 / 1;
+  }
+}
+
 .card-hover {
   transition: border-color 220ms ease-out, box-shadow 220ms ease-out, transform 220ms ease-out;
 }
