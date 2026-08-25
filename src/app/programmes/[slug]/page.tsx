@@ -37,11 +37,11 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
 
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Course", name: programme.title, provider: { "@type": "CollegeOrUniversity", name: institution.name } }) }} />
-    <div className="relative isolate overflow-hidden bg-navy-900 py-14 text-white">
-      <Image src={programme.image} alt="" fill sizes="100vw" className="absolute inset-0 -z-20 object-cover" />
+    <div className="group relative isolate overflow-hidden bg-navy-900 py-14 text-white">
+      <Image src={programme.image} alt="" fill sizes="100vw" className="image-zoom absolute inset-0 -z-20 object-cover" />
       <div className="hero-media-overlay absolute inset-0 -z-10" />
       <Container>
-        <Link href="/programmes" className="text-sm text-white/75 hover:text-white">← All programmes</Link>
+        <Link href="/programmes" className="text-sm text-white/75 hover:text-white focus-visible:ring-2 focus-visible:ring-teal-400">← All programmes</Link>
         <div className="mt-9 flex items-start gap-4">
             <span className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border-4 border-white bg-white p-2">
             <Image src={institution.logo} alt={`${institution.shortName} mark`} width={68} height={44} className="size-full object-contain" />
@@ -74,7 +74,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
             <p className="mt-4 leading-7 text-ink-600">{programme.assessmentNote} {programme.requiresOecExam ? "Some institution-required examinations take place at an accredited Open Education Center." : ""}</p>
           </section>
         </div>
-        <aside className="h-fit rounded-lg border border-line p-6 lg:sticky lg:top-28">
+        <aside className="card-hover h-fit rounded-xl border border-line p-6 lg:sticky lg:top-28">
           <div className="grid grid-cols-3 gap-3 border-b border-line pb-5 text-center">
             <div><Clock3 size={18} className="mx-auto text-teal-600" /><p className="mt-2 text-xs text-ink-400">Duration</p><p className="mt-1 text-sm font-semibold text-navy-800">{programme.durationMonths} months</p></div>
             <div><Monitor size={18} className="mx-auto text-teal-600" /><p className="mt-2 text-xs text-ink-400">Study mode</p><p className="mt-1 text-sm font-semibold text-navy-800">{programme.studyMode}</p></div>
@@ -86,7 +86,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
             <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Next intake</span><span className="font-semibold text-navy-800">{programme.nextIntake}</span></div>
           </div>
           <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
-          <a href={institution.admissionsPortalUrl} target="_blank" rel="noreferrer" className="mt-6 flex items-center justify-center gap-2 rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700">Apply on {institution.shortName}&apos;s portal <ArrowUpRight size={16} /></a>
+          <a href={institution.admissionsPortalUrl} target="_blank" rel="noreferrer" className="mt-6 flex items-center justify-center gap-2 rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">Apply on {institution.shortName}&apos;s portal <ArrowUpRight size={16} /></a>
           <p className="mt-4 text-xs leading-5 text-ink-400">Admission decisions are made solely by {institution.name}. Edulage does not process admissions.</p>
         </aside>
       </div>

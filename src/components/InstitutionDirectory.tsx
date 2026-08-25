@@ -15,7 +15,7 @@ export function InstitutionDirectory() {
 
   return <>
     <label htmlFor="institution-query" className="sr-only">Search institutions</label>
-    <input id="institution-query" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by institution or country" className="mb-10 w-full rounded-md border border-line px-4 py-3 text-sm md:max-w-md" />
+    <input id="institution-query" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by institution or country" className="mb-10 min-h-11 w-full rounded-md border border-line px-4 py-3 text-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 md:max-w-md" />
     <div className="space-y-12">
       {Object.entries(grouped).map(([region, regionItems]) => <section key={region} aria-labelledby={`region-${region}`}>
         <div className="mb-5 flex items-baseline justify-between border-b border-line pb-3">
@@ -23,14 +23,14 @@ export function InstitutionDirectory() {
           <span className="text-xs text-ink-400">{regionItems.length} {regionItems.length === 1 ? "institution" : "institutions"}</span>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {regionItems.map((institution) => <Link key={institution.id} href={`/institutions/${institution.slug}`} className="flex min-h-48 flex-col justify-between overflow-hidden rounded-lg border border-line bg-white hover:border-teal-500 hover:shadow-sm">
+          {regionItems.map((institution) => <Link key={institution.id} href={`/institutions/${institution.slug}`} className="group card-hover flex min-h-48 flex-col justify-between overflow-hidden rounded-xl border border-line bg-white focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">
             <div className="relative h-32 w-full">
-              <Image src={institution.campusImage} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw" className="object-cover" />
+              <Image src={institution.campusImage} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw" className="image-zoom object-cover" />
             </div>
             <div className="flex flex-1 flex-col justify-between p-5">
               <span className="flex items-center gap-3">
                 <span className="flex h-12 w-16 items-center justify-center overflow-hidden rounded-md border border-line bg-white p-1">
-                  <Image src={institution.logo} alt={`${institution.shortName} mark`} width={40} height={40} className="size-full object-contain" />
+                  <Image src={institution.logo} alt={`${institution.shortName} mark`} width={40} height={40} className="logo-muted size-full object-contain" />
                 </span>
                 <span className="text-xs font-semibold text-teal-600">{institution.tenantStatus === "active" ? "Active tenant" : "Provisional tenant"}</span>
               </span>

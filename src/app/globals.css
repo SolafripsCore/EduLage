@@ -110,6 +110,59 @@ h1, h2, h3, p {
   background: linear-gradient(to top, var(--scrim), transparent 72%);
 }
 
+.discipline-scrim {
+  background: linear-gradient(to top, color-mix(in srgb, var(--navy-900) 94%, transparent), color-mix(in srgb, var(--navy-900) 12%, transparent) 70%);
+}
+
+.card-hover {
+  transition: border-color 220ms ease-out, box-shadow 220ms ease-out, transform 220ms ease-out;
+}
+
+.card-hover:hover {
+  border-color: var(--teal-500);
+  box-shadow: 0 12px 24px color-mix(in srgb, var(--navy-900) 12%, transparent);
+  transform: translateY(-2px);
+}
+
+.image-zoom {
+  transition: transform 500ms ease-out;
+}
+
+.group:hover .image-zoom {
+  transform: scale(1.05);
+}
+
+.arrow-slide {
+  transition: color 220ms ease-out;
+}
+
+.arrow-slide > span {
+  display: inline-block;
+  transition: transform 220ms ease-out;
+}
+
+.group:hover .arrow-slide > span,
+.arrow-slide:hover > span {
+  transform: translateX(3px);
+}
+
+.logo-muted {
+  filter: saturate(0.35) opacity(0.78);
+  transition: filter 220ms ease-out;
+}
+
+.group:hover .logo-muted,
+.logo-muted:hover {
+  filter: saturate(1) opacity(1);
+}
+
+.glass-chip {
+  background: color-mix(in srgb, var(--white) 88%, var(--teal-400));
+  color: var(--navy-800);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--navy-900) 20%, transparent);
+  backdrop-filter: blur(8px);
+}
+
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -120,4 +173,8 @@ h1, h2, h3, p {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  .card-hover:hover,
+  .group:hover .image-zoom,
+  .group:hover .arrow-slide > span,
+  .arrow-slide:hover > span { transform: none; }
 }
