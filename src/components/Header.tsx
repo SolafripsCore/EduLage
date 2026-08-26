@@ -8,6 +8,9 @@ import { Button } from "./ui/Button";
 
 const mainLinks = [
   ["About", "/about"],
+];
+
+const catalogueLinks = [
   ["Programmes", "/programmes"],
   ["Institutions", "/institutions"],
 ];
@@ -74,6 +77,7 @@ export function Header() {
             <div className="mt-2 border-t border-line pt-2"><Link role="menuitem" href="/study-types" onClick={() => setStudyOpen(false)} className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-teal-600 hover:bg-teal-500/10 focus-visible:bg-teal-500/10 focus-visible:outline-none">Compare all study types <span aria-hidden>→</span></Link></div>
           </div>}
         </div>
+        {catalogueLinks.map(([label, href]) => <Link key={href} href={href} className="rounded-sm text-sm font-medium text-ink-600 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500">{label}</Link>)}
       </nav>
       <div className="hidden items-center gap-2 md:flex">
         <button type="button" aria-label="Search programmes" aria-expanded={searchOpen} aria-controls="header-search-panel" onClick={showSearch} className="rounded-md p-2 text-ink-600 hover:bg-surface hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"><Search size={19} /></button>
