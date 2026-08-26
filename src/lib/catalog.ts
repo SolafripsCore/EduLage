@@ -55,10 +55,47 @@ function spreadProgrammes(items: Programme[], limit = items.length) {
   return [...spread, ...items.filter((programme) => !spread.includes(programme))].slice(0, limit);
 }
 export function getFeaturedProgrammes(limit: number) { return spreadProgrammes(programmes, limit); }
+function spreadHomepageProgrammes(items: Programme[], limit: number, excludedIds = new Set<string>()) {
+  const candidates = items.filter((programme) => !excludedIds.has(programme.id));
+  const selected: Programme[] = [];
+  const seenInstitutions = new Set<string>();
+  const seenDisciplines = new Set<string>();
+  const seenImages = new Set<string>();
+  const add = (programme: Programme) => {
+    selected.push(programme);
+    seenInstitutions.add(programme.institutionId);
+    seenDisciplines.add(programme.discipline);
+    seenImages.add(programme.image);
+  };
+  candidates.forEach((programme) => {
+    if (selected.length >= limit) return;
+    if (!seenInstitutions.has(programme.institutionId) && !seenDisciplines.has(programme.discipline) && !seenImages.has(programme.image)) add(programme);
+  });
+  candidates.forEach((programme) => {
+    if (selected.length >= limit) return;
+    if (!selected.includes(programme) && !seenImages.has(programme.image)) add(programme);
+  });
+  return selected.slice(0, limit);
+}
 export function getTrendingProgrammes(limit: number) {
   const trending = programmes.filter((programme) => programme.trending);
-  if (trending.length >= limit) return spreadProgrammes(trending, limit);
-  return [...trending, ...spreadProgrammes(programmes.filter((programme) => !programme.trending), limit - trending.length)].slice(0, limit);
+  return spreadHomepageProgrammes([...trending, ...programmes.filter((programme) => !programme.trending)], limit);
 }
 export function getProgrammesByLevel(level: Programme["level"], limit?: number) { return spreadProgrammes(getProgrammes({ level }), limit); }
+export function getHomepageProgrammeSections() {
+  const trending = getTrendingProgrammes(6);
+  const used = new Set(trending.map((programme) => programme.id));
+  const degreePools = [["Undergraduate", "Postgraduate", "Doctoral"].map((level) => getProgrammes({ level: level as Programme["level"] }))];
+  const degreeCandidates: Programme[] = [];
+  const pools = degreePools[0];
+  for (let index = 0; index < Math.max(...pools.map((pool) => pool.length)); index++) {
+    pools.forEach((pool) => {
+      if (pool[index]) degreeCandidates.push(pool[index]);
+    });
+  }
+  const degree = spreadHomepageProgrammes(degreeCandidates, 6, used);
+  degree.forEach((programme) => used.add(programme.id));
+  const professional = spreadHomepageProgrammes(getProgrammes({ level: "Professional" }), 6, used);
+  return { trending, degree, professional };
+}
 export function getInstitutionProgrammes(id: string) { return programmes.filter((item) => item.institutionId === id); }
