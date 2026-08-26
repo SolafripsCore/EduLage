@@ -4,7 +4,7 @@ import { institutions } from "@/data/institutions";
 import { programmes } from "@/data/programmes";
 import type { Programme } from "@/data/types";
 
-export type ProgrammeFilters = Partial<Pick<Programme, "discipline" | "credential" | "deliveryMode" | "language" | "studyMode">> & { country?: string; query?: string };
+export type ProgrammeFilters = Partial<Pick<Programme, "discipline" | "credential" | "deliveryMode" | "language" | "studyMode" | "level">> & { country?: string; query?: string };
 
 export function getProgrammes(filters: ProgrammeFilters = {}) {
   return programmes.filter((programme) => {
@@ -15,6 +15,7 @@ export function getProgrammes(filters: ProgrammeFilters = {}) {
       && (!filters.deliveryMode || programme.deliveryMode === filters.deliveryMode)
       && (!filters.language || programme.language === filters.language)
       && (!filters.studyMode || programme.studyMode === filters.studyMode)
+      && (!filters.level || programme.level === filters.level)
       && (!filters.country || institution?.country === filters.country)
       && (!filters.query || haystack.includes(filters.query.toLowerCase()));
   });
@@ -44,13 +45,20 @@ export function getMarketplaceStats() {
   };
 }
 
-export function getFeaturedProgrammes(limit: number) {
+function spreadProgrammes(items: Programme[], limit = items.length) {
   const seen = new Set<string>();
-  const spread = programmes.filter((programme) => {
+  const spread = items.filter((programme) => {
     if (seen.has(programme.institutionId)) return false;
     seen.add(programme.institutionId);
     return true;
   });
-  return [...spread, ...programmes.filter((programme) => !spread.includes(programme))].slice(0, limit);
+  return [...spread, ...items.filter((programme) => !spread.includes(programme))].slice(0, limit);
 }
+export function getFeaturedProgrammes(limit: number) { return spreadProgrammes(programmes, limit); }
+export function getTrendingProgrammes(limit: number) {
+  const trending = programmes.filter((programme) => programme.trending);
+  if (trending.length >= limit) return spreadProgrammes(trending, limit);
+  return [...trending, ...spreadProgrammes(programmes.filter((programme) => !programme.trending), limit - trending.length)].slice(0, limit);
+}
+export function getProgrammesByLevel(level: Programme["level"], limit?: number) { return spreadProgrammes(getProgrammes({ level }), limit); }
 export function getInstitutionProgrammes(id: string) { return programmes.filter((item) => item.institutionId === id); }

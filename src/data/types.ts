@@ -6,8 +6,10 @@ export type Credential =
   | "MSc"
   | "MBA"
   | "MPH"
+  | "PhD"
   | "PGD"
   | "Professional Certificate";
+export type StudyLevel = "Undergraduate" | "Postgraduate" | "Doctoral" | "Professional";
 export type StudyMode = "Part-time" | "Full-time";
 export type DeliveryMode = "Fully online" | "Online + OEC exams";
 
@@ -38,7 +40,7 @@ export type Programme = {
   title: string;
   discipline: string;
   credential: Credential;
-  level: string;
+  level: StudyLevel;
   durationMonths: number;
   studyMode: StudyMode;
   deliveryMode: DeliveryMode;
@@ -53,6 +55,7 @@ export type Programme = {
   assessmentNote: string;
   requiresOecExam: boolean;
   image: string;
+  trending?: boolean;
 };
 
 export type Discipline = {
