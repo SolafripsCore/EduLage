@@ -85,16 +85,40 @@ export function getProgrammesByLevel(level: Programme["level"], limit?: number) 
 export function getHomepageProgrammeSections() {
   const trending = getTrendingProgrammes(6);
   const used = new Set(trending.map((programme) => programme.id));
-  const degreePools = [["Undergraduate", "Postgraduate", "Doctoral"].map((level) => getProgrammes({ level: level as Programme["level"] }))];
-  const degreeCandidates: Programme[] = [];
-  const pools = degreePools[0];
-  for (let index = 0; index < Math.max(...pools.map((pool) => pool.length)); index++) {
-    pools.forEach((pool) => {
-      if (pool[index]) degreeCandidates.push(pool[index]);
+  const degreePools = ["Undergraduate", "Postgraduate", "Doctoral"].map((level) =>
+    getProgrammes({ level: level as Programme["level"] }),
+  );
+  const degree: Programme[] = [];
+  const degreeImages = new Set<string>();
+  const degreeInstitutions = new Set<string>();
+  const degreeDisciplines = new Set<string>();
+  const addDegreeProgramme = (programme: Programme) => {
+    degree.push(programme);
+    degreeImages.add(programme.image);
+    degreeInstitutions.add(programme.institutionId);
+    degreeDisciplines.add(programme.discipline);
+    used.add(programme.id);
+  };
+  const selectDegreeFromPool = (pool: Programme[], limit: number) => {
+    const candidates = pool.filter((programme) => !used.has(programme.id));
+    const preferred = candidates.filter((programme) =>
+      !degreeImages.has(programme.image)
+      && !degreeInstitutions.has(programme.institutionId)
+      && !degreeDisciplines.has(programme.discipline),
+    );
+    const fallback = candidates.filter((programme) => !degreeImages.has(programme.image));
+
+    [...preferred, ...fallback].forEach((programme) => {
+      if (degree.length >= 6 || limit <= 0 || degree.includes(programme)) return;
+      addDegreeProgramme(programme);
+      limit -= 1;
     });
+  };
+
+  degreePools.forEach((pool) => selectDegreeFromPool(pool, 2));
+  if (degree.length < 6) {
+    degreePools.forEach((pool) => selectDegreeFromPool(pool, 6 - degree.length));
   }
-  const degree = spreadHomepageProgrammes(degreeCandidates, 6, used);
-  degree.forEach((programme) => used.add(programme.id));
   const professional = spreadHomepageProgrammes(getProgrammes({ level: "Professional" }), 6, used);
   return { trending, degree, professional };
 }
