@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Award, Building2, CheckCircle2, Globe2, GraduationCap, Landmark, Laptop2, MapPin, Network, Search, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { ArrowRight, Award, BadgeCheck, BookOpen, Building2, CalendarDays, CheckCircle2, Clock3, Globe2, GraduationCap, Landmark, Laptop2, MapPin, Network, Search, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Checklist } from "@/components/ui/Checklist";
@@ -18,6 +18,14 @@ const journey = [
   [Laptop2, "Participate", "Learn online, with the option of local support and facilities through an accredited OEC."],
   [Award, "Earn", "Complete the institution’s assessment and receive an institution-issued credential."],
 ] as const;
+
+const programmeTypes = ["Undergraduate", "Postgraduate", "Professional credentials", "Short courses"];
+
+const featuredProgrammes = [
+  { type: "Postgraduate degree", credential: "Master of Science", title: "Digital Transformation and Innovation", institution: "Illustrative accredited university", field: "Technology & Management", duration: "18–24 months", mode: "Online with optional OEC support", intake: "Institution-defined intake" },
+  { type: "Professional programme", credential: "Professional Certificate", title: "Sustainable Enterprise Leadership", institution: "Illustrative accredited business school", field: "Business & Sustainability", duration: "16 weeks", mode: "Fully online", intake: "Flexible institutional intake" },
+  { type: "Short course", credential: "Institution-issued certificate", title: "Applied Data Analytics for Decision-Making", institution: "Illustrative accredited institute", field: "Data & Digital Skills", duration: "8 weeks", mode: "Online", intake: "Multiple annual intakes" },
+];
 
 export default function Home() {
   return (
@@ -47,6 +55,48 @@ export default function Home() {
       <section className="border-b border-line bg-white py-9"><Container><div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center"><div><p className="text-sm font-bold text-navy-800">EduLage does not replace universities—it enables them.</p><p className="mt-1 text-sm leading-6 text-ink-600">Participating institutions retain admissions, curricula, teaching, assessment, results and certification.</p></div><Link href="/about" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">Understand the EduLage model <ArrowRight size={16}/></Link></div></Container></section>
 
       <section className="bg-surface py-20 md:py-28"><Container><div className="max-w-3xl"><p className="section-kicker">A village built for participation</p><h2 className="section-title">One ecosystem. Clear pathways for everyone.</h2><p className="section-lead">EduLage brings the essential actors in open and online tertiary education into a trusted, standards-based environment.</p></div><div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{audiences.map(({icon:Icon,title,text,href,action},index)=><Link key={title} href={href} className="audience-card group flex min-h-[300px] flex-col rounded-2xl border border-line bg-white p-6"><div className="flex items-center justify-between"><span className="grid size-12 place-items-center rounded-xl bg-teal-500/10 text-teal-600"><Icon size={24}/></span><span className="text-xs font-bold tabular-nums text-ink-400">0{index+1}</span></div><h3 className="mt-8 text-xl font-bold text-navy-800">{title}</h3><p className="mt-3 flex-1 text-sm leading-6 text-ink-600">{text}</p><span className="arrow-slide mt-7 inline-flex items-center gap-2 text-sm font-semibold text-navy-800">{action} <ArrowRight size={15}/></span></Link>)}</div></Container></section>
+
+      <section className="overflow-hidden bg-white py-20 md:py-28">
+        <Container>
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div className="max-w-3xl">
+              <p className="section-kicker">Academic programme marketplace</p>
+              <h2 className="section-title">Discover quality programmes from trusted tertiary institutions.</h2>
+              <p className="section-lead">Compare institution-approved degrees, postgraduate programmes, professional credentials and short courses through one structured global marketplace.</p>
+            </div>
+            <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">Explore the programme catalogue <ArrowRight size={16}/></Link>
+          </div>
+
+          <div className="mt-10 rounded-2xl border border-line bg-surface p-4 shadow-sm md:p-5">
+            <form action="/programmes" className="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_auto]" role="search">
+              <label className="relative"><span className="sr-only">Subject, programme or skill</span><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" size={18}/><input name="q" placeholder="What would you like to study?" className="h-12 w-full rounded-xl border border-line bg-white pl-11 pr-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"/></label>
+              <label><span className="sr-only">Qualification level</span><select name="level" defaultValue="" className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"><option value="">All qualification levels</option>{programmeTypes.map(type=><option key={type}>{type}</option>)}</select></label>
+              <label><span className="sr-only">Delivery mode</span><select name="delivery" defaultValue="" className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"><option value="">All delivery modes</option><option>Fully online</option><option>Online with OEC support</option><option>Blended delivery</option></select></label>
+              <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-navy-800 px-6 text-sm font-semibold text-white transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"><Search size={17}/> Search programmes</button>
+            </form>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">{programmeTypes.map(type=><Link key={type} href={`/programmes?level=${encodeURIComponent(type)}`} className="rounded-full border border-line bg-white px-4 py-2 text-xs font-semibold text-ink-600 transition hover:border-teal-500 hover:bg-teal-500/5 hover:text-navy-800">{type}</Link>)}</div>
+
+          <div className="mt-10 flex items-start gap-3 rounded-xl border border-teal-500/25 bg-teal-500/5 px-4 py-3 text-xs leading-5 text-ink-600"><BadgeCheck className="mt-0.5 shrink-0 text-teal-600" size={17}/><p><strong className="text-navy-800">Staging demonstration:</strong> The sample listings below illustrate the approved marketplace structure. Public listings will be published only after the institution and programme information have been verified.</p></div>
+
+          <div className="mt-6 grid gap-5 lg:grid-cols-3">
+            {featuredProgrammes.map((programme, index) => <article key={programme.title} className="group flex min-h-[430px] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-teal-500/50 hover:shadow-xl">
+              <div className={`relative h-2 ${index === 0 ? "bg-teal-500" : index === 1 ? "bg-blue-600" : "bg-amber-500"}`}/>
+              <div className="flex flex-1 flex-col p-6">
+                <div className="flex items-center justify-between gap-3"><span className="rounded-full bg-navy-800/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-navy-800">{programme.type}</span><span className="text-[11px] font-semibold text-teal-600">Sample listing</span></div>
+                <p className="mt-7 text-xs font-semibold text-teal-600">{programme.field}</p>
+                <h3 className="mt-2 text-xl font-bold leading-7 text-navy-800">{programme.title}</h3>
+                <div className="mt-5 flex items-start gap-3 border-y border-line py-4"><span className="grid size-10 shrink-0 place-items-center rounded-lg bg-surface text-navy-800"><Landmark size={19}/></span><div><p className="text-xs text-ink-400">Awarding institution</p><p className="mt-1 text-sm font-semibold text-navy-800">{programme.institution}</p></div></div>
+                <dl className="mt-5 grid gap-3 text-sm text-ink-600"><div className="flex items-center gap-3"><Award size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Credential</dt><dd>{programme.credential}</dd></div><div className="flex items-center gap-3"><Clock3 size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Duration</dt><dd>{programme.duration}</dd></div><div className="flex items-center gap-3"><Laptop2 size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Delivery</dt><dd>{programme.mode}</dd></div><div className="flex items-center gap-3"><CalendarDays size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Intake</dt><dd>{programme.intake}</dd></div></dl>
+                <div className="mt-auto pt-7"><Link href="/programmes" className="inline-flex items-center gap-2 text-sm font-semibold text-navy-800 transition group-hover:text-teal-600">View programme structure <ArrowRight size={15}/></Link></div>
+              </div>
+            </article>)}
+          </div>
+
+          <div className="mt-8 grid gap-4 rounded-2xl bg-navy-900 p-6 text-white md:grid-cols-[auto_1fr_auto] md:items-center md:p-8"><span className="grid size-12 place-items-center rounded-xl bg-teal-400/15 text-teal-400"><BookOpen size={24}/></span><div><h3 className="font-bold text-white">Every listing remains institution-controlled.</h3><p className="mt-1 text-sm leading-6 text-white/65">Participating institutions approve programme information, set entry requirements, make admission decisions, deliver teaching and assessment, and issue the resulting credential.</p></div><Link href="/programmes" className="inline-flex items-center gap-2 text-sm font-semibold text-teal-400">Browse all programmes <ArrowRight size={15}/></Link></div>
+        </Container>
+      </section>
 
       <section className="overflow-hidden bg-white py-20 md:py-28"><Container><div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div className="relative min-h-[480px] overflow-hidden rounded-[2rem] bg-navy-900"><Image src="/media/study-online.jpg" alt="Learner participating in online higher education" fill sizes="(max-width: 1023px) 100vw, 45vw" className="object-cover opacity-90"/><div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/10 to-transparent"/><div className="absolute inset-x-7 bottom-7 rounded-2xl border border-white/15 bg-navy-900/75 p-6 text-white backdrop-blur-md"><Sparkles size={22} className="text-teal-400"/><p className="mt-4 text-xl font-bold">Global reach. Local participation.</p><p className="mt-2 text-sm leading-6 text-white/65">A digital layer for discovery and delivery, supported by physical access infrastructure.</p></div></div>
