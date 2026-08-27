@@ -22,10 +22,10 @@ const trustStandards = [
   [CheckCircle2, "Standards-based access", "Institutions and Open Education Centers participate through defined readiness and quality requirements."],
 ] as const;
 const journey = [
-  [Search, "Discover", "Search programmes, courses, institutions, disciplines and study options across one trusted education ecosystem.", "/programmes", "Discover programmes"],
-  [Award, "Compare", "Evaluate qualifications, institutions, delivery formats, duration, tuition and upcoming intakes.", "/programmes", "Compare study options"],
-  [Landmark, "Apply", "Review the entry requirements and continue through the institution’s official admissions process.", "/about", "Understand admissions"],
-  [Laptop2, "Learn", "Study through the institution’s digital campus, with local OEC facilities and support where available.", "/open-education-centers", "Find an OEC"],
+  [Search, "Discover", "Search accredited online and open education programmes by discipline, qualification, institution, delivery mode and intake.", "/programmes", "Explore programmes"],
+  [Award, "Evaluate", "Review programme structure, entry requirements, duration, tuition, delivery format, awarding institution and learner support.", "/programmes", "Compare study options"],
+  [Landmark, "Apply", "Confirm your preferred programme and continue through the institution’s authorised application and admissions process.", "/about", "Understand admissions"],
+  [Laptop2, "Enrol and study", "Following admission, access teaching, assessment and academic support through the institution, with local OEC facilities where available.", "/open-education-centers", "Find an OEC"],
 ] as const;
 const resources = [
   ["Learner guide", "Choosing a credible online programme", "Understand qualifications, delivery formats and questions to ask before applying.", "/programmes"],
@@ -78,7 +78,42 @@ export default function Home() {
         </div>
       </Container>
     </section>
-    <section className="bg-white py-20 md:py-24" aria-labelledby="how-edulage-works"><Container><div className="grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-center"><div className="relative min-h-[460px] overflow-hidden rounded-[2rem]"><Image src="/media/study-online.jpg" alt="Learner participating in online higher education" fill sizes="(max-width:1023px)100vw,42vw" className="object-cover"/><div className="image-scrim absolute inset-0"/><div className="absolute inset-x-7 bottom-7 rounded-2xl border border-white/15 bg-navy-900/75 p-6 text-white backdrop-blur"><p className="text-xs font-bold uppercase tracking-[0.16em] text-teal-400">Global reach. Local support.</p><p className="mt-2 text-lg font-bold">A connected pathway from discovery to study.</p></div></div><div><p className="section-kicker">How EduLage works</p><h2 id="how-edulage-works" className="section-title">A simpler way to find and access quality education.</h2><p className="section-lead">Understand every stage clearly—from finding the right opportunity to studying through an institution-led digital campus.</p><ol className="mt-8 space-y-3">{journey.map(([Icon,title,text,href,action],index)=><li key={title} className="group flex gap-4 rounded-xl border border-line p-5 transition hover:border-teal-500 hover:shadow-lg"><span className="grid size-11 shrink-0 place-items-center rounded-full bg-navy-800 text-white"><Icon size={19}/></span><div className="min-w-0 flex-1"><div className="flex items-center justify-between gap-4"><h3 className="font-bold text-navy-800">{title}</h3><span className="text-[10px] font-bold text-teal-600">0{index+1}</span></div><p className="mt-1 text-sm leading-6 text-ink-600">{text}</p><Link href={href} className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-teal-700 opacity-80 transition group-hover:opacity-100">{action}<ArrowRight size={13}/></Link></div></li>)}</ol></div></div></Container></section>
+    <section className="bg-white py-20 md:py-24" aria-labelledby="how-edulage-works">
+      <Container>
+        <div className="grid gap-12 lg:grid-cols-[0.86fr_1.14fr] lg:items-start lg:gap-16">
+          <div className="order-2 lg:order-1 lg:sticky lg:top-28">
+            <div className="relative min-h-[430px] overflow-hidden rounded-[2rem] shadow-xl sm:min-h-[500px] lg:min-h-[560px]">
+              <Image src="/media/study-online.jpg" alt="Learner participating in institution-led online higher education" fill sizes="(max-width:1023px)100vw,42vw" className="object-cover transition duration-700 hover:scale-[1.02]"/>
+              <div className="image-scrim absolute inset-0"/>
+              <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-white/15 bg-navy-900/80 p-6 text-white backdrop-blur-md sm:inset-x-7 sm:bottom-7">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-teal-400">Connected globally. Supported locally.</p>
+                <p className="mt-2 text-base font-semibold leading-7 text-white">A coordinated pathway to quality open and online education.</p>
+              </div>
+            </div>
+          </div>
+          <div className="order-1 lg:order-2">
+            <p className="section-kicker">How EduLage works</p>
+            <h2 id="how-edulage-works" className="section-title max-w-3xl">A clear pathway from programme discovery to enrolment and study.</h2>
+            <p className="section-lead max-w-3xl">EduLage brings programmes, institutions and essential study information together in one trusted ecosystem—helping learners make informed decisions and continue through each institution’s official admissions and learning processes.</p>
+            <ol className="relative mt-9 space-y-3 before:absolute before:bottom-8 before:left-[1.55rem] before:top-8 before:w-px before:bg-gradient-to-b before:from-teal-500 before:via-teal-500/60 before:to-line" aria-label="The EduLage learner journey">
+              {journey.map(([Icon,title,text,href,action],index)=><li key={title} className="group relative flex gap-4 rounded-2xl border border-line bg-white p-5 transition duration-300 hover:-translate-y-0.5 hover:border-teal-500 hover:bg-teal-500/[0.035] hover:shadow-xl">
+                <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border-4 border-white bg-navy-800 text-white shadow-sm transition group-hover:bg-teal-600"><Icon size={19}/></span>
+                <div className="min-w-0 flex-1 pt-0.5">
+                  <div className="flex items-start justify-between gap-4"><div><p className="text-[10px] font-bold uppercase tracking-[0.16em] text-teal-700">Step 0{index+1}</p><h3 className="mt-1 text-lg font-bold text-navy-800">{title}</h3></div><ArrowRight size={17} className="mt-2 text-ink-400 transition-transform group-hover:translate-x-1 group-hover:text-teal-600"/></div>
+                  <p className="mt-2 text-sm leading-6 text-ink-600">{text}</p>
+                  <Link href={href} className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-teal-700">{action}<ArrowRight size={13}/></Link>
+                </div>
+              </li>)}
+            </ol>
+            <div className="mt-5 rounded-2xl border border-teal-500/25 bg-teal-500/[0.055] p-5 sm:flex sm:items-start sm:gap-4">
+              <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-teal-700 shadow-sm"><ShieldCheck size={20}/></span>
+              <div className="mt-3 sm:mt-0"><h3 className="text-sm font-bold text-navy-800">Academic responsibility remains with the institution.</h3><p className="mt-1 text-sm leading-6 text-ink-600">Participating institutions determine admissions, provide teaching and assessment, and issue all qualifications and credentials. EduLage supports discovery, access and ecosystem coordination.</p></div>
+            </div>
+            <div className="mt-7"><Button href="/programmes" variant="teal">Start exploring programmes</Button></div>
+          </div>
+        </div>
+      </Container>
+    </section>
     <ProgrammeDiscoveryShowcase />
     <HighDemandFields />
     <section className="bg-white py-20 md:py-24"><Container><div className="flex flex-wrap items-end justify-between gap-5"><div><p className="section-kicker">Featured institutions</p><h2 className="section-title">Explore reputable institutions worldwide.</h2><p className="section-lead">Discover institutional profiles, academic strengths and programmes available through each digital campus.</p></div><Link href="/institutions" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">View all institutions <ArrowRight size={16}/></Link></div><div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">{featuredInstitutions.map(institution=>{const count=getInstitutionProgrammes(institution.id).length;return <Link key={institution.id} href={`/institutions/${institution.slug}`} className="group grid grid-cols-[72px_1fr] gap-4 rounded-2xl border border-line p-5 transition hover:-translate-y-1 hover:border-teal-500 hover:shadow-xl"><span className="grid h-16 w-[72px] place-items-center rounded-xl bg-surface p-2"><Image src={institution.logo} alt={`${institution.shortName} logo`} width={64} height={44} className="max-h-11 w-auto object-contain"/></span><div className="min-w-0"><p className="text-xs font-semibold text-teal-600">{institution.country}</p><h3 className="mt-1 text-base font-bold leading-6 text-navy-800 group-hover:text-teal-600">{institution.name}</h3><div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-ink-600"><span className="flex items-center gap-1"><ShieldCheck size={14}/>{institution.accreditationStatus}</span><span>{count} {count===1?"programme":"programmes"}</span></div></div></Link>})}</div></Container></section>
