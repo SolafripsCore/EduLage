@@ -1,9 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Award, BadgeCheck, BookOpen, Building2, CalendarDays, CheckCircle2, Clock3, Globe2, GraduationCap, Landmark, Laptop2, MapPin, Network, Search, ShieldCheck, Sparkles, Users } from "lucide-react";
+import { ArrowRight, Award, BookOpen, Building2, CheckCircle2, Globe2, GraduationCap, Landmark, Laptop2, MapPin, Network, Search, ShieldCheck, Sparkles, Users } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Checklist } from "@/components/ui/Checklist";
+import { ProgrammeCard } from "@/components/ProgrammeCard";
+import { getDisciplineCounts, getHomepageProgrammeSections, getMarketplaceStats } from "@/lib/catalog";
 
 const audiences = [
   { icon: GraduationCap, title: "Learners", text: "Discover trusted pathways and participate online or through an accredited Open Education Center.", href: "/programmes", action: "Explore learning pathways" },
@@ -19,15 +21,17 @@ const journey = [
   [Award, "Earn", "Complete the institution’s assessment and receive an institution-issued credential."],
 ] as const;
 
-const programmeTypes = ["Undergraduate", "Postgraduate", "Professional credentials", "Short courses"];
-
-const featuredProgrammes = [
-  { type: "Postgraduate degree", credential: "Master of Science", title: "Digital Transformation and Innovation", institution: "Illustrative accredited university", field: "Technology & Management", duration: "18–24 months", mode: "Online with optional OEC support", intake: "Institution-defined intake" },
-  { type: "Professional programme", credential: "Professional Certificate", title: "Sustainable Enterprise Leadership", institution: "Illustrative accredited business school", field: "Business & Sustainability", duration: "16 weeks", mode: "Fully online", intake: "Flexible institutional intake" },
-  { type: "Short course", credential: "Institution-issued certificate", title: "Applied Data Analytics for Decision-Making", institution: "Illustrative accredited institute", field: "Data & Digital Skills", duration: "8 weeks", mode: "Online", intake: "Multiple annual intakes" },
+const programmeTypes = [
+  { label: "Undergraduate degrees", value: "Undergraduate", description: "Bachelor-level study pathways" },
+  { label: "Postgraduate degrees", value: "Postgraduate", description: "Master’s degrees and diplomas" },
+  { label: "Doctoral programmes", value: "Doctoral", description: "Advanced research pathways" },
+  { label: "Professional education", value: "Professional", description: "Certificates and career development" },
 ];
 
 export default function Home() {
+  const { trending: featuredProgrammes } = getHomepageProgrammeSections();
+  const disciplines = getDisciplineCounts().sort((a, b) => b.count - a.count).slice(0, 8);
+  const marketplace = getMarketplaceStats();
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Organization", name: "EduLage", url: "https://edulage.org", slogan: "The Global Education Village", description: "Global education infrastructure connecting learners to quality open and online education from tertiary institutions worldwide." }) }} />
@@ -58,43 +62,15 @@ export default function Home() {
 
       <section className="overflow-hidden bg-white py-20 md:py-28">
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div className="max-w-3xl">
-              <p className="section-kicker">Academic programme marketplace</p>
-              <h2 className="section-title">Discover quality programmes from trusted tertiary institutions.</h2>
-              <p className="section-lead">Compare institution-approved degrees, postgraduate programmes, professional credentials and short courses through one structured global marketplace.</p>
-            </div>
-            <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">Explore the programme catalogue <ArrowRight size={16}/></Link>
-          </div>
+          <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end"><div className="max-w-3xl"><p className="section-kicker">Programmes & courses</p><h2 className="section-title">Find the right academic opportunity—clearly and confidently.</h2><p className="section-lead">Explore degrees, postgraduate study, professional qualifications and short courses from reputable tertiary institutions across countries and disciplines.</p></div><div className="grid grid-cols-3 divide-x divide-line rounded-xl border border-line bg-surface px-2 py-4 text-center"><div className="px-4"><p className="text-xl font-bold text-navy-800">{marketplace.programmes}</p><p className="text-[11px] text-ink-600">Programmes</p></div><div className="px-4"><p className="text-xl font-bold text-navy-800">{marketplace.institutions}</p><p className="text-[11px] text-ink-600">Institutions</p></div><div className="px-4"><p className="text-xl font-bold text-navy-800">{marketplace.countries}</p><p className="text-[11px] text-ink-600">Countries</p></div></div></div>
 
-          <div className="mt-10 rounded-2xl border border-line bg-surface p-4 shadow-sm md:p-5">
-            <form action="/programmes" className="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_auto]" role="search">
-              <label className="relative"><span className="sr-only">Subject, programme or skill</span><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" size={18}/><input name="q" placeholder="What would you like to study?" className="h-12 w-full rounded-xl border border-line bg-white pl-11 pr-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"/></label>
-              <label><span className="sr-only">Qualification level</span><select name="level" defaultValue="" className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"><option value="">All qualification levels</option>{programmeTypes.map(type=><option key={type}>{type}</option>)}</select></label>
-              <label><span className="sr-only">Delivery mode</span><select name="delivery" defaultValue="" className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"><option value="">All delivery modes</option><option>Fully online</option><option>Online with OEC support</option><option>Blended delivery</option></select></label>
-              <button type="submit" className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-navy-800 px-6 text-sm font-semibold text-white transition hover:bg-teal-600 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"><Search size={17}/> Search programmes</button>
-            </form>
-          </div>
+          <div className="mt-10 rounded-2xl bg-navy-900 p-5 shadow-xl md:p-7"><div className="mb-4 flex flex-wrap items-center justify-between gap-3"><div><p className="text-sm font-bold text-white">Search the academic marketplace</p><p className="mt-1 text-xs text-white/55">Search by subject, programme, qualification or institution.</p></div><Link href="/programmes" className="text-xs font-semibold text-teal-400">Advanced programme search →</Link></div><form action="/programmes" className="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_auto]" role="search"><label className="relative"><span className="sr-only">Subject, programme or institution</span><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" size={18}/><input name="query" placeholder="Subject, programme or institution" className="h-13 w-full rounded-xl border border-white/10 bg-white pl-11 pr-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/25"/></label><label><span className="sr-only">Academic level</span><select name="level" defaultValue="" className="h-13 w-full rounded-xl border border-white/10 bg-white px-4 text-sm text-navy-800 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/25"><option value="">All academic levels</option>{programmeTypes.map(type=><option key={type.value} value={type.value}>{type.label}</option>)}</select></label><label><span className="sr-only">Delivery mode</span><select name="deliveryMode" defaultValue="" className="h-13 w-full rounded-xl border border-white/10 bg-white px-4 text-sm text-navy-800 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/25"><option value="">All delivery modes</option><option>Fully online</option><option>Online + OEC exams</option></select></label><button type="submit" className="inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-teal-500 px-7 text-sm font-bold text-navy-900 transition hover:bg-teal-400 focus-visible:ring-2 focus-visible:ring-teal-400 focus-visible:ring-offset-2 focus-visible:ring-offset-navy-900"><Search size={17}/> Find programmes</button></form></div>
 
-          <div className="mt-6 flex flex-wrap gap-2">{programmeTypes.map(type=><Link key={type} href={`/programmes?level=${encodeURIComponent(type)}`} className="rounded-full border border-line bg-white px-4 py-2 text-xs font-semibold text-ink-600 transition hover:border-teal-500 hover:bg-teal-500/5 hover:text-navy-800">{type}</Link>)}</div>
+          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">{programmeTypes.map(({label,value,description})=><Link key={value} href={`/programmes?level=${value}`} className="group rounded-xl border border-line bg-surface p-5 transition hover:-translate-y-0.5 hover:border-teal-500 hover:bg-white hover:shadow-lg"><div className="flex items-start justify-between gap-3"><span className="grid size-10 place-items-center rounded-lg bg-white text-teal-600 shadow-sm"><GraduationCap size={20}/></span><ArrowRight size={16} className="text-ink-400 transition group-hover:translate-x-1 group-hover:text-teal-600"/></div><h3 className="mt-5 text-sm font-bold text-navy-800">{label}</h3><p className="mt-1 text-xs leading-5 text-ink-600">{description}</p></Link>)}</div>
 
-          <div className="mt-10 flex items-start gap-3 rounded-xl border border-teal-500/25 bg-teal-500/5 px-4 py-3 text-xs leading-5 text-ink-600"><BadgeCheck className="mt-0.5 shrink-0 text-teal-600" size={17}/><p><strong className="text-navy-800">Staging demonstration:</strong> The sample listings below illustrate the approved marketplace structure. Public listings will be published only after the institution and programme information have been verified.</p></div>
+          <div className="mt-16 grid gap-8 lg:grid-cols-[260px_1fr]"><aside><p className="section-kicker">Browse by discipline</p><h3 className="mt-3 text-2xl font-bold text-navy-800">Explore your field of study.</h3><p className="mt-3 text-sm leading-6 text-ink-600">Move directly into the area most relevant to your academic or professional goals.</p><div className="mt-6 space-y-1">{disciplines.map(discipline=><Link key={discipline.name} href={`/programmes?discipline=${encodeURIComponent(discipline.name)}`} className="group flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm text-ink-600 transition hover:bg-surface hover:text-navy-800"><span>{discipline.name}</span><span className="rounded-full bg-surface px-2 py-0.5 text-[11px] font-semibold group-hover:bg-white">{discipline.count}</span></Link>)}</div><Link href="/programmes" className="arrow-slide mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-600">View all disciplines <ArrowRight size={15}/></Link></aside><div><div className="mb-6 flex flex-wrap items-end justify-between gap-4"><div><p className="section-kicker">Featured academic opportunities</p><h3 className="mt-2 text-2xl font-bold text-navy-800">Programmes learners are exploring</h3></div><Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-navy-800 hover:text-teal-600">View all {marketplace.programmes} programmes <ArrowRight size={15}/></Link></div><div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">{featuredProgrammes.map((programme,index)=><ProgrammeCard key={programme.id} programme={programme} priority={index < 3}/>)}</div></div></div>
 
-          <div className="mt-6 grid gap-5 lg:grid-cols-3">
-            {featuredProgrammes.map((programme, index) => <article key={programme.title} className="group flex min-h-[430px] flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-teal-500/50 hover:shadow-xl">
-              <div className={`relative h-2 ${index === 0 ? "bg-teal-500" : index === 1 ? "bg-blue-600" : "bg-amber-500"}`}/>
-              <div className="flex flex-1 flex-col p-6">
-                <div className="flex items-center justify-between gap-3"><span className="rounded-full bg-navy-800/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-navy-800">{programme.type}</span><span className="text-[11px] font-semibold text-teal-600">Sample listing</span></div>
-                <p className="mt-7 text-xs font-semibold text-teal-600">{programme.field}</p>
-                <h3 className="mt-2 text-xl font-bold leading-7 text-navy-800">{programme.title}</h3>
-                <div className="mt-5 flex items-start gap-3 border-y border-line py-4"><span className="grid size-10 shrink-0 place-items-center rounded-lg bg-surface text-navy-800"><Landmark size={19}/></span><div><p className="text-xs text-ink-400">Awarding institution</p><p className="mt-1 text-sm font-semibold text-navy-800">{programme.institution}</p></div></div>
-                <dl className="mt-5 grid gap-3 text-sm text-ink-600"><div className="flex items-center gap-3"><Award size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Credential</dt><dd>{programme.credential}</dd></div><div className="flex items-center gap-3"><Clock3 size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Duration</dt><dd>{programme.duration}</dd></div><div className="flex items-center gap-3"><Laptop2 size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Delivery</dt><dd>{programme.mode}</dd></div><div className="flex items-center gap-3"><CalendarDays size={17} className="shrink-0 text-teal-600"/><dt className="sr-only">Intake</dt><dd>{programme.intake}</dd></div></dl>
-                <div className="mt-auto pt-7"><Link href="/programmes" className="inline-flex items-center gap-2 text-sm font-semibold text-navy-800 transition group-hover:text-teal-600">View programme structure <ArrowRight size={15}/></Link></div>
-              </div>
-            </article>)}
-          </div>
-
-          <div className="mt-8 grid gap-4 rounded-2xl bg-navy-900 p-6 text-white md:grid-cols-[auto_1fr_auto] md:items-center md:p-8"><span className="grid size-12 place-items-center rounded-xl bg-teal-400/15 text-teal-400"><BookOpen size={24}/></span><div><h3 className="font-bold text-white">Every listing remains institution-controlled.</h3><p className="mt-1 text-sm leading-6 text-white/65">Participating institutions approve programme information, set entry requirements, make admission decisions, deliver teaching and assessment, and issue the resulting credential.</p></div><Link href="/programmes" className="inline-flex items-center gap-2 text-sm font-semibold text-teal-400">Browse all programmes <ArrowRight size={15}/></Link></div>
+          <div className="mt-10 grid gap-4 rounded-2xl bg-navy-900 p-6 text-white md:grid-cols-[auto_1fr_auto] md:items-center md:p-8"><span className="grid size-12 place-items-center rounded-xl bg-teal-400/15 text-teal-400"><BookOpen size={24}/></span><div><h3 className="font-bold text-white">Academic authority remains with each institution.</h3><p className="mt-1 text-sm leading-6 text-white/65">The institution sets entry requirements and tuition, decides admission, delivers teaching and assessment, and awards the resulting degree, diploma or certificate.</p></div><Link href="/programmes" className="inline-flex items-center gap-2 text-sm font-semibold text-teal-400">Explore the full catalogue <ArrowRight size={15}/></Link></div>
         </Container>
       </section>
 
