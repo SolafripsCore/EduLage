@@ -79,7 +79,7 @@ export function HighDemandFields() {
     tabs[next]?.click();
   };
 
-  return <section className="overflow-hidden bg-white py-20 md:py-24" aria-labelledby="high-demand-title">
+  return <section className="overflow-hidden bg-white py-14 md:py-20" aria-labelledby="high-demand-title">
     <div className="container-page">
       <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
         <div>
@@ -90,7 +90,7 @@ export function HighDemandFields() {
         <div className="hidden items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3 lg:flex"><BarChart3 size={20} className="text-teal-600"/><p className="max-w-52 text-xs leading-5 text-ink-600"><strong className="block text-navy-800">Curated for relevance</strong>Selected across qualification levels and institutions.</p></div>
       </div>
 
-      <div className="relative mt-9">
+      <div className="relative mt-8">
         <div className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] md:flex-wrap [&::-webkit-scrollbar]:hidden" role="tablist" aria-label="High-demand fields">
           {fields.map((field) => {
             const active = field.name === activeField.name;
