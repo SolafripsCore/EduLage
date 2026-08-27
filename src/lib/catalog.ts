@@ -2,7 +2,7 @@ import { centers } from "@/data/centers";
 import { disciplines } from "@/data/disciplines";
 import { institutions } from "@/data/institutions";
 import { programmes } from "@/data/programmes";
-import type { Institution, Programme } from "@/data/types";
+import type { Programme } from "@/data/types";
 
 export type ProgrammeFilters = Partial<Pick<Programme, "discipline" | "credential" | "deliveryMode" | "language" | "studyMode" | "level" | "institutionId">> & { country?: string; query?: string };
 
@@ -26,23 +26,6 @@ export function getProgrammeBySlug(slug: string) { return programmes.find((item)
 export function getInstitutions(query?: string) {
   if (!query) return institutions;
   return institutions.filter((item) => `${item.name} ${item.country}`.toLowerCase().includes(query.toLowerCase()));
-}
-export function getFeaturedInstitutions(limit: number) {
-  if (limit <= 0) return [];
-  const grouped = new Map<string, Institution[]>();
-  institutions.forEach((institution) => {
-    const regionInstitutions = grouped.get(institution.region) ?? [];
-    regionInstitutions.push(institution);
-    grouped.set(institution.region, regionInstitutions);
-  });
-  const regions = [...grouped.values()];
-  const featured: Institution[] = [];
-  for (let index = 0; index < Math.max(...regions.map((region) => region.length)); index++) {
-    regions.forEach((region) => {
-      if (region[index] && featured.length < limit) featured.push(region[index]);
-    });
-  }
-  return featured;
 }
 export function getInstitutionBySlug(slug: string) { return institutions.find((item) => item.slug === slug); }
 export function getCenters() { return centers; }
