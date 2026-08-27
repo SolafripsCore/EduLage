@@ -19,10 +19,10 @@ export const metadata: Metadata = {
     default: "EduLage | The Global Education Village",
     template: "%s | EduLage",
   },
-  description: "Discover degree and professional programmes from accredited institutions worldwide.",
+  description: "Discover quality open and online education programmes from reputable tertiary institutions worldwide.",
   openGraph: {
     title: "EduLage | The Global Education Village",
-    description: "A global marketplace for accredited higher-education programmes.",
+    description: "A trusted global education ecosystem connecting learners with quality open and online education.",
     type: "website",
     url: "https://edulage.org",
   },

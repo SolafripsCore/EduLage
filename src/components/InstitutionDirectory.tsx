@@ -32,7 +32,7 @@ export function InstitutionDirectory() {
                 <span className="flex h-12 w-16 items-center justify-center overflow-hidden rounded-md border border-line bg-white p-1">
                   <Image src={institution.logo} alt={`${institution.shortName} mark`} width={40} height={40} className="logo-muted size-full object-contain" />
                 </span>
-                <span className="text-xs font-semibold text-teal-600">{institution.tenantStatus === "active" ? "Active tenant" : "Provisional tenant"}</span>
+                <span className="text-xs font-semibold text-teal-600">{institution.tenantStatus === "active" ? "Participating institution" : "Participation in review"}</span>
               </span>
               <span className="mt-5">
                 <span className="block font-semibold leading-5 text-navy-800">{institution.name}</span>

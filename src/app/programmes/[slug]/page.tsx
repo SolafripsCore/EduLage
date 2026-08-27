@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowUpRight, Check, Clock3, Languages, Monitor } from "lucide-react";
+import { Check, Clock3, Languages, Monitor, ShieldCheck } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getInstitutionProgrammes, getProgrammeBySlug } from "@/lib/catalog";
 import { institutionById } from "@/data/institutions";
@@ -73,6 +73,10 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
             <h2 className="text-2xl font-bold text-navy-800">Assessment</h2>
             <p className="mt-4 leading-7 text-ink-600">{programme.assessmentNote} {programme.requiresOecExam ? "Some institution-required examinations take place at an accredited Open Education Center." : ""}</p>
           </section>
+          <section className="mt-12 rounded-2xl bg-surface p-7">
+            <h2 className="text-2xl font-bold text-navy-800">Before you apply</h2>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">{["Confirm the official entry requirements","Review tuition and additional institutional fees","Check the application deadline and intake","Verify technology, language and attendance requirements"].map(item=><div key={item} className="flex gap-3 text-sm leading-6 text-ink-600"><ShieldCheck size={17} className="mt-1 shrink-0 text-teal-700"/>{item}</div>)}</div>
+          </section>
         </div>
         <aside className="card-hover h-fit rounded-xl border border-line p-6 lg:sticky lg:top-28">
           <div className="grid grid-cols-3 gap-3 border-b border-line pb-5 text-center">
@@ -86,8 +90,8 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
             <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Next intake</span><span className="font-semibold text-navy-800">{programme.nextIntake}</span></div>
           </div>
           <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
-          <a href={institution.admissionsPortalUrl} target="_blank" rel="noreferrer" className="mt-6 flex items-center justify-center gap-2 rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">Apply on {institution.shortName}&apos;s portal <ArrowUpRight size={16} /></a>
-          <p className="mt-4 text-xs leading-5 text-ink-400">Admission decisions are made solely by {institution.name}. EduLage does not process admissions.</p>
+          <Link href="/contact" className="mt-6 flex items-center justify-center rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">Request admissions guidance</Link>
+          <p className="mt-4 text-xs leading-5 text-ink-400">The official institutional application link is published after it has been confirmed by {institution.name}. Admission decisions remain solely with the institution.</p>
         </aside>
       </div>
     </Container>
