@@ -16,7 +16,6 @@ import {
   Users,
 } from "lucide-react";
 import { CompactProgrammeCard, ProgrammeCard } from "@/components/ProgrammeCard";
-import { HighDemandFields } from "@/components/HighDemandFields";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import {
@@ -164,7 +163,7 @@ export default function Home() {
           }),
         }}
       />
-      <section className="relative isolate overflow-hidden bg-navy-900 text-white">
+      <section className="hero-premium relative isolate overflow-hidden bg-navy-900 text-white">
         <div className="hero-grid absolute inset-0 -z-20 opacity-20" />
         <div className="hero-aurora absolute inset-0 -z-20" />
         <Container>
@@ -316,7 +315,6 @@ export default function Home() {
               <p className="section-kicker">Featured institutions</p>
               <h2 className="section-title">Learners study with accredited institutions on every continent.</h2>
               <p className="section-lead">Discover institutional profiles, academic strengths and programmes available through each digital campus.</p>
-              <Link href="/institutions" className="arrow-slide mt-4 inline-flex items-center gap-2 text-sm font-semibold text-ink-600 hover:text-teal-600">Explore the global network <span aria-hidden>→</span></Link>
             </div>
             <Link href="/institutions" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">View all institutions <span aria-hidden>→</span></Link>
           </div>
@@ -339,7 +337,7 @@ export default function Home() {
           </div>
         </Container>
       </section>
-      <section className="bg-white py-14 md:py-20" aria-labelledby="how-edulage-works">
+      <section className="bg-surface py-14 md:py-20" aria-labelledby="how-edulage-works">
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.86fr_1.14fr] lg:items-start lg:gap-16">
             <div className="order-2 lg:order-1 lg:sticky lg:top-28">
@@ -382,7 +380,7 @@ export default function Home() {
             <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">View all programmes <span aria-hidden>→</span></Link>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {trending.map((programme, index) => <ProgrammeCard key={programme.id} programme={programme} discovery priority={index < 3} />)}
+            {trending.map((programme, index) => <div key={programme.id} className={index >= 4 ? "hidden h-full md:block" : "h-full"}><ProgrammeCard programme={programme} discovery priority={index < 3} /></div>)}
           </div>
         </Container>
       </section>
@@ -397,7 +395,7 @@ export default function Home() {
             <Link href="/programmes?level=Postgraduate" className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-medium text-ink-600 transition hover:border-teal-500 hover:bg-teal-500/10 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500">Master&apos;s degrees</Link>
             <Link href="/programmes?level=Doctoral" className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-medium text-ink-600 transition hover:border-teal-500 hover:bg-teal-500/10 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500">Doctoral programmes</Link>
           </div>
-          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{degree.map((programme) => <ProgrammeCard key={programme.id} programme={programme} />)}</div>
+          <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{degree.map((programme, index) => <div key={programme.id} className={index >= 4 ? "hidden h-full md:block" : "h-full"}><ProgrammeCard programme={programme} discovery /></div>)}</div>
           <p className="mt-8 text-xs text-ink-600">Degrees are awarded by the institution, never by EduLage.</p>
         </Container>
       </section>
@@ -407,10 +405,9 @@ export default function Home() {
             <div className="max-w-3xl"><p className="section-kicker">Build practical expertise</p><h2 className="section-title">Professional diplomas and certificates.</h2><p className="section-lead">Shorter, applied pathways from reputable institutions and companies worldwide, designed to fit around work and other commitments.</p></div>
             <Link href="/programmes?level=Professional" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">View all professional programmes <span aria-hidden>→</span></Link>
           </div>
-          <div className="mt-8 grid gap-4 md:grid-cols-2">{professional.map((programme) => <CompactProgrammeCard key={programme.id} programme={programme} />)}</div>
+          <div className="mt-8 grid gap-4 md:grid-cols-2">{professional.map((programme, index) => <div key={programme.id} className={index >= 4 ? "hidden h-full md:block" : "h-full"}><CompactProgrammeCard programme={programme} /></div>)}</div>
         </Container>
       </section>
-      <HighDemandFields />
       <section className="bg-navy-900 py-14 text-white md:py-20">
         <Container>
           <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
@@ -441,7 +438,7 @@ export default function Home() {
           <div className="mt-8 grid gap-4 md:grid-cols-3">{audiencePaths.map(([Icon, title, text, href, action]) => <div key={title} className="flex h-full flex-col rounded-2xl border border-line bg-white p-7 transition hover:-translate-y-1 hover:border-teal-500 hover:shadow-xl"><Icon className="text-teal-600" size={27} /><h3 className="mt-5 text-xl font-bold text-navy-800">{title}</h3><p className="mt-3 flex-1 text-sm leading-6 text-ink-600">{text}</p><Link href={href} className="arrow-slide mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-600">{action} <span aria-hidden>→</span></Link></div>)}</div>
         </Container>
       </section>
-      <section className="bg-white py-14 md:py-20">
+      <section className="bg-surface py-14 md:py-20">
         <Container>
           <div className="grid gap-6 rounded-[2rem] bg-navy-800 p-8 text-white md:grid-cols-[1fr_auto] md:items-center md:p-12"><div><p className="section-kicker text-teal-400">Your next step</p><h2 className="mt-4 max-w-3xl text-3xl font-bold text-white md:text-4xl">Enter the Global Education Village.</h2><p className="mt-4 max-w-2xl text-white/65">Discover a programme, explore participating institutions, locate an OEC or begin an institutional partnership.</p></div><div className="flex flex-wrap gap-3 md:justify-end"><Button href="/programmes" variant="teal">Explore programmes</Button><Button href="/get-started" variant="ghost">Get started</Button></div></div>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-ink-600"><span className="flex items-center gap-2"><Headphones size={17} className="text-teal-600" />Help and learner support</span><span className="flex items-center gap-2"><Building2 size={17} className="text-teal-600" />Institutional enquiries</span><span className="flex items-center gap-2"><Users size={17} className="text-teal-600" />Partnership enquiries</span></div>
