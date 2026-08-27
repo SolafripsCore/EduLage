@@ -187,8 +187,8 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-            <div className="relative mx-auto w-full max-w-[520px] lg:justify-self-end">
-              <div className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl sm:aspect-[16/10] lg:aspect-[5/4]">
+          <div className="relative mx-auto w-full max-w-[520px] lg:justify-self-end">
+            <div className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl sm:aspect-[16/10] lg:aspect-[5/4]">
                 <Image
                   src="/media/hero-learner.jpg"
                   alt="Learner accessing online tertiary education"
@@ -198,8 +198,26 @@ export default function Home() {
                   className="object-cover transition duration-700 group-hover:scale-[1.025]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-900/10 via-transparent to-white/5" />
-              </div>
             </div>
+
+            <div className="absolute -left-3 top-5 z-10 w-[178px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.24)] sm:-left-7 sm:top-6 sm:w-[198px]" aria-label="Verified institution-issued credential">
+              <div className="flex items-center gap-2 text-[10px] font-bold">
+                <ShieldCheck size={14} className="text-teal-600" />
+                <span>Credential verified</span>
+              </div>
+              <p className="mt-2 text-[9px] text-ink-500">Issued by the institution</p>
+              <p className="mt-1 text-[10px] font-bold tracking-[0.06em] text-navy-800">EDU-4821-KX</p>
+              <Link href="/verify" className="mt-3 inline-flex text-[9px] font-bold uppercase tracking-[0.08em] text-teal-700">Verified on EduLage</Link>
+            </div>
+
+            <Link href="/open-education-centers" className="group/oec absolute -bottom-4 -left-2 z-10 w-[142px] overflow-hidden rounded-xl border border-white/70 bg-white shadow-[0_18px_45px_rgba(5,18,53,0.28)] sm:-bottom-6 sm:-left-6 sm:w-[164px]" aria-label="Explore Open Education Centers">
+              <span className="relative block h-[104px] sm:h-[122px]">
+                <Image src="/media/oec-lab.jpg" alt="Learners using an Open Education Center" fill sizes="170px" className="object-cover transition duration-500 group-hover/oec:scale-105" />
+                <span className="absolute inset-0 bg-gradient-to-t from-navy-900/65 via-transparent to-transparent" />
+                <span className="absolute inset-x-2 bottom-2 text-[9px] font-medium text-white">Open Education Center</span>
+              </span>
+            </Link>
+          </div>
           </div>
           <div className="relative z-10 pb-8">
             <div className="rounded-2xl border border-white/15 bg-white p-5 text-navy-800 shadow-2xl md:p-6">
