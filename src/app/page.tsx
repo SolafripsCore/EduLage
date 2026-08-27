@@ -62,10 +62,11 @@ export default function Home() {
           <div className="relative mx-auto w-full max-w-[520px] lg:justify-self-end">
             <div className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl sm:aspect-[16/10] lg:aspect-[5/4]">
               <Image src="/media/hero-learner.jpg" alt="Learner accessing online tertiary education" fill priority sizes="(max-width:1023px) 90vw,40vw" className="object-cover transition duration-700 group-hover:scale-[1.025]"/>
-              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-transparent to-transparent"/>
-              <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/15 bg-navy-900/75 p-5 backdrop-blur-md sm:inset-x-6 sm:bottom-6">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-teal-400">Global education. Institution-led.</p>
-                <p className="mt-2 text-sm font-medium leading-6 text-white/85">Discover programmes from reputable tertiary institutions worldwide.</p>
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/25 via-transparent to-white/5"/>
+              <div className="absolute bottom-5 left-5 max-w-[calc(100%-2.5rem)] rounded-xl bg-white/95 p-5 text-navy-800 shadow-[0_18px_50px_rgba(5,18,53,0.22)] backdrop-blur-md sm:bottom-6 sm:left-6 sm:max-w-[76%] sm:p-6">
+                <span className="mb-3 block h-0.5 w-10 bg-teal-600"/>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-teal-700">Institution-led. Globally accessible.</p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-navy-800">Discover quality programmes from reputable tertiary institutions worldwide.</p>
               </div>
             </div>
           </div>
