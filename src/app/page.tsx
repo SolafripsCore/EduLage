@@ -140,10 +140,10 @@ export default function Home() {
                 <span className="h-px w-8 bg-teal-400" />
                 The Global Education Village
               </p>
-              <h1 className="mt-5 max-w-[17ch] text-[2.45rem] font-bold leading-[1.06] text-white sm:text-[3rem] lg:text-[3.4rem]">
+              <h1 className="mt-5 max-w-[18ch] text-[2.15rem] font-bold leading-[1.1] tracking-[-0.025em] text-white sm:text-[2.6rem] lg:text-[3rem]">
                 Discover quality education without boundaries.
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">
+              <p className="mt-5 max-w-xl text-[0.98rem] leading-7 text-white/72 sm:text-base sm:leading-7">
                 Explore accredited online and open education programmes from
                 reputable tertiary institutions worldwide—through one trusted
                 global education ecosystem.
@@ -187,15 +187,15 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-          <div className="relative mx-auto w-full max-w-[520px] lg:justify-self-end">
-            <div className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl sm:aspect-[16/10] lg:aspect-[5/4]">
+          <div className="relative mx-auto w-full max-w-[430px] lg:justify-self-end">
+            <div className="relative aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/15 bg-navy-800 shadow-2xl">
                 <Image
                   src="/media/hero-learner.jpg"
                   alt="Learner accessing online tertiary education"
                   fill
                   priority
-                  sizes="(max-width:1023px) 90vw,40vw"
-                  className="object-cover transition duration-700 group-hover:scale-[1.025]"
+                  sizes="(max-width:1023px) 90vw,430px"
+                  className="object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-900/10 via-transparent to-white/5" />
             </div>
