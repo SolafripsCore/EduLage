@@ -43,10 +43,10 @@ export default function Home() {
       <div className="hero-grid absolute inset-0 -z-20 opacity-20"/>
       <div className="hero-aurora absolute inset-0 -z-20"/>
       <Container>
-        <div className="grid gap-10 pb-10 pt-14 lg:grid-cols-[1.08fr_0.92fr] lg:items-center lg:gap-14 lg:pb-12 lg:pt-16">
+        <div className="grid gap-9 pb-8 pt-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-14 lg:pb-9 lg:pt-14">
           <div className="relative z-10 max-w-3xl">
             <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-teal-400"><span className="h-px w-8 bg-teal-400"/>The Global Education Village</p>
-            <h1 className="mt-5 max-w-[12ch] text-[2.65rem] font-bold leading-[1.04] text-white sm:text-[3.25rem] lg:text-[3.75rem]">Discover quality education without boundaries.</h1>
+            <h1 className="mt-5 max-w-[17ch] text-[2.45rem] font-bold leading-[1.06] text-white sm:text-[3rem] lg:text-[3.4rem]">Discover quality education without boundaries.</h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">Explore accredited online and open education programmes from reputable tertiary institutions worldwide—through one trusted global education ecosystem.</p>
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <Button href="/programmes" variant="teal">Explore programmes</Button>
@@ -59,8 +59,8 @@ export default function Home() {
               <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70"><MapPin size={17} className="mt-0.5 shrink-0 text-teal-400"/><span>Local support through OECs</span></li>
             </ul>
           </div>
-          <div className="relative mx-auto w-full max-w-[470px] lg:justify-self-end">
-            <div className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl">
+          <div className="relative mx-auto w-full max-w-[520px] lg:justify-self-end">
+            <div className="group relative aspect-[4/5] overflow-hidden rounded-[2rem] border border-white/15 shadow-2xl sm:aspect-[16/10] lg:aspect-[5/4]">
               <Image src="/media/hero-learner.jpg" alt="Learner accessing online tertiary education" fill priority sizes="(max-width:1023px) 90vw,40vw" className="object-cover transition duration-700 group-hover:scale-[1.025]"/>
               <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-transparent to-transparent"/>
               <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/15 bg-navy-900/75 p-5 backdrop-blur-md sm:inset-x-6 sm:bottom-6">
@@ -70,7 +70,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <div className="relative z-10 pb-10">
+        <div className="relative z-10 pb-8">
           <div className="rounded-2xl border border-white/15 bg-white p-5 text-navy-800 shadow-2xl md:p-6">
             <div className="mb-4 flex flex-wrap items-end justify-between gap-3"><div><p className="font-bold text-navy-800">Find your programme</p><p className="mt-1 text-xs text-ink-600">Search by subject, qualification, institution or delivery format.</p></div><Link href="/programmes" className="group inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700">Advanced search and filters <ArrowRight size={13} className="transition-transform group-hover:translate-x-0.5"/></Link></div>
             <form action="/programmes" className="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_auto]" role="search"><label className="relative"><span className="sr-only">Programme, subject or institution</span><Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" size={18}/><input name="query" placeholder="Programme, subject or institution" className="h-12 w-full rounded-xl border border-line pl-11 pr-4 text-sm outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"/></label><label><span className="sr-only">Study level</span><select name="level" defaultValue="" className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"><option value="">All study levels</option>{studyLevels.map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label><label><span className="sr-only">Delivery mode</span><select name="mode" defaultValue="" className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"><option value="">All delivery modes</option><option>Fully online</option><option>Online + OEC exams</option></select></label><button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-7 text-sm font-bold text-white transition hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"><Search size={17}/>Search programmes</button></form>
