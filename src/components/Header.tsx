@@ -84,7 +84,7 @@ export function Header() {
       <div className="hidden items-center gap-2 lg:flex">
         <button type="button" aria-label="Search programmes" aria-expanded={searchOpen} aria-controls="header-search-panel" onClick={showSearch} className="rounded-md p-2 text-ink-600 hover:bg-surface hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"><Search size={19} /></button>
         <Button href="/sign-in" variant="secondary" className="px-3 py-2">Sign in</Button>
-        <Button href="/for-institutions" className="px-3 py-2">Join as an institution</Button>
+        <Button href="/for-institutions" className="px-3 py-2">Get started</Button>
       </div>
       <button className="rounded-md p-2 text-navy-800 lg:hidden" aria-label="Open navigation" aria-expanded={open} onClick={() => setOpen(true)}><Menu size={24} /></button>
     </div>
@@ -92,7 +92,7 @@ export function Header() {
     {open && <div className="fixed inset-0 z-50 bg-white p-6 lg:hidden">
       <div className="flex items-center justify-between"><Link href="/" onClick={() => setOpen(false)}><Image src="/brand/edulage-logo.png" alt="EduLage" width={150} height={54} className="h-11 w-[122px] object-contain" /></Link><button onClick={() => setOpen(false)} aria-label="Close navigation" className="rounded-md p-2 text-navy-800"><X size={25} /></button></div>
       <nav className="mt-10 flex max-h-[calc(100vh-180px)] flex-col gap-4 overflow-y-auto" aria-label="Mobile navigation">{[...mainLinks,...catalogueLinks].map(([label,href])=><Link key={`${label}-${href}`} href={href} onClick={() => setOpen(false)} className="border-b border-line pb-3 text-lg font-semibold text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500">{label}</Link>)}<p className="pt-2 text-xs font-bold uppercase tracking-[0.16em] text-teal-600">Study options</p>{studyTypeLinks.slice(0, 4).map(([label, href]) => <Link key={href} href={href} onClick={() => setOpen(false)} className="-mt-1 border-b border-line pb-3 text-base font-semibold text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500">{label}</Link>)}<p className="pt-2 text-xs font-bold uppercase tracking-[0.16em] text-teal-600">More</p>{utilityLinks.map(([label, href]) => <Link key={`${label}-${href}`} href={href} onClick={() => setOpen(false)} className="-mt-1 border-b border-line pb-3 text-base font-semibold text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500">{label}</Link>)}<button type="button" onClick={showSearch} className="border-b border-line pb-3 text-left text-base font-semibold text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500">Search programmes</button></nav>
-      <div className="mt-8 flex gap-3"><Button href="/sign-in" variant="secondary" className="flex-1">Sign in</Button><Button href="/for-institutions" className="flex-1">Join as an institution</Button></div>
+      <div className="mt-8 flex gap-3"><Button href="/sign-in" variant="secondary" className="flex-1">Sign in</Button><Button href="/for-institutions" className="flex-1">Get started</Button></div>
     </div>}
   </header></>;
 }
