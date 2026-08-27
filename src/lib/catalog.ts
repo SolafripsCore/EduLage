@@ -4,7 +4,7 @@ import { institutions } from "@/data/institutions";
 import { programmes } from "@/data/programmes";
 import type { Programme } from "@/data/types";
 
-export type ProgrammeFilters = Partial<Pick<Programme, "discipline" | "credential" | "deliveryMode" | "language" | "studyMode" | "level">> & { country?: string; query?: string };
+export type ProgrammeFilters = Partial<Pick<Programme, "discipline" | "credential" | "deliveryMode" | "language" | "studyMode" | "level" | "institutionId">> & { country?: string; query?: string };
 
 export function getProgrammes(filters: ProgrammeFilters = {}) {
   return programmes.filter((programme) => {
@@ -16,6 +16,7 @@ export function getProgrammes(filters: ProgrammeFilters = {}) {
       && (!filters.language || programme.language === filters.language)
       && (!filters.studyMode || programme.studyMode === filters.studyMode)
       && (!filters.level || programme.level === filters.level)
+      && (!filters.institutionId || programme.institutionId === filters.institutionId)
       && (!filters.country || institution?.country === filters.country)
       && (!filters.query || haystack.includes(filters.query.toLowerCase()));
   });

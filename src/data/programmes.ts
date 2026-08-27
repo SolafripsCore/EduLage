@@ -8,7 +8,7 @@ type Seed = Omit<
   Partial<Pick<Programme, "entryRequirements" | "modules" | "assessmentNote" | "tuitionNote">>;
 
 const base = (item: Seed): Programme => ({
-  tuitionNote: "Tuition is set and collected by the institution. Edulage does not price programmes.",
+  tuitionNote: "Tuition is set and collected by the institution. EduLage does not price programmes.",
   entryRequirements: [
     "Meet the institution's published entry requirements for this programme.",
     "Submit academic transcripts and identification through the institution's admissions portal.",

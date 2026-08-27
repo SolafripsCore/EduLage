@@ -16,12 +16,12 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://edulage.org"),
   title: {
-    default: "Edulage | Global education infrastructure",
-    template: "%s | Edulage",
+    default: "EduLage | The Global Education Village",
+    template: "%s | EduLage",
   },
   description: "Discover degree and professional programmes from accredited institutions worldwide.",
   openGraph: {
-    title: "Edulage | Global education infrastructure",
+    title: "EduLage | The Global Education Village",
     description: "A global marketplace for accredited higher-education programmes.",
     type: "website",
     url: "https://edulage.org",

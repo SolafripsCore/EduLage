@@ -87,7 +87,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
           </div>
           <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
           <a href={institution.admissionsPortalUrl} target="_blank" rel="noreferrer" className="mt-6 flex items-center justify-center gap-2 rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">Apply on {institution.shortName}&apos;s portal <ArrowUpRight size={16} /></a>
-          <p className="mt-4 text-xs leading-5 text-ink-400">Admission decisions are made solely by {institution.name}. Edulage does not process admissions.</p>
+          <p className="mt-4 text-xs leading-5 text-ink-400">Admission decisions are made solely by {institution.name}. EduLage does not process admissions.</p>
         </aside>
       </div>
     </Container>
