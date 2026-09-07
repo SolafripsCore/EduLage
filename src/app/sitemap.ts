@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
@@ -21,7 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/data-protection",
   ];
   return routes.map((route) => ({
-    url: `https://edulage.org${route}`,
+    url: `${siteUrl}${route}`,
     lastModified: new Date(),
   }));
 }
