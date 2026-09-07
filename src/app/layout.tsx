@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteChrome } from "@/components/SiteChrome";
+import { isProduction, siteUrl } from "@/lib/site";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,7 +15,8 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://edulage.org"),
+  metadataBase: new URL(siteUrl),
+  robots: isProduction ? undefined : { index: false, follow: false },
   title: {
     default: "EduLage | The Global Education Village",
     template: "%s | EduLage",
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     title: "EduLage | The Global Education Village",
     description: "A trusted global education ecosystem connecting learners with quality open and online education.",
     type: "website",
-    url: "https://edulage.org",
+    url: siteUrl,
   },
 };
 
