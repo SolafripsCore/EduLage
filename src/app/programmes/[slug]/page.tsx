@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { Pill } from "@/components/ui/Pill";
 import { Checklist } from "@/components/ui/Checklist";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
+import { AdmissionsCta } from "@/components/AdmissionsCta";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const programme = getProgrammeBySlug((await params).slug);
@@ -38,7 +39,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Course", name: programme.title, provider: { "@type": "CollegeOrUniversity", name: institution.name } }) }} />
     <div className="group relative isolate overflow-hidden bg-navy-900 py-14 text-white">
-      <Image src={programme.image} alt="" fill sizes="100vw" className="image-zoom absolute inset-0 -z-20 object-cover" />
+      <Image src={programme.image} alt={`${programme.title} at ${institution.name}`} fill sizes="100vw" className="image-zoom absolute inset-0 -z-20 object-cover" />
       <div className="hero-media-overlay absolute inset-0 -z-10" />
       <Container>
         <Link href="/programmes" className="text-sm text-white/75 hover:text-white focus-visible:ring-2 focus-visible:ring-teal-400">← All programmes</Link>
@@ -90,8 +91,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
             <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Next intake</span><span className="font-semibold text-navy-800">{programme.nextIntake}</span></div>
           </div>
           <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
-          <Link href="/contact" className="mt-6 flex items-center justify-center rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">Request admissions guidance</Link>
-          <p className="mt-4 text-xs leading-5 text-ink-400">The official institutional application link is published after it has been confirmed by {institution.name}. Admission decisions remain solely with the institution.</p>
+          <AdmissionsCta institution={institution} />
         </aside>
       </div>
     </Container>
