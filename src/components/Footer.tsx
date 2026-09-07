@@ -74,20 +74,20 @@ export function Footer() {
               <p className="text-sm font-semibold text-white">
                 Need help finding the right pathway?
               </p>
-              <p className="mt-2 text-xs leading-5 text-white/60">
+              <p className="mt-2 text-sm leading-6 text-white/65">
                 Explore programmes, participating institutions and supported
                 access options.
               </p>
               <div className="mt-4 flex flex-wrap gap-3">
                 <Link
                   href="/programmes"
-                  className="rounded-md bg-teal-500 px-4 py-2 text-xs font-bold text-navy-900"
+                  className="rounded-md bg-teal-500 px-4 py-2 text-sm font-bold text-navy-900"
                 >
                   Explore programmes
                 </Link>
                 <Link
                   href="/help"
-                  className="rounded-md border border-white/20 px-4 py-2 text-xs font-bold text-white"
+                  className="rounded-md border border-white/20 px-4 py-2 text-sm font-bold text-white"
                 >
                   Help & support
                 </Link>
@@ -124,7 +124,7 @@ export function Footer() {
             <Link href="/accessibility">Accessibility</Link>
             <Link href="/data-protection">Data protection</Link>
             <Link href="/contact">Contact</Link>
-          <span aria-label="Current site language">English (default)</span>
+            <span aria-label="Current site language">English (default)</span>
           </div>
         </div>
       </Container>

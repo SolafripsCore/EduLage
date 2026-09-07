@@ -64,6 +64,15 @@ export function Header() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
   const showSearch = () => {
     setSearchOpen((value) => !value);
     setStudyOpen(false);
@@ -226,7 +235,7 @@ export function Header() {
           </div>
         )}
         {open && (
-          <div className="fixed inset-0 z-50 bg-white p-6 lg:hidden">
+          <div className="fixed inset-0 z-50 min-h-dvh overflow-y-auto bg-white p-5 sm:p-6 lg:hidden">
             <div className="flex items-center justify-between">
               <Link href="/" onClick={() => setOpen(false)}>
                 <Image
@@ -246,7 +255,7 @@ export function Header() {
               </button>
             </div>
             <nav
-              className="mt-10 flex max-h-[calc(100vh-180px)] flex-col gap-4 overflow-y-auto"
+              className="mt-8 flex flex-col gap-4 pb-4"
               aria-label="Mobile navigation"
             >
               {[...mainLinks, ...catalogueLinks].map(([label, href]) => (
@@ -293,7 +302,7 @@ export function Header() {
                 Search programmes
               </button>
             </nav>
-            <div className="mt-8 flex gap-3">
+            <div className="sticky bottom-0 mt-5 flex gap-3 border-t border-line bg-white py-4">
               <Button href="/sign-in" variant="secondary" className="flex-1">
                 Access portals
               </Button>

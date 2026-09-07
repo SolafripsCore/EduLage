@@ -187,8 +187,8 @@ export default function Home() {
                 </li>
               </ul>
             </div>
-          <div className="relative mx-auto w-full max-w-[430px] lg:justify-self-end">
-            <div className="relative aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/15 bg-navy-800 shadow-2xl">
+            <div className="relative mx-auto w-full max-w-[430px] lg:justify-self-end">
+              <div className="relative aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/15 bg-navy-800 shadow-2xl">
                 <Image
                   src="/media/hero-learner.jpg"
                   alt="Learner accessing online tertiary education"
@@ -198,26 +198,50 @@ export default function Home() {
                   className="object-contain"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-900/10 via-transparent to-white/5" />
-            </div>
-
-            <div className="absolute -left-3 top-5 z-10 w-[178px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.24)] sm:-left-7 sm:top-6 sm:w-[198px]" aria-label="Verified institution-issued credential">
-              <div className="flex items-center gap-2 text-[10px] font-bold">
-                <ShieldCheck size={14} className="text-teal-600" />
-                <span>Credential verified</span>
               </div>
-              <p className="mt-2 text-[9px] text-ink-500">Issued by the institution</p>
-              <p className="mt-1 text-[10px] font-bold tracking-[0.06em] text-navy-800">EDU-4821-KX</p>
-              <Link href="/verify" className="mt-3 inline-flex text-[9px] font-bold uppercase tracking-[0.08em] text-teal-700">Verified on EduLage</Link>
-            </div>
 
-            <Link href="/open-education-centers" className="group/oec absolute -bottom-4 -left-2 z-10 w-[142px] overflow-hidden rounded-xl border border-white/70 bg-white shadow-[0_18px_45px_rgba(5,18,53,0.28)] sm:-bottom-6 sm:-left-6 sm:w-[164px]" aria-label="Explore Open Education Centers">
-              <span className="relative block h-[104px] sm:h-[122px]">
-                <Image src="/media/oec-lab.jpg" alt="Learners using an Open Education Center" fill sizes="170px" className="object-cover transition duration-500 group-hover/oec:scale-105" />
-                <span className="absolute inset-0 bg-gradient-to-t from-navy-900/65 via-transparent to-transparent" />
-                <span className="absolute inset-x-2 bottom-2 text-[9px] font-medium text-white">Open Education Center</span>
-              </span>
-            </Link>
-          </div>
+              <div
+                className="absolute -left-3 top-5 z-10 w-[178px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.24)] sm:-left-7 sm:top-6 sm:w-[198px]"
+                aria-label="Verified institution-issued credential"
+              >
+                <div className="flex items-center gap-2 text-xs font-bold">
+                  <ShieldCheck size={14} className="text-teal-600" />
+                  <span>Credential verified</span>
+                </div>
+                <p className="mt-2 text-xs text-ink-500">
+                  Issued by the institution
+                </p>
+                <p className="mt-1 text-xs font-bold tracking-[0.06em] text-navy-800">
+                  EDU-4821-KX
+                </p>
+                <Link
+                  href="/verify"
+                  className="mt-3 inline-flex text-[11px] font-bold uppercase tracking-[0.06em] text-teal-700"
+                >
+                  Verified on EduLage
+                </Link>
+              </div>
+
+              <Link
+                href="/open-education-centers"
+                className="group/oec absolute -bottom-4 -left-2 z-10 w-[142px] overflow-hidden rounded-xl border border-white/70 bg-white shadow-[0_18px_45px_rgba(5,18,53,0.28)] sm:-bottom-6 sm:-left-6 sm:w-[164px]"
+                aria-label="Explore Open Education Centers"
+              >
+                <span className="relative block h-[104px] sm:h-[122px]">
+                  <Image
+                    src="/media/oec-lab.jpg"
+                    alt="Learners using an Open Education Center"
+                    fill
+                    sizes="170px"
+                    className="object-cover transition duration-500 group-hover/oec:scale-105"
+                  />
+                  <span className="absolute inset-0 bg-gradient-to-t from-navy-900/65 via-transparent to-transparent" />
+                  <span className="absolute inset-x-2 bottom-2 text-xs font-semibold text-white">
+                    Open Education Center
+                  </span>
+                </span>
+              </Link>
+            </div>
           </div>
           <div className="relative z-10 pb-8">
             <div className="rounded-2xl border border-white/15 bg-white p-5 text-navy-800 shadow-2xl md:p-6">
@@ -347,7 +371,7 @@ export default function Home() {
                     <div className="min-w-0 flex-1 pt-0.5">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-teal-700">
+                          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-700">
                             Step 0{index + 1}
                           </p>
                           <h3 className="mt-1 text-lg font-bold text-navy-800">
@@ -532,13 +556,16 @@ export default function Home() {
               </div>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button href="/open-education-centers">Find an OEC</Button>
-                <Button href="/open-education-centers#operate" variant="secondary">
+                <Button
+                  href="/open-education-centers#operate"
+                  variant="secondary"
+                >
                   Become an operator
                 </Button>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="relative min-h-[390px] overflow-hidden rounded-2xl">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="relative min-h-[300px] overflow-hidden rounded-2xl sm:min-h-[390px]">
                 <Image
                   src="/media/oec-lab.jpg"
                   alt="Learners in an Open Education Center"
