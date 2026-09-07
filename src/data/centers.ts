@@ -1,0 +1,22 @@
+import type { Center } from "./types";
+
+export const centers: Center[] = [
+  { id: "center-001", name: "Lagos Mainland Open Education Center", city: "Lagos", country: "Nigeria", countryCode: "NG", region: "Africa", facilities: ["Connected devices", "Secure CBT rooms", "Learner support"], seats: 240, status: "Accredited" },
+  { id: "center-002", name: "Enugu Open Education Center", city: "Enugu", country: "Nigeria", countryCode: "NG", region: "Africa", facilities: ["Connected devices", "Study space", "Secure CBT rooms"], seats: 160, status: "Accredited" },
+  { id: "center-003", name: "Nairobi Open Education Center", city: "Nairobi", country: "Kenya", countryCode: "KE", region: "Africa", facilities: ["Connected devices", "Secure CBT rooms", "Learner support"], seats: 180, status: "Accredited" },
+  { id: "center-004", name: "Cape Town Learning Access Center", city: "Cape Town", country: "South Africa", countryCode: "ZA", region: "Africa", facilities: ["Connected devices", "Secure CBT rooms", "Study space"], seats: 200, status: "Accredited" },
+  { id: "center-005", name: "Cairo Open Education Center", city: "Cairo", country: "Egypt", countryCode: "EG", region: "Africa", facilities: ["Connected devices", "Study space", "Learner support"], seats: 150, status: "Provisional" },
+  { id: "center-006", name: "São Paulo Open Education Center", city: "São Paulo", country: "Brazil", countryCode: "BR", region: "Latin America", facilities: ["Connected devices", "Secure CBT rooms", "Learner support"], seats: 220, status: "Accredited" },
+  { id: "center-007", name: "Bogotá Learning Access Center", city: "Bogotá", country: "Colombia", countryCode: "CO", region: "Latin America", facilities: ["Connected devices", "Study space", "Secure CBT rooms"], seats: 130, status: "Provisional" },
+  { id: "center-008", name: "Mumbai Open Education Center", city: "Mumbai", country: "India", countryCode: "IN", region: "South Asia", facilities: ["Connected devices", "Secure CBT rooms", "Learner support"], seats: 320, status: "Accredited" },
+  { id: "center-009", name: "Dhaka Open Education Center", city: "Dhaka", country: "Bangladesh", countryCode: "BD", region: "South Asia", facilities: ["Connected devices", "Study space", "Secure CBT rooms"], seats: 180, status: "Accredited" },
+  { id: "center-010", name: "Singapore Assessment Center", city: "Singapore", country: "Singapore", countryCode: "SG", region: "East Asia", facilities: ["Connected devices", "Secure CBT rooms", "Accessibility support"], seats: 140, status: "Accredited" },
+  { id: "center-011", name: "Jakarta Open Education Center", city: "Jakarta", country: "Indonesia", countryCode: "ID", region: "East Asia", facilities: ["Connected devices", "Study space", "Learner support"], seats: 210, status: "Accredited" },
+  { id: "center-012", name: "Amsterdam Assessment Center", city: "Amsterdam", country: "Netherlands", countryCode: "NL", region: "Europe", facilities: ["Secure CBT rooms", "Accessibility support", "Study space"], seats: 120, status: "Accredited" },
+  { id: "center-013", name: "Berlin Open Education Center", city: "Berlin", country: "Germany", countryCode: "DE", region: "Europe", facilities: ["Connected devices", "Secure CBT rooms", "Learner support"], seats: 160, status: "Accredited" },
+  { id: "center-014", name: "London Assessment Center", city: "London", country: "United Kingdom", countryCode: "GB", region: "Europe", facilities: ["Secure CBT rooms", "Study space", "Accessibility support"], seats: 175, status: "Accredited" },
+  { id: "center-015", name: "Toronto Learning Access Center", city: "Toronto", country: "Canada", countryCode: "CA", region: "North America", facilities: ["Connected devices", "Secure CBT rooms", "Learner support"], seats: 190, status: "Accredited" },
+  { id: "center-016", name: "Dubai Open Education Center", city: "Dubai", country: "United Arab Emirates", countryCode: "AE", region: "Middle East", facilities: ["Connected devices", "Secure CBT rooms", "Study space"], seats: 165, status: "Accredited" },
+  { id: "center-017", name: "Sydney Assessment Center", city: "Sydney", country: "Australia", countryCode: "AU", region: "Oceania", facilities: ["Secure CBT rooms", "Accessibility support", "Learner support"], seats: 145, status: "Accredited" },
+  { id: "center-018", name: "Auckland Digital Study Center", city: "Auckland", country: "New Zealand", countryCode: "NZ", region: "Oceania", facilities: ["Connected devices", "Learner support", "Secure CBT rooms"], seats: 110, status: "Provisional" },
+];
