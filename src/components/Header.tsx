@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { AccountControls } from "./AccountControls";
 import { Button } from "./ui/Button";
 
 const mainLinks = [
@@ -196,12 +197,7 @@ export function Header() {
             >
               <Search size={19} />
             </button>
-            <Button href="/sign-in" variant="secondary" className="px-3 py-2">
-              Access portals
-            </Button>
-            <Button href="/get-started" className="px-3 py-2">
-              Get started
-            </Button>
+            <AccountControls />
           </div>
           <button
             className="rounded-md p-2 text-navy-800 lg:hidden"
@@ -303,12 +299,7 @@ export function Header() {
               </button>
             </nav>
             <div className="sticky bottom-0 mt-5 flex gap-3 border-t border-line bg-white py-4">
-              <Button href="/sign-in" variant="secondary" className="flex-1">
-                Access portals
-              </Button>
-              <Button href="/get-started" className="flex-1">
-                Get started
-              </Button>
+              <AccountControls mobile />
             </div>
           </div>
         )}
