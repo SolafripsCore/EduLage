@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { learnLinks } from "@/lib/site";
 import { Container } from "./ui/Container";
 
 const columns = [
@@ -24,8 +25,8 @@ const columns = [
   [
     "Access & support",
     [
+      ["Sign in to My learning", learnLinks.myLearning],
       ["Open Education Centers", "/open-education-centers"],
-      ["OEC standards", "/open-education-centers"],
       ["Learner support", "/help"],
       ["Verify a credential", "/verify"],
     ],

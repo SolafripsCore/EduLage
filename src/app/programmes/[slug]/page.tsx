@@ -9,6 +9,7 @@ import { Container } from "@/components/ui/Container";
 import { Pill } from "@/components/ui/Pill";
 import { Checklist } from "@/components/ui/Checklist";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
+import { learnLinks } from "@/lib/site";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const programme = getProgrammeBySlug((await params).slug);
@@ -92,6 +93,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
           <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
           <Link href="/contact" className="mt-6 flex items-center justify-center rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">Request admissions guidance</Link>
           <p className="mt-4 text-xs leading-5 text-ink-400">The official institutional application link is published after it has been confirmed by {institution.name}. Admission decisions remain solely with the institution.</p>
+          <p className="mt-5 border-t border-line pt-4 text-sm text-ink-600">Already admitted? <a href={learnLinks.signIn} className="font-bold text-teal-700 hover:text-navy-800">Sign in to start learning →</a></p>
         </aside>
       </div>
     </Container>
