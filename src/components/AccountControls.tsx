@@ -45,8 +45,8 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
         >
           Sign in
         </Button>
-        <Button href="/get-started" className={mobile ? "flex-1" : "px-3 py-2"}>
-          Get started
+        <Button href={learnLinks.register} className={mobile ? "flex-1" : "px-3 py-2"}>
+          Create account
         </Button>
       </>
     );

@@ -10,6 +10,7 @@ import { Pill } from "@/components/ui/Pill";
 import { Checklist } from "@/components/ui/Checklist";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { learnLinks } from "@/lib/site";
+import { EnrolCta } from "@/components/EnrolCta";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const programme = getProgrammeBySlug((await params).slug);
@@ -87,12 +88,11 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
           </div>
           <div className="mt-5 flex flex-wrap gap-2"><Pill accent>{programme.credential}</Pill><Pill>{programme.deliveryMode}</Pill></div>
           <div className="mt-5 space-y-3 border-y border-line py-4">
-            <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Tuition from</span><span className="font-semibold text-navy-800">{tuition} / {programme.tuitionPeriod}</span></div>
+            <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Tuition from</span><span className="font-semibold text-navy-800">{programme.tuitionFrom > 0 ? `${tuition} / ${programme.tuitionPeriod}` : "Set by the institution"}</span></div>
             <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Next intake</span><span className="font-semibold text-navy-800">{programme.nextIntake}</span></div>
           </div>
           <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
-          <Link href="/contact" className="mt-6 flex items-center justify-center rounded-md bg-navy-800 px-4 py-3 text-sm font-semibold text-white hover:bg-navy-700 focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">Request admissions guidance</Link>
-          <p className="mt-4 text-xs leading-5 text-ink-400">The official institutional application link is published after it has been confirmed by {institution.name}. Admission decisions remain solely with the institution.</p>
+          <EnrolCta courseId={programme.courseId} institutionName={institution.name} />
           <p className="mt-5 border-t border-line pt-4 text-sm text-ink-600">Already admitted? <a href={learnLinks.signIn} className="font-bold text-teal-700 hover:text-navy-800">Sign in to start learning →</a></p>
         </aside>
       </div>
