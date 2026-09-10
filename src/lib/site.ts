@@ -15,6 +15,7 @@ export const studioUrl =
 
 export const learnLinks = {
   signIn: `${learnUrl}/login?next=/dashboard`,
+  register: `${learnUrl}/edulage/register/`,
   myLearning: `${learnUrl}/dashboard`,
   account: `${learnUrl}/account/settings`,
   signOut: `${learnUrl}/logout`,
