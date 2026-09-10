@@ -46,7 +46,7 @@ export function EnrolCta({
       headers: { Accept: "application/json" },
     })
       .then((res) => (res.ok ? res.json() : null))
-      .then((data: { results?: RunPolicy[] } | null) => setRun(data?.results?.[0] ?? null))
+      .then((data: { runs?: RunPolicy[] } | null) => setRun(data?.runs?.[0] ?? null))
       .catch(() => setRun(null));
     return () => controller.abort();
   }, [courseId]);
