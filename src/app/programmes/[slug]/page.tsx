@@ -9,7 +9,8 @@ import { Container } from "@/components/ui/Container";
 import { Pill } from "@/components/ui/Pill";
 import { Checklist } from "@/components/ui/Checklist";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
-import { AdmissionsCta } from "@/components/AdmissionsCta";
+import { learnLinks } from "@/lib/site";
+import { EnrolCta } from "@/components/EnrolCta";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const programme = getProgrammeBySlug((await params).slug);
@@ -39,7 +40,7 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
   return <>
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Course", name: programme.title, provider: { "@type": "CollegeOrUniversity", name: institution.name } }) }} />
     <div className="group relative isolate overflow-hidden bg-navy-900 py-14 text-white">
-      <Image src={programme.image} alt={`${programme.title} at ${institution.name}`} fill sizes="100vw" className="image-zoom absolute inset-0 -z-20 object-cover" />
+      <Image src={programme.image} alt="" fill sizes="100vw" className="image-zoom absolute inset-0 -z-20 object-cover" />
       <div className="hero-media-overlay absolute inset-0 -z-10" />
       <Container>
         <Link href="/programmes" className="text-sm text-white/75 hover:text-white focus-visible:ring-2 focus-visible:ring-teal-400">← All programmes</Link>
@@ -87,11 +88,12 @@ export default async function ProgrammeDetail({ params }: { params: Promise<{ sl
           </div>
           <div className="mt-5 flex flex-wrap gap-2"><Pill accent>{programme.credential}</Pill><Pill>{programme.deliveryMode}</Pill></div>
           <div className="mt-5 space-y-3 border-y border-line py-4">
-            <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Tuition from</span><span className="font-semibold text-navy-800">{tuition} / {programme.tuitionPeriod}</span></div>
+            <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Tuition from</span><span className="font-semibold text-navy-800">{programme.tuitionFrom > 0 ? `${tuition} / ${programme.tuitionPeriod}` : "Set by the institution"}</span></div>
             <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Next intake</span><span className="font-semibold text-navy-800">{programme.nextIntake}</span></div>
           </div>
           <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
-          <AdmissionsCta institution={institution} />
+          <EnrolCta courseId={programme.courseId} institutionName={institution.name} />
+          <p className="mt-5 border-t border-line pt-4 text-sm text-ink-600">Already admitted? <a href={learnLinks.signIn} className="font-bold text-teal-700 hover:text-navy-800">Sign in to start learning →</a></p>
         </aside>
       </div>
     </Container>

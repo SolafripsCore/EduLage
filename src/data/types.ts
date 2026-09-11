@@ -56,6 +56,8 @@ export type Programme = {
   requiresOecExam: boolean;
   image: string;
   trending?: boolean;
+  /** Open edX course run key; when set, the programme page reads its enrolment policy and price from the LMS. */
+  courseId?: string;
 };
 
 export type Discipline = {
