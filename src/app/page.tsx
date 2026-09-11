@@ -21,6 +21,9 @@ import { HighDemandFields } from "@/components/HighDemandFields";
 import { getCatalogue, enrolUrl, priceLabel } from "@/lib/liveCatalogue";
 import { learnLinks } from "@/lib/site";
 import { centers } from "@/data/centers";
+import { institutions as sampleInstitutions } from "@/data/institutions";
+import { getFeaturedProgrammes, getMarketplaceStats } from "@/lib/catalog";
+import { ProgrammeCard } from "@/components/ProgrammeCard";
 
 const studyLevels = [
   ["Undergraduate", "Undergraduate degrees"],
@@ -68,14 +71,34 @@ export default async function Home() {
   const catalogue = await getCatalogue();
   const openCourses = catalogue?.open_courses.slice(0, 6) ?? [];
   const liveInstitutions = catalogue?.institutions ?? [];
-  const stats = catalogue
-    ? [
-        { icon: Landmark, value: catalogue.counts.institutions, label: "Institutions" },
-        { icon: BookOpen, value: catalogue.counts.courses, label: "Courses & programmes" },
-        { icon: GraduationCap, value: catalogue.counts.open_courses, label: "Open for enrolment now" },
-        { icon: MapPin, value: centers.length, label: "Open Education Centers" },
-      ]
-    : [];
+  const sample = getMarketplaceStats();
+  const featuredProgrammes = getFeaturedProgrammes(6);
+  const institutionCards = [
+    ...liveInstitutions.map((i) => ({
+      key: i.code,
+      href: `/institutions/${i.code.toLowerCase()}`,
+      name: i.name,
+      country: i.country,
+      logo: i.logo,
+      image: "",
+      mark: i.code.slice(0, 2),
+    })),
+    ...sampleInstitutions.slice(0, 9 - Math.min(liveInstitutions.length, 3)).map((i) => ({
+      key: i.id,
+      href: `/institutions/${i.slug}`,
+      name: i.name,
+      country: i.country,
+      logo: i.logo,
+      image: i.campusImage,
+      mark: i.shortName.slice(0, 2),
+    })),
+  ].slice(0, 9);
+  const stats = [
+    { icon: Landmark, value: (catalogue?.counts.institutions ?? 0) + sample.institutions, label: "Institutions" },
+    { icon: BookOpen, value: (catalogue?.counts.courses ?? 0) + sample.programmes, label: "Programmes & courses" },
+    { icon: Globe2, value: (catalogue?.counts.countries ?? 0) + sample.countries, label: "Countries" },
+    { icon: MapPin, value: centers.length, label: "Open Education Centers" },
+  ];
 
   return (
     <main>
@@ -207,23 +230,21 @@ export default async function Home() {
       </section>
 
       {/* Live numbers */}
-      {stats.length > 0 && (
-        <section className="border-b border-line bg-white">
-          <Container>
-            <dl className="grid grid-cols-2 divide-line py-6 sm:grid-cols-4 sm:divide-x">
-              {stats.map(({ icon: Icon, value, label }) => (
-                <div key={label} className="flex items-center gap-3 px-2 py-2 sm:justify-center">
-                  <Icon size={22} className="shrink-0 text-teal-600" />
-                  <div>
-                    <dd className="text-2xl font-bold leading-none text-navy-800">{value}</dd>
-                    <dt className="mt-1 text-xs text-ink-600">{label}</dt>
-                  </div>
+      <section className="border-b border-line bg-white">
+        <Container>
+          <dl className="grid grid-cols-2 divide-line py-6 sm:grid-cols-4 sm:divide-x">
+            {stats.map(({ icon: Icon, value, label }) => (
+              <div key={label} className="flex items-center gap-3 px-2 py-2 sm:justify-center">
+                <Icon size={22} className="shrink-0 text-teal-600" />
+                <div>
+                  <dd className="text-2xl font-bold leading-none text-navy-800">{value}</dd>
+                  <dt className="mt-1 text-xs text-ink-600">{label}</dt>
                 </div>
-              ))}
-            </dl>
-          </Container>
-        </section>
-      )}
+              </div>
+            ))}
+          </dl>
+        </Container>
+      </section>
 
       {/* Enrol now */}
       {openCourses.length > 0 && (
@@ -339,10 +360,34 @@ export default async function Home() {
         </Container>
       </section>
 
+      {/* Featured programmes */}
+      <section className="bg-surface py-20 md:py-24">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <p className="section-kicker">Featured programmes</p>
+              <h2 className="section-title">Degrees and professional programmes from leading institutions.</h2>
+              <p className="section-lead">
+                Admission-based programmes taught and awarded by the institution, delivered online with optional Open
+                Education Center support.
+              </p>
+            </div>
+            <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
+              Browse all programmes <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {featuredProgrammes.map((programme) => (
+              <ProgrammeCard key={programme.id} programme={programme} discovery />
+            ))}
+          </div>
+        </Container>
+      </section>
+
       <HighDemandFields />
 
       {/* Institutions */}
-      {liveInstitutions.length > 0 && (
+      {institutionCards.length > 0 && (
         <section className="bg-white py-20 md:py-24">
           <Container>
             <div className="flex flex-wrap items-end justify-between gap-5">
@@ -358,23 +403,27 @@ export default async function Home() {
               </Link>
             </div>
             <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {liveInstitutions.map((institution) => (
+              {institutionCards.map((institution) => (
                 <Link
-                  key={institution.code}
-                  href={`/institutions/${institution.code.toLowerCase()}`}
-                  className="group grid grid-cols-[64px_1fr] gap-4 rounded-2xl border border-line p-5 transition hover:-translate-y-1 hover:border-teal-500 hover:shadow-xl"
+                  key={institution.key}
+                  href={institution.href}
+                  className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition hover:-translate-y-1 hover:border-teal-500 hover:shadow-xl"
                 >
-                  <span className="grid size-16 place-items-center rounded-xl bg-surface p-2 text-lg font-bold text-navy-800">
-                    {institution.logo ? (
-                      <Image src={institution.logo} alt={`${institution.name} logo`} width={56} height={40} className="max-h-10 w-auto object-contain" unoptimized />
-                    ) : (
-                      institution.code.slice(0, 2)
+                  <div className="relative h-32 bg-navy-800">
+                    {institution.image && (
+                      <Image src={institution.image} alt={`${institution.name} campus`} fill sizes="(max-width:639px) 100vw, 33vw" className="object-cover" />
                     )}
-                  </span>
-                  <div className="min-w-0">
+                    <span className="absolute -bottom-5 left-5 grid h-12 w-14 place-items-center overflow-hidden rounded-md border-4 border-white bg-white p-1 text-sm font-bold text-navy-800 shadow-sm">
+                      {institution.logo ? (
+                        <Image src={institution.logo} alt={`${institution.name} logo`} width={48} height={36} className="size-full object-contain" unoptimized={institution.logo.startsWith("http")} />
+                      ) : (
+                        institution.mark
+                      )}
+                    </span>
+                  </div>
+                  <div className="p-5 pt-8">
                     {institution.country && <p className="text-xs font-semibold text-teal-600">{institution.country}</p>}
                     <h3 className="mt-1 text-base font-bold leading-6 text-navy-800 group-hover:text-teal-600">{institution.name}</h3>
-                    <p className="mt-2 text-xs text-ink-600">{institution.host}</p>
                   </div>
                 </Link>
               ))}
