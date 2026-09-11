@@ -6,7 +6,7 @@ import { learnLinks } from "@/lib/site";
 import { useLearnerSession } from "@/lib/useLearnerSession";
 import { Button } from "./ui/Button";
 
-const menuItems = [
+const learnerItems = [
   ["My learning", learnLinks.myLearning],
   ["Account", learnLinks.account],
   ["Help & support", "/help"],
@@ -53,12 +53,21 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
   }
 
   const initials = session.username.slice(0, 2).toUpperCase();
+  const { doors } = session;
+  const staffItems: [string, string][] = [
+    ...(doors.studio ? [["EduLage Studio", learnLinks.studio] as [string, string]] : []),
+    ...(doors.admin ? [["Platform admin", learnLinks.admin] as [string, string]] : []),
+  ];
 
   if (mobile) {
     return (
       <>
-        <Button href={learnLinks.myLearning} variant="secondary" className="flex-1">
-          My learning
+        <Button
+          href={doors.studio ? learnLinks.studio : learnLinks.myLearning}
+          variant="secondary"
+          className="flex-1"
+        >
+          {doors.studio ? "Studio" : "My learning"}
         </Button>
         <Button href={learnLinks.signOut} className="flex-1">
           Sign out
@@ -69,6 +78,11 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
 
   return (
     <>
+      {doors.studio && (
+        <Button href={learnLinks.studio} variant="secondary" className="hidden px-3 py-2 lg:inline-flex">
+          Studio
+        </Button>
+      )}
       <Button href={learnLinks.myLearning} variant="secondary" className="px-3 py-2">
         My learning
       </Button>
@@ -99,7 +113,7 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
             role="menu"
             className="absolute right-0 top-full z-50 mt-3 w-56 rounded-xl border border-line bg-white p-2 shadow-xl"
           >
-            {menuItems.map(([label, href]) => (
+            {[...learnerItems, ...staffItems].map(([label, href]) => (
               <a
                 key={label}
                 role="menuitem"
