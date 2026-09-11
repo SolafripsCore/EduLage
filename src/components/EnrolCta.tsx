@@ -70,6 +70,17 @@ export function EnrolCta({
     );
   }
 
+  if (courseId && run) {
+    return (
+      <>
+        <a href={`${learnUrl}/edulage/apply/${courseId}/`} className={buttonClass}>Apply</a>
+        <p className="mt-4 text-xs leading-5 text-ink-400">
+          Admission required. You will be asked to sign in or create a free EduLage account; your application then appears on your My learning dashboard and {institutionName} records its decision there. Once admitted, the programme is activated automatically.
+        </p>
+      </>
+    );
+  }
+
   return (
     <>
       <Link href="/contact" className={buttonClass}>Request admissions guidance</Link>
