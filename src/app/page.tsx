@@ -7,7 +7,6 @@ import {
   Building2,
   CheckCircle2,
   Globe2,
-  GraduationCap,
   Landmark,
   Laptop2,
   MapPin,
