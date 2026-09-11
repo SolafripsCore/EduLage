@@ -25,7 +25,7 @@ export function InstitutionDirectory() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {regionItems.map((institution) => <Link key={institution.id} href={`/institutions/${institution.slug}`} className="group card-hover flex min-h-48 flex-col justify-between overflow-hidden rounded-xl border border-line bg-white focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">
             <div className="relative h-32 w-full">
-              <Image src={institution.campusImage} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw" className="image-zoom object-cover" />
+              <Image src={institution.campusImage} alt={`${institution.name} campus`} fill sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw" className="image-zoom object-cover" />
             </div>
             <div className="flex flex-1 flex-col justify-between p-5">
               <span className="flex items-center gap-3">
