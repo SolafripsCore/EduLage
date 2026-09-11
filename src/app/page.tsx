@@ -2,56 +2,31 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  Award,
   BookOpen,
   Building2,
   CheckCircle2,
   Globe2,
   Landmark,
-  Laptop2,
   MapPin,
   Search,
   ShieldCheck,
-  UserPlus,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { HighDemandFields } from "@/components/HighDemandFields";
+import { Pill } from "@/components/ui/Pill";
 import { getCatalogue, enrolUrl, priceLabel } from "@/lib/liveCatalogue";
 import { learnLinks } from "@/lib/site";
 import { centers } from "@/data/centers";
 import { institutions as sampleInstitutions } from "@/data/institutions";
 import { getFeaturedProgrammes, getMarketplaceStats } from "@/lib/catalog";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
+import { ProgrammeDiscoveryShowcase } from "@/components/ProgrammeDiscoveryShowcase";
 
 const studyLevels = [
   ["Undergraduate", "Undergraduate degrees"],
   ["Postgraduate", "Postgraduate degrees"],
   ["Doctoral", "Doctoral programmes"],
   ["Professional", "Professional programmes & courses"],
-] as const;
-
-const journey = [
-  [
-    Search,
-    "Discover",
-    "Search programmes and short courses by discipline, qualification, institution, delivery mode and intake.",
-  ],
-  [
-    UserPlus,
-    "Enrol or apply",
-    "Create a free account. Open courses start immediately; admission-based programmes go through the institution's review and appear on your My learning dashboard.",
-  ],
-  [
-    Laptop2,
-    "Learn",
-    "Study with the institution's own teaching team and assessments, online or with a local Open Education Center for exams and support.",
-  ],
-  [
-    Award,
-    "Earn a verifiable credential",
-    "Your certificate is awarded by the institution, recorded by EduLage, and verifiable by anyone from its credential ID.",
-  ],
 ] as const;
 
 const trust = [
@@ -68,30 +43,14 @@ export const metadata = {
 
 export default async function Home() {
   const catalogue = await getCatalogue();
-  const openCourses = catalogue?.open_courses.slice(0, 6) ?? [];
+  const liveCourses = catalogue?.open_courses.slice(0, 4) ?? [];
+  const featured = getFeaturedProgrammes(8 - liveCourses.length);
   const liveInstitutions = catalogue?.institutions ?? [];
   const sample = getMarketplaceStats();
-  const featuredProgrammes = getFeaturedProgrammes(6);
-  const institutionCards = [
-    ...liveInstitutions.map((i) => ({
-      key: i.code,
-      href: `/institutions/${i.code.toLowerCase()}`,
-      name: i.name,
-      country: i.country,
-      logo: i.logo,
-      image: "",
-      mark: i.code.slice(0, 2),
-    })),
-    ...sampleInstitutions.slice(0, 9 - Math.min(liveInstitutions.length, 3)).map((i) => ({
-      key: i.id,
-      href: `/institutions/${i.slug}`,
-      name: i.name,
-      country: i.country,
-      logo: i.logo,
-      image: i.campusImage,
-      mark: i.shortName.slice(0, 2),
-    })),
-  ].slice(0, 9);
+  const partnerLogos = [
+    ...liveInstitutions.map((i) => ({ key: i.code, href: `/institutions/${i.code.toLowerCase()}`, name: i.name, logo: i.logo, mark: i.code })),
+    ...sampleInstitutions.map((i) => ({ key: i.id, href: `/institutions/${i.slug}`, name: i.name, logo: i.logo, mark: i.shortName })),
+  ].slice(0, 12);
   const stats = [
     { icon: Landmark, value: (catalogue?.counts.institutions ?? 0) + sample.institutions, label: "Institutions" },
     { icon: BookOpen, value: (catalogue?.counts.courses ?? 0) + sample.programmes, label: "Programmes & courses" },
@@ -245,191 +204,148 @@ export default async function Home() {
         </Container>
       </section>
 
-      {/* Enrol now */}
-      {openCourses.length > 0 && (
-        <section className="bg-surface py-16 md:py-20">
-          <Container>
-            <div className="flex flex-wrap items-end justify-between gap-5">
-              <div>
-                <p className="section-kicker">Start today</p>
-                <h2 className="section-title">Courses open for enrolment now.</h2>
-                <p className="section-lead">
-                  No application needed. Create a free account and begin — fees, where they apply, are set by the
-                  institution and shown up front.
-                </p>
-              </div>
-              <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
-                All programmes <ArrowRight size={16} />
-              </Link>
-            </div>
-            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {openCourses.map((course) => (
-                <article
-                  key={course.course_id}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition hover:-translate-y-1 hover:border-teal-500 hover:shadow-xl"
-                >
-                  <div className="relative h-40 bg-navy-800">
-                    {course.image && (
-                      <Image
-                        src={course.image}
-                        alt={`${course.title} course image`}
-                        fill
-                        sizes="(max-width:768px) 100vw, 33vw"
-                        className="object-cover"
-                        unoptimized
-                      />
-                    )}
-                    <span
-                      className={`absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-bold ${
-                        course.enrolment_policy === "open_free" ? "bg-teal-600 text-white" : "bg-white text-navy-800"
-                      }`}
-                    >
-                      {priceLabel(course)}
-                    </span>
-                  </div>
-                  <div className="flex flex-1 flex-col p-5">
-                    <p className="text-xs font-semibold text-teal-600">{course.institution_name}</p>
-                    <h3 className="mt-1 text-lg font-bold leading-6 text-navy-800">{course.title}</h3>
-                    <p className="mt-2 text-xs text-ink-600">
-                      {course.classification === "professional" ? "Short course · Professional certificate" : "Course"}
-                      {course.start ? ` · Starts ${new Date(course.start).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}` : ""}
-                    </p>
-                    <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-                      <a
-                        href={enrolUrl(course)}
-                        className="inline-flex items-center gap-2 rounded-md bg-navy-800 px-4 py-2 text-sm font-semibold text-white transition group-hover:bg-teal-600"
-                      >
-                        Enrol now <ArrowRight size={14} />
-                      </a>
-                      <a href={course.about_url} className="text-xs font-semibold text-ink-600 hover:text-navy-800">
-                        Details
-                      </a>
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </Container>
-        </section>
-      )}
-
-      {/* How it works + trust */}
-      <section className="bg-white py-20 md:py-24" aria-labelledby="how-edulage-works">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-16">
-            <div>
-              <p className="section-kicker">How EduLage works</p>
-              <h2 id="how-edulage-works" className="section-title">
-                From discovery to a credential you can prove.
-              </h2>
-              <p className="section-lead">
-                Account first, admission where the programme needs it. Short courses start immediately;
-                degree programmes follow the institution&rsquo;s own admissions process — all from one dashboard.
-              </p>
-              <div className="mt-8 grid gap-3">
-                {trust.map(([Icon, title, text]) => (
-                  <div key={title} className="flex gap-4 rounded-2xl border border-line bg-surface p-5">
-                    <Icon className="shrink-0 text-teal-600" size={22} />
-                    <div>
-                      <h3 className="font-bold text-navy-800">{title}</h3>
-                      <p className="mt-1 text-sm leading-6 text-ink-600">{text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <ol
-              className="relative grid gap-3 before:absolute before:bottom-8 before:left-[1.55rem] before:top-8 before:w-px before:bg-gradient-to-b before:from-teal-500 before:via-teal-500/60 before:to-line"
-              aria-label="The EduLage learner journey"
-            >
-              {journey.map(([Icon, title, text], index) => (
-                <li key={title} className="relative flex gap-4 rounded-2xl border border-line bg-white p-5 transition hover:border-teal-500 hover:shadow-lg">
-                  <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border-4 border-white bg-navy-800 text-white shadow-sm">
-                    <Icon size={19} />
-                  </span>
-                  <div className="pt-0.5">
-                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Step 0{index + 1}</p>
-                    <h3 className="mt-1 text-lg font-bold text-navy-800">{title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-ink-600">{text}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </Container>
-      </section>
-
-      {/* Featured programmes */}
-      <section className="bg-surface py-20 md:py-24">
+      {/* Featured programmes and courses */}
+      <section className="bg-surface py-16 md:py-20">
         <Container>
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="section-kicker">Featured programmes</p>
-              <h2 className="section-title">Degrees and professional programmes from leading institutions.</h2>
+              <p className="section-kicker">Featured programmes and courses</p>
+              <h2 className="section-title">Selected by EduLage, taught and awarded by the institution.</h2>
               <p className="section-lead">
-                Admission-based programmes taught and awarded by the institution, delivered online with optional Open
-                Education Center support.
+                Each card shows the qualification, institution, fee and how you join: open courses start immediately
+                with a free account; admission-based programmes go through the institution&rsquo;s review.
               </p>
             </div>
             <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
               Browse all programmes <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {featuredProgrammes.map((programme) => (
-              <ProgrammeCard key={programme.id} programme={programme} discovery />
+          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {liveCourses.map((course) => (
+              <article
+                key={course.course_id}
+                className="group card-hover flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white"
+              >
+                <div className="relative aspect-video overflow-visible bg-navy-800">
+                  <div className="absolute inset-0 overflow-hidden rounded-t-xl">
+                    {course.image && (
+                      <Image src={course.image} alt={course.title} fill sizes="(max-width:767px) 100vw, 25vw" className="image-zoom object-cover" unoptimized />
+                    )}
+                    <div className="image-scrim absolute inset-0" />
+                  </div>
+                  <div className="absolute right-3 top-3">
+                    <Pill image>{course.classification === "professional" ? "Professional Certificate" : "Certificate of completion"}</Pill>
+                  </div>
+                  <span className="absolute -bottom-5 left-4 flex h-11 w-14 items-center justify-center overflow-hidden rounded-md border-4 border-white bg-white p-1 text-xs font-bold text-navy-800 shadow-sm">
+                    {course.institution_logo ? (
+                      <Image src={course.institution_logo} alt={`${course.institution_name} logo`} width={48} height={36} className="size-full object-contain" unoptimized />
+                    ) : (
+                      course.institution
+                    )}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-5 pt-8">
+                  <p className="text-xs font-semibold text-teal-600">{course.institution_name}</p>
+                  <h3 className="line-clamp-2 mt-2 min-h-12 text-[17px] font-semibold leading-6 text-navy-800 group-hover:text-teal-600">{course.title}</h3>
+                  <div className="mt-3 flex min-h-7 flex-wrap gap-1.5">
+                    <span className="rounded-full bg-navy-800 px-2.5 py-1 text-xs font-bold text-white">
+                      Open enrolment{course.enrolment_policy === "open_free" ? " · Free" : ""}
+                    </span>
+                    <span className="rounded-full bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-700">Fully online</span>
+                  </div>
+                  <p className="mt-3 text-xs text-ink-600">
+                    {course.start ? `Starts ${new Date(course.start).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}` : "Rolling enrolment"}
+                  </p>
+                  <div className="mt-auto flex items-end justify-between gap-3 border-t border-line pt-4">
+                    <div>
+                      <p className="text-xs text-ink-400">Course fee</p>
+                      <p className="mt-1 text-sm font-semibold text-navy-800">{priceLabel(course)}</p>
+                    </div>
+                    <a href={enrolUrl(course)} className="inline-flex items-center gap-1 text-sm font-semibold text-teal-600">
+                      Enrol now <ArrowRight size={14} />
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+            {featured.map((programme) => (
+              <ProgrammeCard
+                key={programme.id}
+                programme={programme}
+                discovery
+                enrolmentLabel={programme.level === "Professional" ? "Open enrolment" : "Admission required"}
+              />
             ))}
           </div>
         </Container>
       </section>
 
-      <HighDemandFields />
+      <ProgrammeDiscoveryShowcase />
 
-      {/* Institutions */}
-      {institutionCards.length > 0 && (
-        <section className="bg-white py-20 md:py-24">
-          <Container>
-            <div className="flex flex-wrap items-end justify-between gap-5">
-              <div>
-                <p className="section-kicker">Institutions on EduLage</p>
-                <h2 className="section-title">Teaching institutions you can study with today.</h2>
-                <p className="section-lead">
-                  Every institution keeps its own identity, admissions and academic authority on its EduLage campus.
-                </p>
-              </div>
-              <Link href="/institutions" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
-                View all institutions <ArrowRight size={16} />
-              </Link>
+      {/* Partner institutions */}
+      <section className="bg-white py-16 md:py-20">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <p className="section-kicker">Partner institutions</p>
+              <h2 className="section-title">Study with institutions from around the world.</h2>
+              <p className="section-lead">
+                Every institution keeps its own identity, admissions and academic authority on its EduLage campus.
+              </p>
             </div>
-            <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {institutionCards.map((institution) => (
+            <Link href="/institutions" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
+              View all institutions <ArrowRight size={16} />
+            </Link>
+          </div>
+          <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {partnerLogos.map((institution) => (
+              <li key={institution.key}>
                 <Link
-                  key={institution.key}
                   href={institution.href}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition hover:-translate-y-1 hover:border-teal-500 hover:shadow-xl"
+                  title={institution.name}
+                  className="group flex h-24 items-center justify-center rounded-xl border border-line bg-white p-4 transition hover:border-teal-500 hover:shadow-md"
                 >
-                  <div className="relative h-32 bg-navy-800">
-                    {institution.image && (
-                      <Image src={institution.image} alt={`${institution.name} campus`} fill sizes="(max-width:639px) 100vw, 33vw" className="object-cover" />
-                    )}
-                    <span className="absolute -bottom-5 left-5 grid h-12 w-14 place-items-center overflow-hidden rounded-md border-4 border-white bg-white p-1 text-sm font-bold text-navy-800 shadow-sm">
-                      {institution.logo ? (
-                        <Image src={institution.logo} alt={`${institution.name} logo`} width={48} height={36} className="size-full object-contain" unoptimized={institution.logo.startsWith("http")} />
-                      ) : (
-                        institution.mark
-                      )}
-                    </span>
-                  </div>
-                  <div className="p-5 pt-8">
-                    {institution.country && <p className="text-xs font-semibold text-teal-600">{institution.country}</p>}
-                    <h3 className="mt-1 text-base font-bold leading-6 text-navy-800 group-hover:text-teal-600">{institution.name}</h3>
-                  </div>
+                  {institution.logo ? (
+                    <Image
+                      src={institution.logo}
+                      alt={`${institution.name} logo`}
+                      width={140}
+                      height={56}
+                      className="max-h-14 w-auto object-contain opacity-80 transition group-hover:opacity-100"
+                      unoptimized={institution.logo.startsWith("http")}
+                    />
+                  ) : (
+                    <span className="text-center text-sm font-bold leading-5 text-navy-800">{institution.mark}</span>
+                  )}
                 </Link>
-              ))}
-            </div>
-          </Container>
-        </section>
-      )}
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* Trust */}
+      <section className="border-y border-line bg-surface py-14">
+        <Container>
+          <div className="grid gap-4 md:grid-cols-3">
+            {trust.map(([Icon, title, text]) => (
+              <div key={title} className="flex gap-4 rounded-2xl border border-line bg-white p-5">
+                <Icon className="shrink-0 text-teal-600" size={22} />
+                <div>
+                  <h3 className="font-bold text-navy-800">{title}</h3>
+                  <p className="mt-1 text-sm leading-6 text-ink-600">{text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-5 text-sm text-ink-600">
+            See a real credential:{" "}
+            <Link href="/verify/87ec13ac13c443dc844c124088d09121" className="font-semibold text-teal-600">
+              verify 87ec13ac…9121 <ArrowRight size={14} className="inline" />
+            </Link>
+          </p>
+        </Container>
+      </section>
 
       {/* OEC */}
       <section className="overflow-hidden bg-surface py-20 md:py-24">
