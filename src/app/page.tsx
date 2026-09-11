@@ -8,7 +8,10 @@ import {
   Globe2,
   Landmark,
   MapPin,
+  Award,
+  Laptop2,
   Search,
+  UserPlus,
   ShieldCheck,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -27,6 +30,29 @@ const studyLevels = [
   ["Postgraduate", "Postgraduate degrees"],
   ["Doctoral", "Doctoral programmes"],
   ["Professional", "Professional programmes & courses"],
+] as const;
+
+const journey = [
+  [
+    Search,
+    "Discover",
+    "Search programmes and short courses by discipline, qualification, institution, delivery mode and intake.",
+  ],
+  [
+    UserPlus,
+    "Enrol or apply",
+    "Create a free account. Open courses start immediately; admission-based programmes go through the institution's review and appear on your My learning dashboard.",
+  ],
+  [
+    Laptop2,
+    "Learn",
+    "Study with the institution's own teaching team and assessments, online or with a local Open Education Center for exams and support.",
+  ],
+  [
+    Award,
+    "Earn a verifiable credential",
+    "Your certificate is awarded by the institution, recorded by EduLage, and verifiable by anyone from its credential ID.",
+  ],
 ] as const;
 
 const trust = [
@@ -324,26 +350,49 @@ export default async function Home() {
         </Container>
       </section>
 
-      {/* Trust */}
-      <section className="border-y border-line bg-surface py-14">
+      {/* How it works + trust */}
+      <section className="bg-white py-20 md:py-24" aria-labelledby="how-edulage-works">
         <Container>
-          <div className="grid gap-4 md:grid-cols-3">
-            {trust.map(([Icon, title, text]) => (
-              <div key={title} className="flex gap-4 rounded-2xl border border-line bg-white p-5">
-                <Icon className="shrink-0 text-teal-600" size={22} />
-                <div>
-                  <h3 className="font-bold text-navy-800">{title}</h3>
-                  <p className="mt-1 text-sm leading-6 text-ink-600">{text}</p>
-                </div>
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-16">
+            <div>
+              <p className="section-kicker">How EduLage works</p>
+              <h2 id="how-edulage-works" className="section-title">
+                From discovery to a credential you can prove.
+              </h2>
+              <p className="section-lead">
+                Account first, admission where the programme needs it. Short courses start immediately;
+                degree programmes follow the institution&rsquo;s own admissions process — all from one dashboard.
+              </p>
+              <div className="mt-8 grid gap-3">
+                {trust.map(([Icon, title, text]) => (
+                  <div key={title} className="flex gap-4 rounded-2xl border border-line bg-surface p-5">
+                    <Icon className="shrink-0 text-teal-600" size={22} />
+                    <div>
+                      <h3 className="font-bold text-navy-800">{title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-ink-600">{text}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            <ol
+              className="relative grid gap-3 before:absolute before:bottom-8 before:left-[1.55rem] before:top-8 before:w-px before:bg-gradient-to-b before:from-teal-500 before:via-teal-500/60 before:to-line"
+              aria-label="The EduLage learner journey"
+            >
+              {journey.map(([Icon, title, text], index) => (
+                <li key={title} className="relative flex gap-4 rounded-2xl border border-line bg-white p-5 transition hover:border-teal-500 hover:shadow-lg">
+                  <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border-4 border-white bg-navy-800 text-white shadow-sm">
+                    <Icon size={19} />
+                  </span>
+                  <div className="pt-0.5">
+                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Step 0{index + 1}</p>
+                    <h3 className="mt-1 text-lg font-bold text-navy-800">{title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-ink-600">{text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
           </div>
-          <p className="mt-5 text-sm text-ink-600">
-            See a real credential:{" "}
-            <Link href="/verify/87ec13ac13c443dc844c124088d09121" className="font-semibold text-teal-600">
-              verify 87ec13ac…9121 <ArrowRight size={14} className="inline" />
-            </Link>
-          </p>
         </Container>
       </section>
 
