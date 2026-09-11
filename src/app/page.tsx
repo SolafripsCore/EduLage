@@ -81,7 +81,7 @@ export default async function Home() {
     { icon: Landmark, value: (catalogue?.counts.institutions ?? 0) + sample.institutions, label: "Institutions" },
     { icon: BookOpen, value: (catalogue?.counts.courses ?? 0) + sample.programmes, label: "Programmes & courses" },
     { icon: Globe2, value: (catalogue?.counts.countries ?? 0) + sample.countries, label: "Countries" },
-    { icon: MapPin, value: centers.length, label: "Open Education Centers" },
+    { icon: MapPin, value: centers.length, label: "GOE Centers" },
   ];
 
   return (
@@ -401,7 +401,7 @@ export default async function Home() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
             <div>
-              <p className="section-kicker">Open Education Centers</p>
+              <p className="section-kicker">Global Open Education Centers (GOE Centers)</p>
               <h2 className="section-title">Online education with dependable local access.</h2>
               <p className="section-lead">
                 Independently operated, EduLage-accredited centres provide connectivity, learning spaces, local
@@ -430,7 +430,7 @@ export default async function Home() {
             <div className="relative min-h-[320px] overflow-hidden rounded-[2rem] shadow-xl sm:min-h-[420px]">
               <Image
                 src="/media/oec-lab.jpg"
-                alt="Learners working at computers in an Open Education Center"
+                alt="Learners working at computers in a GOE Center"
                 fill
                 sizes="(max-width:1023px) 100vw, 50vw"
                 className="object-cover"
