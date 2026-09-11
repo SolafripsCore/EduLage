@@ -26,7 +26,7 @@ const columns = [
     "Access & support",
     [
       ["Sign in to My learning", learnLinks.myLearning],
-      ["Open Education Centers", "/open-education-centers"],
+      ["GOE Centers", "/open-education-centers"],
       ["Learner support", "/help"],
       ["Verify a credential", "/verify"],
     ],
