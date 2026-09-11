@@ -44,6 +44,11 @@ export function ProgrammeCard({
         <div className="absolute right-3 top-3">
           <Pill image>{programme.credential}</Pill>
         </div>
+        {enrolmentLabel && (
+          <span className="absolute left-3 top-3 rounded-full bg-navy-800/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+            {enrolmentLabel}
+          </span>
+        )}
         <span className="absolute -bottom-5 left-4 flex h-11 w-14 items-center justify-center overflow-hidden rounded-md border-4 border-white bg-white p-1 shadow-sm">
           <Image
             src={institution.logo}
@@ -63,11 +68,6 @@ export function ProgrammeCard({
         </h3>
         {discovery && (
           <div className="mt-3 flex min-h-7 flex-wrap gap-1.5">
-            {enrolmentLabel && (
-              <span className="rounded-full bg-navy-800 px-2.5 py-1 text-xs font-bold text-white">
-                {enrolmentLabel}
-              </span>
-            )}
             <span className="rounded-full bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-700">
               {programme.deliveryMode === "Fully online"
                 ? "Fully online"

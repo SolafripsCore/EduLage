@@ -10,7 +10,7 @@ const columns = [
       ["Browse programmes", "/programmes"],
       ["Featured institutions", "/institutions"],
       ["Study options", "/study-types"],
-      ["Find an OEC", "/open-education-centers"],
+      ["Find a GOE Center", "/open-education-centers"],
     ],
   ],
   [
