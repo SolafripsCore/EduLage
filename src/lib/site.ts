@@ -20,6 +20,6 @@ export const learnLinks = {
   account: `${learnUrl}/account/settings`,
   signOut: `${learnUrl}/logout`,
   studio: `${studioUrl}/home`,
-  admin: `${learnUrl}/admin/`,
+  admin: `${learnUrl}/edulage/admin/partners/`,
   sessionApi: `${learnUrl}/edulage/api/v1/me/`,
 };
