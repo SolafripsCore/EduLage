@@ -18,7 +18,7 @@ import { getCatalogue, enrolUrl, priceLabel } from "@/lib/liveCatalogue";
 import { learnLinks } from "@/lib/site";
 import { centers } from "@/data/centers";
 import { institutions as sampleInstitutions } from "@/data/institutions";
-import { getMarketplaceStats, getProgrammesByLevel } from "@/lib/catalog";
+import { getFeaturedProgrammes, getMarketplaceStats } from "@/lib/catalog";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { ProgrammeDiscoveryShowcase } from "@/components/ProgrammeDiscoveryShowcase";
 
@@ -43,8 +43,8 @@ export const metadata = {
 
 export default async function Home() {
   const catalogue = await getCatalogue();
-  const liveCourses = catalogue?.open_courses.slice(0, 8) ?? [];
-  const shortCourses = getProgrammesByLevel("Professional", Math.max(0, 8 - liveCourses.length));
+  const liveCourses = catalogue?.open_courses.slice(0, 4) ?? [];
+  const featured = getFeaturedProgrammes(8 - liveCourses.length);
   const liveInstitutions = catalogue?.institutions ?? [];
   const sample = getMarketplaceStats();
   const partnerLogos = [
@@ -204,20 +204,20 @@ export default async function Home() {
         </Container>
       </section>
 
-      {/* Start learning today */}
+      {/* Featured programmes and courses */}
       <section className="bg-surface py-16 md:py-20">
         <Container>
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="section-kicker">Start learning today</p>
-              <h2 className="section-title">Courses open for enrolment.</h2>
+              <p className="section-kicker">Featured programmes and courses</p>
+              <h2 className="section-title">Selected by EduLage, taught and awarded by the institution.</h2>
               <p className="section-lead">
-                Short courses and professional certificates — no application needed. Create a free account and begin;
-                fees, where they apply, are set by the institution and shown up front.
+                Each card shows the qualification, institution, fee and how you join: open courses start immediately
+                with a free account; admission-based programmes go through the institution&rsquo;s review.
               </p>
             </div>
-            <Link href="/programmes?level=Professional" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
-              See all courses <ArrowRight size={16} />
+            <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
+              Browse all programmes <ArrowRight size={16} />
             </Link>
           </div>
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -234,7 +234,7 @@ export default async function Home() {
                     <div className="image-scrim absolute inset-0" />
                   </div>
                   <div className="absolute right-3 top-3">
-                    <Pill image>{course.enrolment_policy === "open_free" ? "Free course" : "Short course"}</Pill>
+                    <Pill image>{course.classification === "professional" ? "Professional Certificate" : "Certificate of completion"}</Pill>
                   </div>
                   <span className="absolute -bottom-5 left-4 flex h-11 w-14 items-center justify-center overflow-hidden rounded-md border-4 border-white bg-white p-1 text-xs font-bold text-navy-800 shadow-sm">
                     {course.institution_logo ? (
@@ -247,12 +247,20 @@ export default async function Home() {
                 <div className="flex flex-1 flex-col p-5 pt-8">
                   <p className="text-xs font-semibold text-teal-600">{course.institution_name}</p>
                   <h3 className="line-clamp-2 mt-2 min-h-12 text-[17px] font-semibold leading-6 text-navy-800 group-hover:text-teal-600">{course.title}</h3>
-                  <p className="mt-2 text-xs text-ink-600">
-                    Fully online
-                    {course.start ? ` · Starts ${new Date(course.start).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}` : " · Rolling enrolment"}
+                  <div className="mt-3 flex min-h-7 flex-wrap gap-1.5">
+                    <span className="rounded-full bg-navy-800 px-2.5 py-1 text-xs font-bold text-white">
+                      Open enrolment{course.enrolment_policy === "open_free" ? " · Free" : ""}
+                    </span>
+                    <span className="rounded-full bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-700">Fully online</span>
+                  </div>
+                  <p className="mt-3 text-xs text-ink-600">
+                    {course.start ? `Starts ${new Date(course.start).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}` : "Rolling enrolment"}
                   </p>
-                  <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-                    <span className="text-sm font-bold text-navy-800">{priceLabel(course)}</span>
+                  <div className="mt-auto flex items-end justify-between gap-3 border-t border-line pt-4">
+                    <div>
+                      <p className="text-xs text-ink-400">Course fee</p>
+                      <p className="mt-1 text-sm font-semibold text-navy-800">{priceLabel(course)}</p>
+                    </div>
                     <a href={enrolUrl(course)} className="inline-flex items-center gap-1 text-sm font-semibold text-teal-600">
                       Enrol now <ArrowRight size={14} />
                     </a>
@@ -260,8 +268,13 @@ export default async function Home() {
                 </div>
               </article>
             ))}
-            {shortCourses.map((programme) => (
-              <ProgrammeCard key={programme.id} programme={programme} discovery />
+            {featured.map((programme) => (
+              <ProgrammeCard
+                key={programme.id}
+                programme={programme}
+                discovery
+                enrolmentLabel={programme.level === "Professional" ? "Open enrolment" : "Admission required"}
+              />
             ))}
           </div>
         </Container>

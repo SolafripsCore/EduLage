@@ -9,10 +9,12 @@ export function ProgrammeCard({
   programme,
   priority = false,
   discovery = false,
+  enrolmentLabel,
 }: {
   programme: Programme;
   priority?: boolean;
   discovery?: boolean;
+  enrolmentLabel?: string;
 }) {
   const institution = institutionById.get(programme.institutionId);
   if (!institution) return null;
@@ -61,6 +63,11 @@ export function ProgrammeCard({
         </h3>
         {discovery && (
           <div className="mt-3 flex min-h-7 flex-wrap gap-1.5">
+            {enrolmentLabel && (
+              <span className="rounded-full bg-navy-800 px-2.5 py-1 text-xs font-bold text-white">
+                {enrolmentLabel}
+              </span>
+            )}
             <span className="rounded-full bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-700">
               {programme.deliveryMode === "Fully online"
                 ? "Fully online"
