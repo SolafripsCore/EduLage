@@ -58,13 +58,15 @@ export function Footer() {
         <div className="border-b border-white/15 py-14">
           <div className="grid gap-8 md:grid-cols-[1fr_0.8fr] md:items-end">
             <div>
-              <Image
-                src="/brand/edulage-logo.png"
-                alt="EduLage"
-                width={150}
-                height={54}
-                className="h-[54px] w-[150px] object-contain object-left brightness-0 invert"
-              />
+              <div className="inline-flex rounded-xl bg-white px-4 py-2.5">
+                <Image
+                  src="/brand/edulage-logo.png"
+                  alt="EduLage"
+                  width={150}
+                  height={54}
+                  className="h-[46px] w-[130px] object-contain object-left"
+                />
+              </div>
               <p className="mt-5 max-w-md text-sm leading-6 text-white/65">
                 The Global Education Village—connecting learners to quality open
                 and online education from reputable tertiary institutions
