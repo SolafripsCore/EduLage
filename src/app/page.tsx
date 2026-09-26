@@ -99,7 +99,7 @@ export default async function Home() {
         <div className="hero-grid absolute inset-0 -z-20 opacity-20" />
         <div className="hero-aurora absolute inset-0 -z-20" />
         <Container>
-          <div className="grid gap-9 pb-16 pt-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-14 lg:pb-20 lg:pt-14">
+          <div className="grid gap-9 pb-8 pt-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-14 lg:pb-9 lg:pt-14">
             <div className="relative z-10 max-w-3xl">
               <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
                 <span className="h-px w-8 bg-teal-400" />
@@ -175,49 +175,83 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-        </Container>
-      </section>
-
-
-      {/* Search */}
-      <section className="relative z-10 -mt-12 bg-transparent">
-        <Container>
-          <form
-            action="/programmes"
-            role="search"
-            className="grid gap-2 rounded-2xl border border-line bg-white p-2 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.12)] sm:grid-cols-[1.6fr_1fr_auto]"
-          >
-            <label className="relative">
-              <span className="sr-only">Search programmes, courses or institutions</span>
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" size={18} />
-              <input
-                name="query"
-                placeholder="Search programmes, courses or institutions"
-                className="h-12 w-full rounded-xl border border-transparent bg-surface pl-11 pr-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20"
-              />
-            </label>
-            <label>
-              <span className="sr-only">Study level</span>
-              <select
-                name="level"
-                defaultValue=""
-                className="h-12 w-full rounded-xl border border-transparent bg-surface px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20"
+          <div className="relative z-10 pb-8">
+            <div className="rounded-2xl border border-white/15 bg-white p-5 text-navy-800 shadow-2xl md:p-6">
+              <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <p className="font-bold text-navy-800">Find your programme</p>
+                  <p className="mt-1 text-xs text-ink-600">
+                    Search by subject, qualification, institution or delivery
+                    format.
+                  </p>
+                </div>
+                <Link
+                  href="/programmes"
+                  className="group inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700"
+                >
+                  Advanced search and filters{" "}
+                  <ArrowRight
+                    size={13}
+                    className="transition-transform group-hover:translate-x-0.5"
+                  />
+                </Link>
+              </div>
+              <form
+                action="/programmes"
+                className="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_auto]"
+                role="search"
               >
-                <option value="">All study levels</option>
-                {studyLevels.map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-6 text-sm font-bold text-white transition hover:bg-navy-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
-              <Search size={17} />
-              Search
-            </button>
-          </form>
+                <label className="relative">
+                  <span className="sr-only">
+                    Programme, subject or institution
+                  </span>
+                  <Search
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400"
+                    size={18}
+                  />
+                  <input
+                    name="query"
+                    placeholder="Programme, subject or institution"
+                    className="h-12 w-full rounded-xl border border-line pl-11 pr-4 text-sm outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  />
+                </label>
+                <label>
+                  <span className="sr-only">Study level</span>
+                  <select
+                    name="level"
+                    defaultValue=""
+                    className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  >
+                    <option value="">All study levels</option>
+                    {studyLevels.map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span className="sr-only">Delivery mode</span>
+                  <select
+                    name="mode"
+                    defaultValue=""
+                    className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
+                  >
+                    <option value="">All delivery modes</option>
+                    <option>Fully online</option>
+                    <option>Online + GOE Center exams</option>
+                  </select>
+                </label>
+                <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-7 text-sm font-bold text-white transition hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                  <Search size={17} />
+                  Search programmes
+                </button>
+              </form>
+            </div>
+          </div>
         </Container>
       </section>
+
 
       {/* Featured programmes and courses */}
       <section className="bg-white py-20 md:py-24">
