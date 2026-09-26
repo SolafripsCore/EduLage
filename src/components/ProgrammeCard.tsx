@@ -9,10 +9,12 @@ export function ProgrammeCard({
   programme,
   priority = false,
   discovery = false,
+  enrolmentLabel,
 }: {
   programme: Programme;
   priority?: boolean;
   discovery?: boolean;
+  enrolmentLabel?: string;
 }) {
   const institution = institutionById.get(programme.institutionId);
   if (!institution) return null;
@@ -31,7 +33,7 @@ export function ProgrammeCard({
         <div className="absolute inset-0 overflow-hidden rounded-t-xl">
           <Image
             src={programme.image}
-            alt=""
+            alt={programme.title}
             fill
             priority={priority}
             sizes="(max-width: 767px) 100vw, (max-width: 1279px) 50vw, 33vw"
@@ -42,10 +44,15 @@ export function ProgrammeCard({
         <div className="absolute right-3 top-3">
           <Pill image>{programme.credential}</Pill>
         </div>
+        {enrolmentLabel && (
+          <span className="absolute left-3 top-3 rounded-full bg-navy-800/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+            {enrolmentLabel}
+          </span>
+        )}
         <span className="absolute -bottom-5 left-4 flex h-11 w-14 items-center justify-center overflow-hidden rounded-md border-4 border-white bg-white p-1 shadow-sm">
           <Image
             src={institution.logo}
-            alt=""
+            alt={`${institution.shortName} logo`}
             width={48}
             height={36}
             className="size-full object-contain"
@@ -131,7 +138,7 @@ export function CompactProgrammeCard({ programme }: { programme: Programme }) {
       <div className="relative h-28 w-36 shrink-0 overflow-hidden rounded-lg bg-navy-800 sm:h-32 sm:w-40">
         <Image
           src={programme.image}
-          alt=""
+          alt={programme.title}
           fill
           sizes="160px"
           className="image-zoom object-cover"

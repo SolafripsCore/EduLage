@@ -13,13 +13,12 @@ const mainLinks = [
 ];
 
 const catalogueLinks = [
-  ["Open Education Centers", "/open-education-centers"],
   ["For institutions", "/for-institutions"],
   ["About", "/about"],
 ];
 
 const utilityLinks = [
-  ["GOE Initiative", "/goe"],
+  ["GOE Centers", "/open-education-centers"],
   ["Global Network", "/institutions"],
   ["Help & Support", "/help"],
   ["Verify a credential", "/verify"],

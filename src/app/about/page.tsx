@@ -45,7 +45,7 @@ const roles = [
   ],
   [
     Users,
-    "Open Education Centers",
+    "Global Open Education Centers (GOE Centers)",
     "Provide approved facilities, connectivity, learner support and secure assessment environments.",
   ],
   [
@@ -90,7 +90,7 @@ export default function Page() {
               </h2>
               <p className="section-lead">
                 EduLage makes programmes discoverable, supports access through
-                Open Education Centers and connects participants through common
+                Global Open Education Centers (GOE Centers) and connects participants through common
                 infrastructure.
               </p>
               <p className="mt-5 leading-7 text-ink-600">

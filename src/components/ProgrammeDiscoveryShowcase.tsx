@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useRef, useState, type KeyboardEvent } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, Flame, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, BookOpen, X } from "lucide-react";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { programmes } from "@/data/programmes";
 import type { Programme } from "@/data/types";
@@ -144,17 +144,13 @@ export function ProgrammeDiscoveryShowcase() {
       <div className="container-page">
         <div className="flex flex-wrap items-end justify-between gap-5">
           <div>
-            <p className="section-kicker flex items-center gap-2">
-              <Flame size={16} aria-hidden />
-              Programme discovery
-            </p>
+            <p className="section-kicker">Explore the catalogue</p>
             <h2 id="programme-discovery-title" className="section-title">
-              Explore programmes and courses.
+              Find the right programme by qualification and field
             </h2>
             <p className="section-lead">
-              Navigate by academic pathway and discipline, then compare the
-              qualification, institution, study format, duration, tuition and
-              next intake.
+              Filter by degree level or discipline, then compare institution,
+              format, duration, tuition and next intake.
             </p>
           </div>
           <Link

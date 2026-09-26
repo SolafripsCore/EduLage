@@ -2,28 +2,27 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  Award,
-  BookOpen,
   Building2,
   CheckCircle2,
   Globe2,
-  GraduationCap,
-  Headphones,
   Landmark,
-  Laptop2,
-  Map,
   MapPin,
-  Network,
+  Award,
+  Laptop2,
   Search,
+  UserPlus,
   ShieldCheck,
-  Users,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
+import { Pill } from "@/components/ui/Pill";
+import { getCatalogue, enrolUrl, priceLabel } from "@/lib/liveCatalogue";
+import { learnLinks } from "@/lib/site";
+import { centers } from "@/data/centers";
+import { institutions as sampleInstitutions } from "@/data/institutions";
+import { getFeaturedProgrammes } from "@/lib/catalog";
+import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { ProgrammeDiscoveryShowcase } from "@/components/ProgrammeDiscoveryShowcase";
-import { HighDemandFields } from "@/components/HighDemandFields";
-import { institutions } from "@/data/institutions";
-import { getInstitutionProgrammes, getMarketplaceStats } from "@/lib/catalog";
 
 const studyLevels = [
   ["Undergraduate", "Undergraduate degrees"],
@@ -32,88 +31,52 @@ const studyLevels = [
   ["Professional", "Professional programmes & courses"],
 ] as const;
 
-const trustStandards = [
-  [
-    Landmark,
-    "Recognised institutions",
-    "Institutional identity, legal standing and accreditation information are clearly presented.",
-  ],
-  [
-    ShieldCheck,
-    "Institution-approved listings",
-    "Programme information, entry requirements, tuition and intakes remain institution-controlled.",
-  ],
-  [
-    GraduationCap,
-    "Institution-issued credentials",
-    "Every degree, diploma and certificate is awarded by the teaching institution—not EduLage.",
-  ],
-  [
-    CheckCircle2,
-    "Standards-based access",
-    "Institutions and Open Education Centers participate through defined readiness and quality requirements.",
-  ],
-] as const;
 const journey = [
   [
     Search,
     "Discover",
-    "Search accredited online and open education programmes by discipline, qualification, institution, delivery mode and intake.",
-    "/programmes",
-    "Explore programmes",
+    "Browse programmes and courses by qualification, discipline and institution.",
   ],
   [
-    Award,
-    "Compare",
-    "Review programme structure, entry requirements, duration, tuition, delivery format, awarding institution and learner support.",
-    "/programmes",
-    "Compare study options",
-  ],
-  [
-    Landmark,
-    "Apply",
-    "Confirm your preferred programme and continue through the institution’s authorised application and admissions process.",
-    "/help",
-    "Understand admissions",
+    UserPlus,
+    "Enrol or apply",
+    "Open courses start with a free account; degree programmes go through the institution's admissions review.",
   ],
   [
     Laptop2,
-    "Enrol and study",
-    "Following admission, access teaching, assessment and academic support through the institution, with local OEC facilities where available.",
-    "/open-education-centers",
-    "Find an OEC",
-  ],
-] as const;
-const resources = [
-  [
-    "Learner guide",
-    "Choosing a credible online programme",
-    "Understand qualifications, delivery formats and questions to ask before applying.",
-    "/help",
+    "Learn",
+    "Study with the institution's own teaching team — online, with GOE Center support where you need it.",
   ],
   [
-    "Institutional insight",
-    "Building a trusted digital campus",
-    "A practical view of readiness, governance and quality online delivery.",
-    "/for-institutions",
-  ],
-  [
-    "GOE briefing",
-    "Expanding access through connected communities",
-    "How country partnerships and OECs make open education practical.",
-    "/goe",
+    Award,
+    "Get certified",
+    "Your credential is awarded by the institution, recorded by EduLage and verifiable by anyone.",
   ],
 ] as const;
 
-export default function Home() {
-  const featuredInstitutions = institutions.slice(0, 6);
-  const stats = getMarketplaceStats();
-  const networkStats = [
-    { icon: Globe2, value: stats.countries, label: "Countries" },
-    { icon: Landmark, value: stats.institutions, label: "Institutions" },
-    { icon: BookOpen, value: stats.programmes, label: "Programmes" },
-    { icon: Map, value: stats.centers, label: "OECs" },
-  ];
+const trust = [
+  [Landmark, "Institution-led", "Admissions, teaching, assessment and qualifications stay with the institution."],
+  [ShieldCheck, "Verifiable credentials", "Every credential has an ID employers can check on EduLage in seconds."],
+  [CheckCircle2, "Clear fees", "Fees are set by the institution and shown before you enrol."],
+] as const;
+
+export const metadata = {
+  title: "EduLage — Quality education and training from reputable institutions, wherever you are",
+  description:
+    "Pursue degrees, professional programmes and short courses from accredited universities and organisations worldwide. Learn flexibly and earn credentials awarded directly by the institution you choose.",
+};
+
+export default async function Home() {
+  const catalogue = await getCatalogue();
+  const liveCourses = catalogue?.open_courses.slice(0, 4) ?? [];
+  const featured = getFeaturedProgrammes(8 - liveCourses.length);
+  const liveInstitutions = catalogue?.institutions ?? [];
+  const centerCountries = new Set(centers.map((c) => c.country)).size;
+  const partnerLogos = [
+    ...liveInstitutions.map((i) => ({ key: i.code, href: `/institutions/${i.code.toLowerCase()}`, name: i.name, logo: i.logo, mark: i.code })),
+    ...sampleInstitutions.map((i) => ({ key: i.id, href: `/institutions/${i.slug}`, name: i.name, logo: i.logo, mark: i.shortName })),
+  ].slice(0, 12);
+
   return (
     <main>
       <script
@@ -130,6 +93,8 @@ export default function Home() {
           }),
         }}
       />
+
+      {/* Hero */}
       <section className="hero-premium relative isolate overflow-hidden bg-navy-900 text-white">
         <div className="hero-grid absolute inset-0 -z-20 opacity-20" />
         <div className="hero-aurora absolute inset-0 -z-20" />
@@ -140,30 +105,27 @@ export default function Home() {
                 <span className="h-px w-8 bg-teal-400" />
                 The Global Education Village
               </p>
-              <h1 className="mt-5 max-w-[18ch] text-[2.15rem] font-bold leading-[1.1] tracking-[-0.025em] text-white sm:text-[2.6rem] lg:text-[3rem]">
-                Discover quality education without boundaries.
+              <h1 className="mt-5 max-w-[24ch] text-[2.15rem] font-bold leading-[1.1] tracking-[-0.025em] text-white sm:text-[2.6rem] lg:text-[3rem]">
+                Quality education and training from reputable institutions &mdash;&nbsp;wherever you&nbsp;are.
               </h1>
               <p className="mt-5 max-w-xl text-[0.98rem] leading-7 text-white/72 sm:text-base sm:leading-7">
-                Explore accredited online and open education programmes from
-                reputable tertiary institutions worldwide—through one trusted
-                global education ecosystem.
+                Degrees, professional programmes and short courses from accredited universities and
+                organisations worldwide &mdash; learn at a pace that fits your life and earn credentials
+                awarded directly by the institution you choose.
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <Button href="/programmes" variant="teal">
-                  Explore programmes
+                  Explore programmes &amp; courses
                 </Button>
-                <Button href="/institutions" variant="ghost">
-                  Explore institutions
+                <Button href={learnLinks.register} variant="ghost">
+                  Create free account
                 </Button>
                 <Link
                   href="/open-education-centers"
                   className="group inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold text-white/75 transition hover:text-white"
                 >
-                  Find an Open Education Center{" "}
-                  <ArrowRight
-                    size={15}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
+                  Find a GOE Center{" "}
+                  <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
               <ul
@@ -171,74 +133,44 @@ export default function Home() {
                 aria-label="EduLage benefits"
               >
                 <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
-                  <ShieldCheck
-                    size={17}
-                    className="mt-0.5 shrink-0 text-teal-400"
-                  />
-                  <span>Institution-led education</span>
+                  <ShieldCheck size={17} className="mt-0.5 shrink-0 text-teal-400" />
+                  <span>Institution-issued, verifiable credentials</span>
                 </li>
                 <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
                   <Globe2 size={17} className="mt-0.5 shrink-0 text-teal-400" />
-                  <span>Globally accessible programmes</span>
+                  <span>Open to learners in every country</span>
                 </li>
                 <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
                   <MapPin size={17} className="mt-0.5 shrink-0 text-teal-400" />
-                  <span>Local support through OECs</span>
+                  <span>Local exam and support centres</span>
                 </li>
               </ul>
             </div>
             <div className="relative mx-auto w-full max-w-[430px] lg:justify-self-end">
-              <div className="relative aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/15 bg-navy-800 shadow-2xl">
+              <div className="hero-portrait relative aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/15 bg-navy-800">
                 <Image
                   src="/media/hero-learner.jpg"
-                  alt="Learner accessing online tertiary education"
+                  alt="Learner studying online with an EduLage partner institution"
                   fill
                   priority
                   sizes="(max-width:1023px) 90vw,430px"
-                  className="object-contain"
+                  className="object-cover object-[center_20%]"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy-900/10 via-transparent to-white/5" />
               </div>
-
-              <div
-                className="absolute -left-3 top-5 z-10 w-[178px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.24)] sm:-left-7 sm:top-6 sm:w-[198px]"
-                aria-label="Verified institution-issued credential"
-              >
-                <div className="flex items-center gap-2 text-xs font-bold">
-                  <ShieldCheck size={14} className="text-teal-600" />
-                  <span>Credential verified</span>
-                </div>
-                <p className="mt-2 text-xs text-ink-500">
-                  Issued by the institution
-                </p>
-                <p className="mt-1 text-xs font-bold tracking-[0.06em] text-navy-800">
-                  EDU-4821-KX
-                </p>
-                <Link
-                  href="/verify"
-                  className="mt-3 inline-flex text-[11px] font-bold uppercase tracking-[0.06em] text-teal-700"
-                >
-                  Verified on EduLage
-                </Link>
-              </div>
-
               <Link
-                href="/open-education-centers"
-                className="group/oec absolute -bottom-4 -left-2 z-10 w-[142px] overflow-hidden rounded-xl border border-white/70 bg-white shadow-[0_18px_45px_rgba(5,18,53,0.28)] sm:-bottom-6 sm:-left-6 sm:w-[164px]"
-                aria-label="Explore Open Education Centers"
+                href="/verify/87ec13ac13c443dc844c124088d09121"
+                className="absolute -left-3 top-5 z-10 w-[178px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.24)] transition hover:-translate-y-0.5 sm:-left-7 sm:top-6 sm:w-[198px]"
+                aria-label="See a verified EduLage credential"
               >
-                <span className="relative block h-[104px] sm:h-[122px]">
-                  <Image
-                    src="/media/oec-lab.jpg"
-                    alt="Learners using an Open Education Center"
-                    fill
-                    sizes="170px"
-                    className="object-cover transition duration-500 group-hover/oec:scale-105"
-                  />
-                  <span className="absolute inset-0 bg-gradient-to-t from-navy-900/65 via-transparent to-transparent" />
-                  <span className="absolute inset-x-2 bottom-2 text-xs font-semibold text-white">
-                    Open Education Center
-                  </span>
+                <span className="flex items-center gap-2 text-xs font-bold">
+                  <ShieldCheck size={14} className="text-teal-600" />
+                  Credential verified
+                </span>
+                <span className="mt-2 block text-xs text-ink-500">Issued by the institution</span>
+                <span className="mt-1 block text-xs font-bold tracking-[0.06em] text-navy-800">87EC13AC</span>
+                <span className="mt-3 inline-flex text-[11px] font-bold uppercase tracking-[0.06em] text-teal-700">
+                  Verified on EduLage
                 </span>
               </Link>
             </div>
@@ -307,7 +239,7 @@ export default function Home() {
                   >
                     <option value="">All delivery modes</option>
                     <option>Fully online</option>
-                    <option>Online + OEC exams</option>
+                    <option>Online + GOE Center exams</option>
                   </select>
                 </label>
                 <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-7 text-sm font-bold text-white transition hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
@@ -319,221 +251,186 @@ export default function Home() {
           </div>
         </Container>
       </section>
-      <section
-        className="bg-white py-20 md:py-24"
-        aria-labelledby="how-edulage-works"
-      >
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[0.86fr_1.14fr] lg:items-start lg:gap-16">
-            <div className="order-2 lg:order-1 lg:sticky lg:top-28">
-              <div className="relative min-h-[430px] overflow-hidden rounded-[2rem] shadow-xl sm:min-h-[500px] lg:min-h-[560px]">
-                <Image
-                  src="/media/study-online.jpg"
-                  alt="Learner participating in institution-led online higher education"
-                  fill
-                  sizes="(max-width:1023px)100vw,42vw"
-                  className="object-cover transition duration-700 hover:scale-[1.02]"
-                />
-                <div className="image-scrim absolute inset-0" />
-                <div className="absolute inset-x-6 bottom-6 rounded-2xl border border-white/15 bg-navy-900/80 p-6 text-white backdrop-blur-md sm:inset-x-7 sm:bottom-7">
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-teal-400">
-                    Connected globally. Supported locally.
-                  </p>
-                  <p className="mt-2 text-base font-semibold leading-7 text-white">
-                    A coordinated pathway to quality open and online education.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2">
-              <p className="section-kicker">How EduLage works</p>
-              <h2 id="how-edulage-works" className="section-title max-w-3xl">
-                A clear pathway from programme discovery to enrolment and study.
-              </h2>
-              <p className="section-lead max-w-3xl">
-                EduLage brings programmes, institutions and essential study
-                information together in one trusted ecosystem—helping learners
-                make informed decisions and continue through each institution’s
-                official admissions and learning processes.
-              </p>
-              <ol
-                className="relative mt-9 space-y-3 before:absolute before:bottom-8 before:left-[1.55rem] before:top-8 before:w-px before:bg-gradient-to-b before:from-teal-500 before:via-teal-500/60 before:to-line"
-                aria-label="The EduLage learner journey"
-              >
-                {journey.map(([Icon, title, text, href, action], index) => (
-                  <li
-                    key={title}
-                    className="group relative flex gap-4 rounded-2xl border border-line bg-white p-5 transition duration-300 hover:-translate-y-0.5 hover:border-teal-500 hover:bg-teal-500/[0.035] hover:shadow-xl"
-                  >
-                    <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border-4 border-white bg-navy-800 text-white shadow-sm transition group-hover:bg-teal-600">
-                      <Icon size={19} />
-                    </span>
-                    <div className="min-w-0 flex-1 pt-0.5">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-700">
-                            Step 0{index + 1}
-                          </p>
-                          <h3 className="mt-1 text-lg font-bold text-navy-800">
-                            {title}
-                          </h3>
-                        </div>
-                        <ArrowRight
-                          size={17}
-                          className="mt-2 text-ink-400 transition-transform group-hover:translate-x-1 group-hover:text-teal-600"
-                        />
-                      </div>
-                      <p className="mt-2 text-sm leading-6 text-ink-600">
-                        {text}
-                      </p>
-                      <Link
-                        href={href}
-                        className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-teal-700"
-                      >
-                        {action}
-                        <ArrowRight size={13} />
-                      </Link>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-              <div className="mt-5 rounded-2xl border border-teal-500/25 bg-teal-500/[0.055] p-5 sm:flex sm:items-start sm:gap-4">
-                <span className="grid size-10 shrink-0 place-items-center rounded-full bg-white text-teal-700 shadow-sm">
-                  <ShieldCheck size={20} />
-                </span>
-                <div className="mt-3 sm:mt-0">
-                  <h3 className="text-sm font-bold text-navy-800">
-                    Academic responsibility remains with the institution.
-                  </h3>
-                  <p className="mt-1 text-sm leading-6 text-ink-600">
-                    Participating institutions determine admissions, provide
-                    teaching and assessment, and issue all qualifications and
-                    credentials. EduLage supports discovery, access and
-                    ecosystem coordination.
-                  </p>
-                </div>
-              </div>
-              <div className="mt-7">
-                <Button href="/programmes" variant="teal">
-                  Start exploring programmes
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-      <ProgrammeDiscoveryShowcase />
-      <HighDemandFields />
+
+
+      {/* Featured programmes and courses */}
       <section className="bg-white py-20 md:py-24">
         <Container>
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="section-kicker">Featured institutions</p>
-              <h2 className="section-title">
-                Explore reputable institutions worldwide.
-              </h2>
+              <p className="section-kicker">Featured</p>
+              <h2 className="section-title">Programmes and courses worth your attention</h2>
               <p className="section-lead">
-                Discover institutional profiles, academic strengths and
-                programmes available through each digital campus.
+                Strategic offerings from partner institutions — each showing the qualification, institution, fee and
+                how to join.
               </p>
             </div>
-            <Link
-              href="/institutions"
-              className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600"
-            >
-              View all institutions <ArrowRight size={16} />
+            <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
+              View all programmes <ArrowRight size={16} />
             </Link>
           </div>
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {featuredInstitutions.map((institution) => {
-              const count = getInstitutionProgrammes(institution.id).length;
-              return (
+          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {liveCourses.map((course) => (
+              <article
+                key={course.course_id}
+                className="group card-hover flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white"
+              >
+                <div className="relative aspect-video overflow-visible bg-navy-800">
+                  <div className="absolute inset-0 overflow-hidden rounded-t-xl">
+                    {course.image && (
+                      <Image src={course.image} alt={course.title} fill sizes="(max-width:767px) 100vw, 25vw" className="image-zoom object-cover" unoptimized />
+                    )}
+                    <div className="image-scrim absolute inset-0" />
+                  </div>
+                  <span className="absolute left-3 top-3 rounded-full bg-navy-800/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
+                    Open enrolment{course.enrolment_policy === "open_free" ? " · Free" : ""}
+                  </span>
+                  <div className="absolute right-3 top-3">
+                    <Pill image>{course.classification === "professional" ? "Professional Certificate" : "Certificate of completion"}</Pill>
+                  </div>
+                  <span className="absolute -bottom-5 left-4 flex h-11 w-14 items-center justify-center overflow-hidden rounded-md border-4 border-white bg-white p-1 text-xs font-bold text-navy-800 shadow-sm">
+                    {course.institution_logo ? (
+                      <Image src={course.institution_logo} alt={`${course.institution_name} logo`} width={48} height={36} className="size-full object-contain" unoptimized />
+                    ) : (
+                      course.institution
+                    )}
+                  </span>
+                </div>
+                <div className="flex flex-1 flex-col p-5 pt-8">
+                  <p className="text-xs font-semibold text-teal-600">{course.institution_name}</p>
+                  <h3 className="line-clamp-2 mt-2 min-h-12 text-[17px] font-semibold leading-6 text-navy-800 group-hover:text-teal-600">{course.title}</h3>
+                  <div className="mt-3 flex min-h-7 flex-wrap gap-1.5">
+                    <span className="rounded-full bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-700">Fully online</span>
+                    <span className="rounded-full bg-surface px-2.5 py-1 text-xs font-bold text-ink-600">Self-paced</span>
+                  </div>
+                  <p className="mt-3 text-xs text-ink-600">
+                    {course.start ? `Starts ${new Date(course.start).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}` : "Rolling enrolment"}
+                  </p>
+                  <div className="mt-auto flex items-end justify-between gap-3 border-t border-line pt-4">
+                    <div>
+                      <p className="text-xs text-ink-400">Course fee</p>
+                      <p className="mt-1 text-sm font-bold text-navy-800">{priceLabel(course)}</p>
+                    </div>
+                    <a href={enrolUrl(course)} className="inline-flex items-center gap-1 text-sm font-semibold text-teal-600">
+                      Enrol now <ArrowRight size={14} />
+                    </a>
+                  </div>
+                </div>
+              </article>
+            ))}
+            {featured.map((programme) => (
+              <ProgrammeCard
+                key={programme.id}
+                programme={programme}
+                discovery
+                enrolmentLabel={programme.level === "Professional" ? "Open enrolment" : "Admission required"}
+              />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <ProgrammeDiscoveryShowcase />
+
+      {/* Partner institutions */}
+      <section className="bg-white py-20 md:py-24">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <p className="section-kicker">Our partners</p>
+              <h2 className="section-title">Institutions teaching on EduLage</h2>
+              <p className="section-lead">
+                Universities and training providers that publish programmes, admit learners and award credentials on
+                their own EduLage campus.
+              </p>
+            </div>
+            <Link href="/institutions" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
+              All institutions <ArrowRight size={16} />
+            </Link>
+          </div>
+          <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+            {partnerLogos.map((institution) => (
+              <li key={institution.key}>
                 <Link
-                  key={institution.id}
-                  href={`/institutions/${institution.slug}`}
-                  className="group grid grid-cols-[72px_1fr] gap-4 rounded-2xl border border-line p-5 transition hover:-translate-y-1 hover:border-teal-500 hover:shadow-xl"
+                  href={institution.href}
+                  title={institution.name}
+                  className="group flex h-24 items-center justify-center rounded-xl border border-line bg-white p-4 transition hover:border-teal-500 hover:shadow-md"
                 >
-                  <span className="grid h-16 w-[72px] place-items-center rounded-xl bg-surface p-2">
+                  {institution.logo ? (
                     <Image
                       src={institution.logo}
-                      alt={`${institution.shortName} logo`}
-                      width={64}
-                      height={44}
-                      className="max-h-11 w-auto object-contain"
+                      alt={`${institution.name} logo`}
+                      width={140}
+                      height={56}
+                      className="max-h-14 w-auto object-contain grayscale opacity-70 transition group-hover:grayscale-0 group-hover:opacity-100"
+                      unoptimized={institution.logo.startsWith("http")}
                     />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs font-semibold text-teal-600">
-                      {institution.country}
-                    </p>
-                    <h3 className="mt-1 text-base font-bold leading-6 text-navy-800 group-hover:text-teal-600">
-                      {institution.name}
-                    </h3>
-                    <div className="mt-3 flex flex-wrap items-center gap-3 text-xs text-ink-600">
-                      <span className="flex items-center gap-1">
-                        <ShieldCheck size={14} />
-                        {institution.accreditationStatus}
-                      </span>
-                      <span>
-                        {count} {count === 1 ? "programme" : "programmes"}
-                      </span>
-                    </div>
-                  </div>
+                  ) : (
+                    <span className="grid size-12 place-items-center rounded-lg bg-navy-800 text-sm font-bold tracking-wide text-white">{institution.mark}</span>
+                  )}
                 </Link>
-              );
-            })}
-          </div>
+              </li>
+            ))}
+          </ul>
         </Container>
       </section>
-      <section className="bg-navy-900 py-20 text-white md:py-24">
+
+      {/* How it works + trust */}
+      <section className="bg-surface py-20 md:py-24" aria-labelledby="how-edulage-works">
         <Container>
-          <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-16">
             <div>
-              <p className="section-kicker text-teal-400">
-                Trust & academic authority
-              </p>
-              <h2 className="mt-4 text-3xl font-bold leading-tight text-white md:text-5xl">
-                Clear standards. Clear responsibility.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-white/65">
-                EduLage enables discovery and access while each institution
-                retains responsibility for admissions, curriculum, teaching,
-                assessment and certification.
-              </p>
-              <Link
-                href="/quality-and-trust"
-                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-400"
-              >
-                Explore quality and trust <ArrowRight size={15} />
-              </Link>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {trustStandards.map(([Icon, title, text]) => (
-                <div
-                  key={title}
-                  className="rounded-2xl border border-white/15 bg-white/5 p-6"
-                >
-                  <Icon className="text-teal-400" size={23} />
-                  <h3 className="mt-5 font-bold text-white">{title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-white/60">{text}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-      <section className="overflow-hidden bg-surface py-20 md:py-24">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:items-center">
-            <div>
-              <p className="section-kicker">Open Education Centers</p>
-              <h2 className="section-title">
-                Online education with dependable local access.
+              <p className="section-kicker">How it works</p>
+              <h2 id="how-edulage-works" className="section-title">
+                Four steps from discovery to a verified credential
               </h2>
               <p className="section-lead">
-                Independently operated, EduLage-accredited OECs provide
-                connectivity, suitable learning spaces, learner support and
-                secure institution-required assessment facilities.
+                Create a free account, join a course or apply for admission, learn with the institution&rsquo;s own
+                teaching team, and receive a credential anyone can verify.
+              </p>
+              <div className="mt-8 grid gap-3">
+                {trust.map(([Icon, title, text]) => (
+                  <div key={title} className="flex gap-4 rounded-2xl border border-line bg-white p-5">
+                    <Icon className="shrink-0 text-teal-600" size={22} />
+                    <div>
+                      <h3 className="font-bold text-navy-800">{title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-ink-600">{text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <ol
+              className="relative grid gap-3 before:absolute before:bottom-8 before:left-[1.55rem] before:top-8 before:w-px before:bg-gradient-to-b before:from-teal-500 before:via-teal-500/60 before:to-line"
+              aria-label="The EduLage learner journey"
+            >
+              {journey.map(([Icon, title, text], index) => (
+                <li key={title} className="relative flex gap-4 rounded-2xl border border-line bg-white p-5 transition hover:border-teal-500 hover:shadow-lg">
+                  <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border-4 border-white bg-navy-800 text-white shadow-sm">
+                    <Icon size={19} />
+                  </span>
+                  <div className="pt-0.5">
+                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Step {index + 1}</p>
+                    <h3 className="mt-1 text-lg font-bold text-navy-800">{title}</h3>
+                    <p className="mt-2 text-sm leading-6 text-ink-600">{text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </Container>
+      </section>
+
+      {/* OEC */}
+      <section className="overflow-hidden bg-white py-20 md:py-24">
+        <Container>
+          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+            <div>
+              <p className="section-kicker">Global Open Education Centers (GOE Centers)</p>
+              <h2 className="section-title">Local support for your online studies</h2>
+              <p className="section-lead">
+                Accredited centres near you provide connectivity, study space, learner support and secure venues for
+                institution-required exams.
               </p>
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 {[
@@ -542,239 +439,101 @@ export default function Home() {
                   "Trained local learner support",
                   "Secure computer-based assessment",
                 ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-3 text-sm font-semibold text-navy-800"
-                  >
-                    <CheckCircle2
-                      size={17}
-                      className="shrink-0 text-teal-600"
-                    />
+                  <div key={item} className="flex items-center gap-3 text-sm font-semibold text-navy-800">
+                    <CheckCircle2 size={17} className="shrink-0 text-teal-600" />
                     {item}
                   </div>
                 ))}
               </div>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Button href="/open-education-centers">Find an OEC</Button>
-                <Button
-                  href="/open-education-centers#operate"
-                  variant="secondary"
-                >
-                  Become an operator
+                <Button href="/open-education-centers">Find a GOE Center</Button>
+                <Button href="/open-education-centers#operate" variant="secondary">
+                  Operate a GOE Center
                 </Button>
               </div>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="relative min-h-[300px] overflow-hidden rounded-2xl sm:min-h-[390px]">
-                <Image
-                  src="/media/oec-lab.jpg"
-                  alt="Learners in an Open Education Center"
-                  fill
-                  sizes="25vw"
-                  className="object-cover"
-                />
-              </div>
-              <div className="grid gap-4">
-                <div className="relative min-h-[220px] overflow-hidden rounded-2xl">
-                  <Image
-                    src="/media/oec-exam.jpg"
-                    alt="Secure digital assessment facility"
-                    fill
-                    sizes="25vw"
-                    className="object-cover"
-                  />
-                </div>
-                <div className="rounded-2xl bg-navy-900 p-6 text-white">
-                  <MapPin className="text-teal-400" size={23} />
-                  <h3 className="mt-4 font-bold text-white">
-                    Closer to every community
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-white/60">
-                    Making online participation practical where connectivity or
-                    equipment is limited.
-                  </p>
-                </div>
+            <div className="relative min-h-[320px] overflow-hidden rounded-[2rem] shadow-xl sm:min-h-[420px]">
+              <Image
+                src="/media/oec-lab.jpg"
+                alt="Learners working at computers in a GOE Center"
+                fill
+                sizes="(max-width:1023px) 100vw, 50vw"
+                className="object-cover"
+              />
+              <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-navy-800 shadow-md">
+                <MapPin size={14} className="text-teal-600" />
+                {centers.length} centres · {centerCountries} countries
               </div>
             </div>
           </div>
         </Container>
       </section>
-      <section className="bg-white py-20 md:py-24">
+
+      {/* Institutions & partners */}
+      <section className="bg-surface py-20 md:py-24">
         <Container>
           <div className="grid gap-5 lg:grid-cols-3">
             <div className="lg:col-span-3">
-              <p className="section-kicker">Participate in the ecosystem</p>
-              <h2 className="section-title">
-                Purpose-built pathways for institutions and partners.
-              </h2>
+              <p className="section-kicker">For institutions and partners</p>
+              <h2 className="section-title">Bring your programmes to a global audience</h2>
             </div>
             <div className="relative overflow-hidden rounded-2xl bg-navy-900 p-7 text-white lg:col-span-2">
               <div className="relative z-10 max-w-xl">
                 <Landmark className="text-teal-400" size={27} />
-                <h3 className="mt-5 text-2xl font-bold text-white">
-                  For tertiary institutions
-                </h3>
-                <p className="mt-3 leading-7 text-white/65">
-                  Establish a digital campus, publish programmes globally and
-                  use shared delivery infrastructure without surrendering
-                  institutional identity or academic authority.
+                <h3 className="mt-5 text-2xl font-bold text-white">Tertiary institutions &amp; training providers</h3>
+                <p className="mt-3 leading-7 text-white/70">
+                  Register, get approved and your branded campus is live the same day — publish courses, set fees or
+                  admission rules, issue your own credentials.
                 </p>
-                <Link
-                  href="/for-institutions"
-                  className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-400"
-                >
-                  Explore institutional participation <ArrowRight size={15} />
-                </Link>
+                <div className="mt-7 flex flex-wrap gap-3">
+                  <Button href="/for-institutions#register" variant="teal">
+                    Register your institution
+                  </Button>
+                  <Link href="/for-institutions" className="inline-flex items-center gap-2 px-2 py-2.5 text-sm font-semibold text-teal-400">
+                    How it works for institutions <ArrowRight size={15} />
+                  </Link>
+                </div>
               </div>
               <div className="hero-grid absolute inset-0 opacity-15" />
             </div>
-            <div className="rounded-2xl border border-line bg-surface p-7">
-              <Globe2 className="text-teal-600" size={27} />
-              <h3 className="mt-5 text-xl font-bold text-navy-800">
-                Governments & partners
-              </h3>
+            <div className="rounded-2xl border border-line bg-white p-7">
+              <Building2 className="text-teal-600" size={27} />
+              <h3 className="mt-5 text-xl font-bold text-navy-800">Governments &amp; development partners</h3>
               <p className="mt-3 text-sm leading-6 text-ink-600">
-                Use GOE to build institutional readiness, activate OEC networks
-                and coordinate country participation.
+                Strengthen institutional readiness, build GOE Center networks and coordinate national participation
+                through the GOE Initiative.
               </p>
-              <Link
-                href="/goe"
-                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-600"
-              >
-                Explore GOE partnerships <ArrowRight size={15} />
+              <Link href="/goe" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
+                About the GOE Initiative <ArrowRight size={15} />
               </Link>
             </div>
           </div>
         </Container>
       </section>
-      <section className="bg-navy-900 py-20 text-white md:py-24">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div>
-              <p className="section-kicker text-teal-400">The global network</p>
-              <h2 className="mt-4 text-3xl font-bold leading-tight text-white md:text-5xl">
-                Education connected across institutions, countries and
-                communities.
-              </h2>
-              <p className="mt-5 text-lg leading-8 text-white/65">
-                Explore programmes and institutions across regions, with local
-                access extended through Open Education Centers and country
-                partnerships.
-              </p>
-              <Link
-                href="/institutions"
-                className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-400"
-              >
-                Explore the global network <ArrowRight size={15} />
-              </Link>
-            </div>
-            <div className="rounded-[2rem] border border-white/15 bg-white/5 p-7">
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                {networkStats.map(({ icon: Icon, value, label }) => (
-                  <div
-                    key={label}
-                    className="rounded-xl border border-white/10 bg-navy-900/50 p-5"
-                  >
-                    <Icon className="text-teal-400" size={21} />
-                    <p className="mt-5 text-3xl font-bold text-white">
-                      {value}
-                    </p>
-                    <p className="mt-1 text-xs text-white/55">{label}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-5 flex items-center gap-3 rounded-xl border border-white/10 p-4">
-                <Network size={20} className="text-teal-400" />
-                <p className="text-sm text-white/65">
-                  A shared infrastructure with institutional identity preserved.
-                </p>
-              </div>
-            </div>
-          </div>
-        </Container>
-      </section>
-      <section className="bg-surface py-20 md:py-24">
-        <Container>
-          <div className="flex flex-wrap items-end justify-between gap-5">
-            <div>
-              <p className="section-kicker">Insights & resources</p>
-              <h2 className="section-title">
-                Make informed education decisions.
-              </h2>
-            </div>
-            <Link href="/about" className="text-sm font-semibold text-teal-600">
-              View all resources →
-            </Link>
-          </div>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {resources.map(([type, title, text, href]) => (
-              <article
-                key={title}
-                className="flex flex-col rounded-2xl border border-line bg-white p-6"
-              >
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-teal-600">
-                  {type}
-                </p>
-                <h3 className="mt-5 text-lg font-bold leading-7 text-navy-800">
-                  {title}
-                </h3>
-                <p className="mt-3 flex-1 text-sm leading-6 text-ink-600">
-                  {text}
-                </p>
-                <Link
-                  href={href}
-                  className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-navy-800"
-                >
-                  Read resource <ArrowRight size={15} />
-                </Link>
-              </article>
-            ))}
-          </div>
-        </Container>
-      </section>
-      <section className="bg-white py-20">
+
+      {/* Final CTA */}
+      <section className="bg-surface pb-20">
         <Container>
           <div className="grid gap-6 rounded-[2rem] bg-navy-800 p-8 text-white md:grid-cols-[1fr_auto] md:items-center md:p-12">
             <div>
-              <p className="section-kicker text-teal-400">Your next step</p>
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold text-white md:text-4xl">
-                Enter the Global Education Village.
-              </h2>
-              <p className="mt-4 max-w-2xl text-white/65">
-                Discover a programme, explore participating institutions, locate
-                an OEC or begin an institutional partnership.
+              <p className="section-kicker text-teal-400">Get started</p>
+              <h2 className="mt-4 max-w-3xl text-3xl font-bold text-white md:text-4xl">Start learning today</h2>
+              <p className="mt-4 max-w-2xl text-white/70">
+                Create your free account, choose a programme or course, and manage everything from one My learning
+                dashboard.
               </p>
             </div>
             <div className="flex flex-wrap gap-3 md:justify-end">
-              <Button href="/programmes" variant="teal">
-                Explore programmes
+              <Button href={learnLinks.register} variant="teal">
+                Create free account
               </Button>
-              <Button href="/get-started" variant="ghost">
-                Get started
+              <Button href="/programmes" variant="ghost">
+                Browse programmes
               </Button>
             </div>
-          </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-ink-600">
-            <span className="flex items-center gap-2">
-              <Headphones size={17} className="text-teal-600" />
-              Help and learner support
-            </span>
-            <span className="flex items-center gap-2">
-              <Building2 size={17} className="text-teal-600" />
-              Institutional enquiries
-            </span>
-            <span className="flex items-center gap-2">
-              <Users size={17} className="text-teal-600" />
-              Partnership enquiries
-            </span>
           </div>
         </Container>
       </section>
     </main>
   );
 }
-export const metadata = {
-  title: "EduLage — The Global Education Village",
-  description:
-    "Discover quality open and online programmes from reputable tertiary institutions worldwide.",
-};
