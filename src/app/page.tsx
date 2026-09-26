@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
-  BookOpen,
   Building2,
   CheckCircle2,
   Globe2,
@@ -21,7 +20,7 @@ import { getCatalogue, enrolUrl, priceLabel } from "@/lib/liveCatalogue";
 import { learnLinks } from "@/lib/site";
 import { centers } from "@/data/centers";
 import { institutions as sampleInstitutions } from "@/data/institutions";
-import { getFeaturedProgrammes, getMarketplaceStats } from "@/lib/catalog";
+import { getFeaturedProgrammes } from "@/lib/catalog";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { ProgrammeDiscoveryShowcase } from "@/components/ProgrammeDiscoveryShowcase";
 
@@ -72,18 +71,11 @@ export default async function Home() {
   const liveCourses = catalogue?.open_courses.slice(0, 4) ?? [];
   const featured = getFeaturedProgrammes(8 - liveCourses.length);
   const liveInstitutions = catalogue?.institutions ?? [];
-  const sample = getMarketplaceStats();
   const centerCountries = new Set(centers.map((c) => c.country)).size;
   const partnerLogos = [
     ...liveInstitutions.map((i) => ({ key: i.code, href: `/institutions/${i.code.toLowerCase()}`, name: i.name, logo: i.logo, mark: i.code })),
     ...sampleInstitutions.map((i) => ({ key: i.id, href: `/institutions/${i.slug}`, name: i.name, logo: i.logo, mark: i.shortName })),
   ].slice(0, 12);
-  const stats = [
-    { icon: Landmark, value: (catalogue?.counts.institutions ?? 0) + sample.institutions, label: "Partner institutions" },
-    { icon: BookOpen, value: (catalogue?.counts.courses ?? 0) + sample.programmes, label: "Programmes & courses" },
-    { icon: Globe2, value: (catalogue?.counts.countries ?? 0) + sample.countries, label: "Countries" },
-    { icon: MapPin, value: centers.length, label: "GOE Centers" },
-  ];
 
   return (
     <main>
@@ -187,13 +179,13 @@ export default async function Home() {
       </section>
 
 
-      {/* Live numbers */}
+      {/* Search */}
       <section className="relative z-10 -mt-12 bg-transparent">
         <Container>
           <form
             action="/programmes"
             role="search"
-            className="mb-4 grid gap-2 rounded-2xl border border-line bg-white p-2 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.12)] sm:grid-cols-[1.6fr_1fr_auto]"
+            className="grid gap-2 rounded-2xl border border-line bg-white p-2 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.12)] sm:grid-cols-[1.6fr_1fr_auto]"
           >
             <label className="relative">
               <span className="sr-only">Search programmes, courses or institutions</span>
@@ -224,22 +216,6 @@ export default async function Home() {
               Search
             </button>
           </form>
-          <div className="rounded-2xl border border-line bg-white px-4 py-5 shadow-[0_18px_45px_rgba(5,18,53,0.12)] md:px-8">
-            <dl className="grid grid-cols-2 gap-y-4 divide-line sm:grid-cols-4 sm:divide-x">
-              {stats.map(({ icon: Icon, value, label }) => (
-                <div key={label} className="flex items-center gap-3 px-2 sm:justify-center">
-                  <span className="grid size-10 shrink-0 place-items-center rounded-full bg-teal-500/10 text-teal-600">
-                    <Icon size={20} />
-                  </span>
-                  <div>
-                    <dd className="text-2xl font-bold leading-none text-navy-800">{value}</dd>
-                    <dt className="mt-1 text-xs text-ink-600">{label}</dt>
-                  </div>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-4 text-center text-xs text-ink-400">Live figures from the EduLage network.</p>
-          </div>
         </Container>
       </section>
 
