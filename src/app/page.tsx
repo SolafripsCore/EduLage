@@ -103,20 +103,19 @@ export default async function Home() {
       />
 
       {/* Hero */}
-      <section className="hero-premium relative isolate overflow-hidden bg-navy-900 text-white">
-        <div className="hero-aurora absolute inset-0 -z-20 opacity-70" />
+      <section className="relative isolate overflow-hidden bg-navy-900 text-white">
+        <div className="hero-glow absolute inset-0 -z-20" />
         <Container>
-          <div className="grid gap-12 pb-24 pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:pb-28 lg:pt-20">
+          <div className="grid gap-12 pb-28 pt-16 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-20 lg:pb-32 lg:pt-24">
             <div className="relative z-10">
               <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-400">
                 <span className="h-px w-8 bg-teal-400/80" />
                 The Global Education Village
               </p>
-              <h1 className="mt-6 max-w-[30ch] text-[2.1rem] font-semibold leading-[1.12] tracking-[-0.02em] text-white sm:text-[2.5rem] lg:text-[2.85rem]">
-                Quality education and training from reputable institutions
-                <span className="mt-1 block text-teal-400">&mdash; wherever you are.</span>
+              <h1 className="mt-6 max-w-[26ch] text-[2rem] font-medium leading-[1.15] tracking-[-0.02em] text-white sm:text-[2.4rem] lg:text-[2.75rem]">
+                Quality education and training from reputable institutions &mdash; wherever you are.
               </h1>
-              <p className="mt-6 max-w-lg text-[15px] leading-relaxed text-white/70 sm:text-base">
+              <p className="mt-6 max-w-[34rem] text-[15px] leading-[1.75] text-white/65 sm:text-base">
                 Degrees, professional programmes and short courses from accredited universities and
                 organisations worldwide. Learn at a pace and schedule that fit your life, and earn credentials
                 awarded directly by the institution you choose.
@@ -125,7 +124,7 @@ export default async function Home() {
               <form
                 action="/programmes"
                 role="search"
-                className="mt-9 grid gap-2 rounded-2xl bg-white p-2 text-navy-800 shadow-[0_24px_60px_rgba(0,0,0,0.25)] sm:grid-cols-[1.6fr_1fr_auto]"
+                className="mt-10 grid gap-2 rounded-2xl bg-white p-2 text-navy-800 shadow-[0_20px_50px_rgba(0,0,0,0.22)] sm:grid-cols-[1.6fr_1fr_auto]"
               >
                 <label className="relative">
                   <span className="sr-only">Search programmes, courses or institutions</span>
@@ -165,54 +164,20 @@ export default async function Home() {
                   Create free account
                 </Button>
               </div>
-              <ul
-                className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-white/10 pt-6 text-[13px] text-white/65"
-                aria-label="EduLage benefits"
-              >
-                {[
-                  [ShieldCheck, "Institution-issued, verifiable credentials"],
-                  [Globe2, "Open to learners in every country"],
-                  [MapPin, "Local exam and support centres"],
-                ].map(([Icon, text]) => (
-                  <li key={text as string} className="flex items-center gap-2">
-                    <Icon size={15} className="shrink-0 text-teal-400" />
-                    {text as string}
-                  </li>
-                ))}
-              </ul>
             </div>
 
-            <div className="relative mx-auto w-full max-w-[440px] lg:justify-self-end">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+            <div className="relative mx-auto w-full max-w-[480px] lg:justify-self-end">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
                 <Image
                   src="/media/hero-learner.jpg"
                   alt="Learner studying online with an EduLage partner institution"
                   fill
                   priority
-                  sizes="(max-width:1023px) 90vw, 440px"
+                  sizes="(max-width:1023px) 90vw, 480px"
                   className="object-cover object-[center_20%]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-900/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent" />
               </div>
-              <Link
-                href="/verify/87ec13ac13c443dc844c124088d09121"
-                className="absolute -bottom-5 -left-3 z-10 w-[230px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.28)] transition hover:-translate-y-0.5 sm:-left-8"
-                aria-label="See a verified EduLage credential"
-              >
-                <span className="flex items-center gap-2 text-xs font-bold">
-                  <ShieldCheck size={14} className="text-teal-600" />
-                  Verified credential
-                </span>
-                <span className="mt-2 block text-xs text-ink-600">
-                  Awarded by the institution, recorded by EduLage.
-                </span>
-                <span className="mt-2 block font-mono text-[11px] tracking-wide text-ink-400">
-                  87ec13ac…9121
-                </span>
-                <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.06em] text-teal-600">
-                  Check it <ArrowRight size={11} />
-                </span>
-              </Link>
             </div>
           </div>
         </Container>
