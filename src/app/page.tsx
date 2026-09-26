@@ -62,9 +62,9 @@ const trust = [
 ] as const;
 
 export const metadata = {
-  title: "EduLage — Quality education and training from world-class institutions, wherever you are",
+  title: "EduLage — Quality education and training from reputable institutions, wherever you are",
   description:
-    "Pursue degrees, professional programmes and courses from reputable institutions and organisations worldwide. Flexible learning that fits your life, with credentials awarded directly by your chosen institution.",
+    "Pursue degrees, professional programmes and short courses from accredited universities and organisations worldwide. Learn flexibly and earn credentials awarded directly by the institution you choose.",
 };
 
 export default async function Home() {
@@ -114,12 +114,12 @@ export default async function Home() {
                 The Global Education Village
               </p>
               <h1 className="mt-5 max-w-[26ch] text-[2.1rem] font-bold leading-[1.1] tracking-[-0.025em] text-white sm:text-[2.5rem] lg:text-[2.9rem]">
-                Quality education and training from world-class tertiary institutions&mdash;wherever you are.
+                Quality education and training from reputable institutions &mdash; wherever you are.
               </h1>
               <p className="mt-5 max-w-xl text-base leading-7 text-white/75">
-                Pursue degrees, professional programmes and courses from reputable institutions and
-                organisations worldwide. Discover flexible learning opportunities that fit your life, and earn
-                credentials awarded directly by your chosen institution.
+                Pursue degrees, professional programmes and short courses from accredited universities and
+                organisations worldwide. Learn flexibly, at a pace and schedule that fit your life, and earn
+                credentials awarded directly by the institution you choose.
               </p>
 
               <form
@@ -159,7 +159,7 @@ export default async function Home() {
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Button href="/programmes" variant="teal">
-                  Explore Programmes &amp; Courses
+                  Explore programmes &amp; courses
                 </Button>
                 <Button href={learnLinks.register} variant="ghost">
                   Create free account
