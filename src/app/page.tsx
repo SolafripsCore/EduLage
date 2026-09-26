@@ -103,89 +103,127 @@ export default async function Home() {
       />
 
       {/* Hero */}
-      <section className="relative isolate overflow-hidden bg-navy-900 text-white">
-        <div className="hero-glow absolute inset-0 -z-20" />
+      <section className="hero-premium relative isolate overflow-hidden bg-navy-900 text-white">
+        <div className="hero-grid absolute inset-0 -z-20 opacity-20" />
+        <div className="hero-aurora absolute inset-0 -z-20" />
         <Container>
-          <div className="grid gap-12 pb-28 pt-16 lg:grid-cols-[1fr_0.9fr] lg:items-center lg:gap-20 lg:pb-32 lg:pt-24">
-            <div className="relative z-10">
-              <p className="flex items-center gap-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-teal-400">
-                <span className="h-px w-8 bg-teal-400/80" />
+          <div className="grid gap-9 pb-16 pt-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-14 lg:pb-20 lg:pt-14">
+            <div className="relative z-10 max-w-3xl">
+              <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
+                <span className="h-px w-8 bg-teal-400" />
                 The Global Education Village
               </p>
-              <h1 className="mt-6 max-w-[26ch] text-[2rem] font-medium leading-[1.15] tracking-[-0.02em] text-white sm:text-[2.4rem] lg:text-[2.75rem]">
-                Quality education and training from reputable institutions &mdash; wherever you are.
+              <h1 className="mt-5 max-w-[24ch] text-[2.15rem] font-bold leading-[1.1] tracking-[-0.025em] text-white sm:text-[2.6rem] lg:text-[3rem]">
+                Quality education and training from reputable institutions &mdash;&nbsp;wherever you&nbsp;are.
               </h1>
-              <p className="mt-6 max-w-[34rem] text-[15px] leading-[1.75] text-white/65 sm:text-base">
+              <p className="mt-5 max-w-xl text-[0.98rem] leading-7 text-white/72 sm:text-base sm:leading-7">
                 Degrees, professional programmes and short courses from accredited universities and
-                organisations worldwide. Learn at a pace and schedule that fit your life, and earn credentials
+                organisations worldwide &mdash; learn at a pace that fits your life and earn credentials
                 awarded directly by the institution you choose.
               </p>
-
-              <form
-                action="/programmes"
-                role="search"
-                className="mt-10 grid gap-2 rounded-2xl bg-white p-2 text-navy-800 shadow-[0_20px_50px_rgba(0,0,0,0.22)] sm:grid-cols-[1.6fr_1fr_auto]"
-              >
-                <label className="relative">
-                  <span className="sr-only">Search programmes, courses or institutions</span>
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" size={18} />
-                  <input
-                    name="query"
-                    placeholder="Search programmes, courses or institutions"
-                    className="h-12 w-full rounded-xl border border-transparent bg-surface pl-11 pr-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20"
-                  />
-                </label>
-                <label>
-                  <span className="sr-only">Study level</span>
-                  <select
-                    name="level"
-                    defaultValue=""
-                    className="h-12 w-full rounded-xl border border-transparent bg-surface px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20"
-                  >
-                    <option value="">All study levels</option>
-                    {studyLevels.map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-6 text-sm font-bold text-white transition hover:bg-navy-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
-                  <Search size={17} />
-                  Search
-                </button>
-              </form>
-
-              <div className="mt-6 flex flex-wrap items-center gap-3">
+              <div className="mt-7 flex flex-wrap items-center gap-3">
                 <Button href="/programmes" variant="teal">
                   Explore programmes &amp; courses
                 </Button>
                 <Button href={learnLinks.register} variant="ghost">
                   Create free account
                 </Button>
+                <Link
+                  href="/open-education-centers"
+                  className="group inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold text-white/75 transition hover:text-white"
+                >
+                  Find a GOE Center{" "}
+                  <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
+                </Link>
               </div>
+              <ul
+                className="mt-8 grid max-w-2xl gap-3 border-t border-white/15 pt-5 sm:grid-cols-3"
+                aria-label="EduLage benefits"
+              >
+                <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
+                  <ShieldCheck size={17} className="mt-0.5 shrink-0 text-teal-400" />
+                  <span>Institution-issued, verifiable credentials</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
+                  <Globe2 size={17} className="mt-0.5 shrink-0 text-teal-400" />
+                  <span>Open to learners in every country</span>
+                </li>
+                <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
+                  <MapPin size={17} className="mt-0.5 shrink-0 text-teal-400" />
+                  <span>Local exam and support centres</span>
+                </li>
+              </ul>
             </div>
-
-            <div className="relative mx-auto w-full max-w-[480px] lg:justify-self-end">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem]">
+            <div className="relative mx-auto w-full max-w-[430px] lg:justify-self-end">
+              <div className="hero-portrait relative aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/15 bg-navy-800">
                 <Image
                   src="/media/hero-learner.jpg"
                   alt="Learner studying online with an EduLage partner institution"
                   fill
                   priority
-                  sizes="(max-width:1023px) 90vw, 480px"
+                  sizes="(max-width:1023px) 90vw,430px"
                   className="object-cover object-[center_20%]"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-900/10 via-transparent to-white/5" />
               </div>
+              <Link
+                href="/verify/87ec13ac13c443dc844c124088d09121"
+                className="absolute -left-3 top-5 z-10 w-[178px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.24)] transition hover:-translate-y-0.5 sm:-left-7 sm:top-6 sm:w-[198px]"
+                aria-label="See a verified EduLage credential"
+              >
+                <span className="flex items-center gap-2 text-xs font-bold">
+                  <ShieldCheck size={14} className="text-teal-600" />
+                  Credential verified
+                </span>
+                <span className="mt-2 block text-xs text-ink-500">Issued by the institution</span>
+                <span className="mt-1 block text-xs font-bold tracking-[0.06em] text-navy-800">87EC13AC</span>
+                <span className="mt-3 inline-flex text-[11px] font-bold uppercase tracking-[0.06em] text-teal-700">
+                  Verified on EduLage
+                </span>
+              </Link>
             </div>
           </div>
         </Container>
       </section>
 
+
       {/* Live numbers */}
       <section className="relative z-10 -mt-12 bg-transparent">
         <Container>
+          <form
+            action="/programmes"
+            role="search"
+            className="mb-4 grid gap-2 rounded-2xl border border-line bg-white p-2 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.12)] sm:grid-cols-[1.6fr_1fr_auto]"
+          >
+            <label className="relative">
+              <span className="sr-only">Search programmes, courses or institutions</span>
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" size={18} />
+              <input
+                name="query"
+                placeholder="Search programmes, courses or institutions"
+                className="h-12 w-full rounded-xl border border-transparent bg-surface pl-11 pr-4 text-sm outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20"
+              />
+            </label>
+            <label>
+              <span className="sr-only">Study level</span>
+              <select
+                name="level"
+                defaultValue=""
+                className="h-12 w-full rounded-xl border border-transparent bg-surface px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:bg-white focus:ring-2 focus:ring-teal-500/20"
+              >
+                <option value="">All study levels</option>
+                {studyLevels.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-6 text-sm font-bold text-white transition hover:bg-navy-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+              <Search size={17} />
+              Search
+            </button>
+          </form>
           <div className="rounded-2xl border border-line bg-white px-4 py-5 shadow-[0_18px_45px_rgba(5,18,53,0.12)] md:px-8">
             <dl className="grid grid-cols-2 gap-y-4 divide-line sm:grid-cols-4 sm:divide-x">
               {stats.map(({ icon: Icon, value, label }) => (
