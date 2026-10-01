@@ -552,7 +552,7 @@ html{scroll-padding-top:112px}body{font-size:1rem}.section{position:relative;pad
             <div class="level-symbol"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="13" rx="2"/><path d="M8 21h8m-4-5v5"/></svg></div><div class="num">02 • Junior Secondary</div>
             <h3>Junior secondary</h3>
             <p>Build core knowledge, curiosity and study skills through JSS 1–3.</p>
-            <a class="level-link" href="#subjects" data-level="jss">Explore JSS</a>
+            <a class="level-link" href="#subjects" data-level="jss">Explore junior secondary</a>
           </article>
           <article class="level-card reveal">
             <div class="level-symbol"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="m8 12 3 3 5-6"/></svg></div><div class="num">03 • Senior Secondary</div>
@@ -617,7 +617,7 @@ html{scroll-padding-top:112px}body{font-size:1rem}.section{position:relative;pad
             <div class="programme-content"><span class="tag">Supplementary</span><h3>After-School Learning</h3><p>Extra academic support alongside physical schooling.</p><button class="programme-link" data-detail="after-school">View programme</button></div>
           </article>
           <article class="programme-card reveal">
-            <img src="https://www.unicef.org/nigeria/sites/unicef.org.nigeria/files/styles/media_large_image/public/DSC_1628.jpg.webp?itok=AQufT6Xu" alt="An educator supporting children with digital learning in Nigeria" loading="lazy" decoding="async">
+            <img src="https://cdsse.vercel.app/static/main/images/Slidder1.jpg" alt="Nigerian secondary learners working with laptops" loading="lazy" decoding="async">
             <div class="programme-content"><span class="tag">Exam support</span><h3>Examination Preparation</h3><p>Revision, timed practice and targeted academic support.</p><button class="programme-link" data-detail="exam-prep">View programme</button></div>
           </article>
         </div>
@@ -850,7 +850,7 @@ document.querySelectorAll('.hero-assurance div').forEach((el,i)=>{el.setAttribut
 document.querySelectorAll('.programme-card,.news-card,.level-card').forEach(card=>card.addEventListener('click',e=>{if(e.target.closest('button,a'))return;card.querySelector('button,a')?.click();}));
 const navGroups=document.querySelectorAll('.nav-group');
 function closeDropdowns(except){navGroups.forEach(group=>{if(group===except)return;group.classList.remove('open');group.querySelector('.nav-trigger').setAttribute('aria-expanded','false');});}
-navGroups.forEach(group=>{const trigger=group.querySelector('.nav-trigger');group.addEventListener('mouseenter',()=>{if(innerWidth>1000&&matchMedia('(hover:hover)').matches){closeDropdowns(group);group.classList.add('open');trigger.setAttribute('aria-expanded','true');}});group.addEventListener('mouseleave',()=>{if(innerWidth>1000&&!group.contains(document.activeElement)){group.classList.remove('open');trigger.setAttribute('aria-expanded','false');}});trigger.addEventListener('click',()=>{const open=!group.classList.contains('open');closeDropdowns(group);group.classList.toggle('open',open);trigger.setAttribute('aria-expanded',String(open));});group.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDropdowns();trigger.focus();}if(e.key==='ArrowDown'&&e.target===trigger){e.preventDefault();closeDropdowns(group);group.classList.add('open');trigger.setAttribute('aria-expanded','true');group.querySelector('.nav-dropdown a,.nav-dropdown button')?.focus();}});group.addEventListener('focusout',e=>{if(!group.contains(e.relatedTarget)){group.classList.remove('open');trigger.setAttribute('aria-expanded','false');}});});
+navGroups.forEach(group=>{const trigger=group.querySelector('.nav-trigger');trigger.addEventListener('click',()=>{const open=!group.classList.contains('open');closeDropdowns(group);group.classList.toggle('open',open);trigger.setAttribute('aria-expanded',String(open));});group.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDropdowns();trigger.focus();}if(e.key==='ArrowDown'&&e.target===trigger){e.preventDefault();closeDropdowns(group);group.classList.add('open');trigger.setAttribute('aria-expanded','true');group.querySelector('.nav-dropdown a,.nav-dropdown button')?.focus();}});group.addEventListener('focusout',e=>{if(!group.contains(e.relatedTarget)){group.classList.remove('open');trigger.setAttribute('aria-expanded','false');}});});
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-group'))closeDropdowns();if(e.target.closest('.nav-dropdown a,.nav-dropdown button')){closeDropdowns();closeMenu();}});
 const backTop=document.querySelector('.back-top');backTop.addEventListener('click',()=>{window.scrollTo({top:0,behavior:reduceMotion?'auto':'smooth'});document.querySelector('.brand').focus({preventScroll:true});});
 let scrollPending=false;function updateScroll(){const max=document.documentElement.scrollHeight-innerHeight;document.querySelector('.header').style.setProperty('--page-progress',(max>0?scrollY/max*100:0)+'%');backTop.hidden=scrollY<650;scrollPending=false;}
