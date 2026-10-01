@@ -408,6 +408,20 @@ html{scroll-padding-top:108px}
 @media(max-width:720px){html{scroll-padding-top:84px}.utility .inner{padding:7px 0;font-size:.7rem}.utility-links{gap:10px}.utility-links a:nth-child(-n+3){display:none}.utility .inner>span{max-width:70%;line-height:1.4}.nav{height:78px;gap:8px}.brand{min-width:0}.brand-logo{width:165px;height:50px}.nav-actions{gap:8px}.nav-actions .btn-primary{font-size:.73rem;padding:9px 11px}.menu{top:78px}.mobile-toggle{font-size:1.35rem;padding:4px}.hero{padding:35px 0 40px}.hero-grid{gap:28px}.hero .eyebrow{font-size:.62rem;letter-spacing:.06em;gap:7px;margin-bottom:16px}.hero .eyebrow:before{width:18px}.hero h1{font-size:clamp(2.4rem,9.3vw,3.4rem);line-height:1.12}.hero-copy{font-size:.97rem;margin:18px 0 21px}.hero-actions{gap:9px;margin-bottom:19px}.hero-actions .btn{font-size:.84rem;padding:12px 15px}.hero-assurance{grid-template-columns:1fr}.hero-assurance div{display:flex;align-items:center;gap:9px;padding:10px 12px}.hero-assurance strong{margin:0;min-width:118px}.hero-assurance span{font-size:.73rem}.launch-note{margin-top:14px}.hero-media{height:390px}.hero-photo{inset:20px 5px 22px 20px}.float-top{left:0;width:170px}.float-bottom{right:0;width:185px}.float-value{font-size:1.12rem}.floating-card{padding:13px}.section{padding:58px 0}.section-title{font-size:2rem}.levels-head>.section-copy{margin-top:18px}.level-card{min-height:320px}.programme-grid{grid-template-columns:1fr}.programme-card{min-height:390px}.programme-content h3{font-size:1.5rem}.help-grid{grid-template-columns:1fr}.cta{padding:28px}.cta h2{font-size:2rem}.cta-actions{flex-direction:column;align-items:stretch}.footer-grid{gap:26px}.subject{padding:14px;gap:10px}.subject b{font-size:.8rem}.subject-icon{width:34px;height:34px;flex-shrink:0}.dual-panel{padding:28px;min-height:350px}.dual-panel h3{font-size:1.8rem}.dialog-top{padding:16px 20px}.dialog-body{padding:22px}.dialog-body h2{font-size:1.55rem}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}.js-reveal{opacity:1;transform:none}}
 
+
+/* Approved access-focused hero copy and family learning photograph */
+.hero-grid{grid-template-columns:1.06fr .94fr;gap:40px}
+.hero h1{font-size:clamp(2.6rem,3.7vw,3.25rem);line-height:1.14;letter-spacing:-.045em}
+.hero-copy{font-size:1rem;line-height:1.75;max-width:610px;margin:22px 0 24px}
+.hero-photo{inset:20px 0 18px 16px}
+.hero-photo img{object-position:42% center}
+.hero-photo:after{background:linear-gradient(180deg,transparent 75%,rgba(5,38,27,.12))}
+.hero-actions .btn{font-size:.86rem;padding:13px 18px}
+.float-top{left:-5px;top:0;width:180px}
+.float-bottom{right:-8px;width:200px}
+.hero-media{height:520px}
+@media(max-width:1000px){.hero-grid{grid-template-columns:1fr;gap:36px}.hero h1{font-size:clamp(2.65rem,5.9vw,3.6rem);max-width:720px}.hero-media{height:480px;max-width:700px}.hero-photo{inset:18px 4px 18px 12px}}
+@media(max-width:720px){.hero h1{font-size:clamp(2.2rem,8.5vw,3rem);line-height:1.15}.hero-copy{font-size:.96rem;line-height:1.7}.hero-actions .btn{font-size:.8rem;padding:12px 14px}.hero-media{height:375px}.hero-photo{inset:18px 4px 22px 12px}.hero-photo img{object-position:46% center}.float-top{width:154px}.float-bottom{width:176px;right:0}.float-value{font-size:1.06rem}}
 </style>
 </head>
 <body id="home">
@@ -448,13 +462,11 @@ html{scroll-padding-top:108px}
       <div class="container hero-grid">
         <div class="reveal">
           <div class="eyebrow">Primary • Junior Secondary • Senior Secondary</div>
-          <h1>A complete school experience. <span>Accessible wherever you are.</span></h1>
-          <p class="hero-copy">
-            BenVA brings structured primary and secondary education, live teaching, guided learning, assessment and family support into one connected digital academy—designed for learners across Benue State.
-          </p>
+          <h1>Bringing quality education <span>within reach of every learner</span> in Benue State.</h1>
+          <p class="hero-copy">BenVA is a virtual academy designed to make primary and secondary education more accessible through live teaching, flexible digital lessons and guided academic support. A structured learning journey helps learners build knowledge and confidence, while keeping parents and guardians connected to their progress.</p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#academics">Explore learning →</a>
-            <a class="btn btn-secondary" href="#how">How BenVA works</a>
+            <a class="btn btn-primary" href="#programmes">Explore Learning Programmes <span aria-hidden="true">→</span></a>
+            <a class="btn btn-secondary" href="#how">How BenVA Works</a>
           </div>
 <div class="hero-assurance">
   <div><strong>Structured learning</strong><span>Clear classes, subjects and academic pathways</span></div>
@@ -472,7 +484,8 @@ html{scroll-padding-top:108px}
         </div>
         <div class="hero-media reveal">
           <div class="hero-photo">
-            <img src="https://www.unicef.org/nigeria/sites/unicef.org.nigeria/files/styles/media_large_image/public/DSC_1628.jpg.webp?itok=AQufT6Xu" alt="Teacher supporting learners with digital learning">
+            <!-- Photo: August de Richelieu / Pexels, photo 4260315. Representative stock photography, not a BenVA learner. -->
+            <img src="https://images.pexels.com/photos/4260315/pexels-photo-4260315.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1200" alt="A learner studying on a laptop at home with support from her mother" width="1200" height="801" fetchpriority="high" decoding="async">
           </div>
           <div class="floating-card float-top">
             <div class="float-label"><span class="live-dot"></span>Live class</div>
