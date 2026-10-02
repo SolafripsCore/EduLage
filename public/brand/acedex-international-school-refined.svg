@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Acedex International School</title>
+  <desc id="desc">Acedex International School, Makurdi, Benue State</desc>
+  <rect width="1200" height="420" fill="#ffffff"/>
+  <g transform="translate(60,35)">
+    <text x="0" y="185" fill="#0B2E63" font-family="Georgia, 'Times New Roman', serif" font-size="210" font-weight="700" letter-spacing="-7">ACEDEX</text>
+    <path d="M6 178 C95 95, 165 88, 250 103 C182 105, 112 132, 45 184 Z" fill="#D59A18"/>
+    <text x="24" y="272" fill="#D59A18" font-family="Georgia, 'Times New Roman', serif" font-size="73" font-weight="700" letter-spacing="2">INTERNATIONAL SCHOOL</text>
+    <text x="145" y="342" fill="#0B2E63" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="700" letter-spacing="14">MAKURDI, BENUE STATE</text>
+  </g>
+</svg>
