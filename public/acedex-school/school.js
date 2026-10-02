@@ -1,4 +1,5 @@
 (() => {
+  document.querySelectorAll('.brand-logo').forEach(img => { img.src = '/brand/acedex-international-school-refined.svg'; });
   const menu = document.getElementById('school-menu');
   const toggle = document.querySelector('.mobile-toggle');
   function closeMenu() {
