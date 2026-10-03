@@ -6,6 +6,15 @@
   const header = document.querySelector('header');
   const menu = document.getElementById('school-menu');
   const toggle = document.querySelector('.mobile-toggle');
+  if (menu && !menu.querySelector('.mobile-account-links')) {
+    const accounts = document.createElement('div');
+    accounts.className = 'mobile-account-links';
+    [['Sign in', '/acedex-school/signin.html'], ['Register', '/acedex-school/register.html']].forEach(([label, href]) => {
+      const link = document.createElement('a');
+      link.href = href; link.textContent = label; accounts.append(link);
+    });
+    menu.append(accounts);
+  }
   const items = [...document.querySelectorAll('.nav-item')];
   const desktop = window.matchMedia('(min-width: 1201px)');
   function setExpanded(item, open) {
@@ -39,7 +48,7 @@
     button.addEventListener('keydown', event => {
       if (event.key === 'ArrowDown') {
         event.preventDefault(); closeSubmenus(item); setExpanded(item, true);
-        item.querySelector('.dropdown a')?.focus();
+        requestAnimationFrame(() => item.querySelector('.dropdown a')?.focus());
       }
     });
     item.addEventListener('pointerenter', event => {
@@ -91,8 +100,7 @@
     document.querySelectorAll('[data-reveal]').forEach(element => observer.observe(element));
   }
   window.addEventListener('pagehide', closeMenu);
-
-  document.querySelectorAll('form[data-draft]').forEach(form => {
+document.querySelectorAll('form[data-draft]').forEach(form => {
     const key = 'acedex-preview-draft-v1-' + form.dataset.draft;
     const status = form.querySelector('.draft-status');
     const values = () => Object.fromEntries(new FormData(form).entries());
