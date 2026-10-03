@@ -204,19 +204,19 @@
     
     /* Approved logo proportions, with no supporting decorative rules. */
     .brand{min-width:310px;flex:0 0 310px}
-    .brand-lockup{position:relative;display:block;width:310px;height:80px;flex:none;overflow:hidden}
-    .brand-lockup .brand-logo{position:absolute;left:0;top:-11px;width:310px;height:auto;max-width:none}
-    .brand-lockup .logo-location-bold{clip-path:inset(74% 0 0 0);filter:url(#location-bold)}
+    .brand-lockup{position:relative;display:block;width:310px;height:auto;flex:none;overflow:visible}
+    .brand-lockup .brand-logo{position:static;display:block;width:100%;height:auto;max-width:none}
+    .brand-lockup .logo-location-bold{position:absolute;left:0;top:0;clip-path:inset(74% 0 0 0);filter:url(#location-bold)}
     .nav-actions{flex-shrink:0}
     .nav-actions .btn{white-space:nowrap;min-height:48px;padding:12px 15px;line-height:1.2}
     .nav-link{padding:0 8px}
-    footer .footer-logo-lockup{width:280px;height:82px}
-    footer .footer-logo-lockup .brand-logo{width:280px;height:auto;top:-8px;max-width:none}
+    footer .footer-logo-lockup{width:280px;height:auto}
+    footer .footer-logo-lockup .brand-logo{width:100%;height:auto;max-width:none}
     @media(max-width:1200px){.menu{display:none}.mobile-toggle{display:inline-flex}}
     @media(max-width:760px){
       .brand{min-width:0;flex:0 1 auto}
-      .brand-lockup{width:240px;height:65px}
-      .brand-lockup .brand-logo{top:-8px;width:240px;height:auto}
+      .brand-lockup{width:240px;height:auto}
+      .brand-lockup .brand-logo{width:100%;height:auto}
     }
     @media(max-width:480px){.nav{gap:10px;flex-wrap:wrap;height:auto;padding:12px 0}.nav-actions{margin-left:auto}}
   
