@@ -30,7 +30,7 @@
     toggle?.setAttribute('aria-label', 'Open navigation');
     closeSubmenus();
   }
-  if (header && menu && toggle) header.classList.add('nav-enhanced');
+  if (header && menu && toggle) { header.classList.add('nav-enhanced'); document.querySelector('.utility')?.classList.add('nav-enhanced'); }
   toggle?.addEventListener('click', () => {
     const open = !menu.classList.contains('is-open');
     closeSubmenus();
@@ -71,7 +71,7 @@
     if (openItem) { event.preventDefault(); setExpanded(openItem, false); openItem.querySelector('.submenu-toggle')?.focus(); }
     else if (menu?.classList.contains('is-open')) { event.preventDefault(); closeMenu(); toggle?.focus(); }
   });
-  document.addEventListener('click', event => { if (!event.target.closest('header')) closeMenu(); });
+  document.addEventListener('click', event => { if (!event.target.closest('header, .utility')) closeMenu(); });
   desktop.addEventListener('change', closeMenu);
   document.querySelectorAll('[data-stage-switcher]').forEach(switcher => {
     const tabs = [...switcher.querySelectorAll('[role="tab"]')];
