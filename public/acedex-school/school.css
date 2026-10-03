@@ -205,7 +205,7 @@
     /* Supplied school logo: crop surrounding blank canvas without changing the artwork. */
     .brand{min-width:310px;flex:0 0 310px}
     .brand-lockup{position:relative;display:block;width:310px;aspect-ratio:1328 / 435;height:auto;flex:none;overflow:hidden}
-    .brand-lockup .brand-logo{position:absolute;display:block;left:-4.518072%;top:-79.310345%;width:109.036145%;height:auto;max-width:none}
+    .brand-lockup .brand-logo{content:url("/brand/acedex-international-school-approved.png?v=aa77e612");position:absolute;display:block;left:-4.518072%;top:-79.310345%;width:109.036145%;height:auto;max-width:none}
     .brand-lockup .logo-location-bold{display:none}
     .nav-actions{flex-shrink:0}
     .nav-actions .btn{white-space:nowrap;min-height:48px;padding:12px 15px;line-height:1.2}
