@@ -40,8 +40,8 @@
 
 /* The original two-line rhythm, with the complete promise kept together. */
 .home-premium .hp-hero-copy{container-type:inline-size}
-.home-premium .hp-hero h1.hero-caption{font-size:clamp(30px,12cqw,70px);line-height:1.08;letter-spacing:-.045em;max-width:100%;margin-bottom:27px}
+.home-premium .hp-hero h1.hero-caption{font-size:clamp(30px,11.3cqw,66px);line-height:1.08;letter-spacing:-.045em;max-width:100%;margin-bottom:27px}
 .hero-caption-lead,.hero-caption-promise{display:block;white-space:nowrap}
 .home-premium .hp-hero .hero-caption-promise{font-size:.76em;line-height:1.18;letter-spacing:-.04em;margin-top:.16em}
 .home-premium .hp-hero h1.hero-caption em{color:#9a7434;font-weight:400;font-style:italic}
-@media(max-width:680px){.home-premium .hp-hero h1.hero-caption{margin-bottom:24px}}
+@media(max-width:680px){.home-premium .hp-hero h1.hero-caption{font-size:clamp(30px,12cqw,70px);margin-bottom:24px}}
