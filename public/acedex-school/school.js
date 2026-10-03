@@ -41,23 +41,26 @@
   items.forEach(item => {
     const button = item.querySelector('.submenu-toggle');
     if (!button) return;
+    let openedByPointer = false;
     button.addEventListener('click', () => {
-      const open = !item.classList.contains('expanded');
+      const open = openedByPointer || !item.classList.contains('expanded');
+      openedByPointer = false;
       closeSubmenus(item); setExpanded(item, open);
     });
     button.addEventListener('keydown', event => {
       if (event.key === 'ArrowDown') {
-        event.preventDefault(); closeSubmenus(item); setExpanded(item, true);
+        event.preventDefault(); openedByPointer = false; closeSubmenus(item); setExpanded(item, true);
         requestAnimationFrame(() => item.querySelector('.dropdown a')?.focus());
       }
     });
     item.addEventListener('pointerenter', event => {
       if (desktop.matches && event.pointerType !== 'touch') {
+        openedByPointer = !item.classList.contains('expanded');
         closeSubmenus(item); setExpanded(item, true);
       }
     });
     item.addEventListener('pointerleave', () => {
-      if (desktop.matches && !item.contains(document.activeElement)) setExpanded(item, false);
+      if (desktop.matches && !item.contains(document.activeElement)) { setExpanded(item, false); openedByPointer = false; }
     });
     item.addEventListener('focusout', () => {
       setTimeout(() => {
