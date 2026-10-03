@@ -1,34 +1,97 @@
 (() => {
-  document.querySelectorAll('.brand-logo').forEach(img => { img.src = '/brand/acedex-international-school-refined.svg'; });
+  const logoUrl = '/brand/acedex-international-school-approved.png?v=aa77e612';
+  document.querySelectorAll('.brand-logo').forEach(image => {
+    if (image.getAttribute('src') !== logoUrl) image.src = logoUrl;
+  });
+  const header = document.querySelector('header');
   const menu = document.getElementById('school-menu');
   const toggle = document.querySelector('.mobile-toggle');
+  const items = [...document.querySelectorAll('.nav-item')];
+  const desktop = window.matchMedia('(min-width: 1201px)');
+  function setExpanded(item, open) {
+    item.classList.toggle('expanded', open);
+    item.querySelector('.submenu-toggle')?.setAttribute('aria-expanded', String(open));
+  }
+  function closeSubmenus(except) {
+    items.forEach(item => { if (item !== except) setExpanded(item, false); });
+  }
   function closeMenu() {
     menu?.classList.remove('is-open');
     toggle?.setAttribute('aria-expanded', 'false');
     toggle?.setAttribute('aria-label', 'Open navigation');
-    document.querySelectorAll('.nav-item.expanded').forEach(item => {
-      item.classList.remove('expanded');
-      item.querySelector('.submenu-toggle')?.setAttribute('aria-expanded', 'false');
-    });
+    closeSubmenus();
   }
+  if (header && menu && toggle) header.classList.add('nav-enhanced');
   toggle?.addEventListener('click', () => {
-    const open = menu.classList.toggle('is-open');
+    const open = !menu.classList.contains('is-open');
+    closeSubmenus();
+    menu.classList.toggle('is-open', open);
     toggle.setAttribute('aria-expanded', String(open));
     toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
   });
-  document.querySelectorAll('.submenu-toggle').forEach(button => {
+  items.forEach(item => {
+    const button = item.querySelector('.submenu-toggle');
+    if (!button) return;
     button.addEventListener('click', () => {
-      const item = button.closest('.nav-item');
-      const open = item.classList.toggle('expanded');
-      button.setAttribute('aria-expanded', String(open));
+      const open = !item.classList.contains('expanded');
+      closeSubmenus(item); setExpanded(item, open);
+    });
+    button.addEventListener('keydown', event => {
+      if (event.key === 'ArrowDown') {
+        event.preventDefault(); closeSubmenus(item); setExpanded(item, true);
+        item.querySelector('.dropdown a')?.focus();
+      }
+    });
+    item.addEventListener('pointerenter', event => {
+      if (desktop.matches && event.pointerType !== 'touch') {
+        closeSubmenus(item); setExpanded(item, true);
+      }
+    });
+    item.addEventListener('pointerleave', () => {
+      if (desktop.matches && !item.contains(document.activeElement)) setExpanded(item, false);
+    });
+    item.addEventListener('focusout', () => {
+      setTimeout(() => {
+        if (!item.contains(document.activeElement)) setExpanded(item, false);
+      }, 0);
     });
   });
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape') { closeMenu(); toggle?.focus(); }
+    if (event.key !== 'Escape') return;
+    const openItem = items.find(item => item.classList.contains('expanded'));
+    if (openItem) { event.preventDefault(); setExpanded(openItem, false); openItem.querySelector('.submenu-toggle')?.focus(); }
+    else if (menu?.classList.contains('is-open')) { event.preventDefault(); closeMenu(); toggle?.focus(); }
   });
-  document.addEventListener('click', event => {
-    if (!event.target.closest('header')) closeMenu();
+  document.addEventListener('click', event => { if (!event.target.closest('header')) closeMenu(); });
+  desktop.addEventListener('change', closeMenu);
+  document.querySelectorAll('[data-stage-switcher]').forEach(switcher => {
+    const tabs = [...switcher.querySelectorAll('[role="tab"]')];
+    const panels = [...switcher.querySelectorAll('[role="tabpanel"]')];
+    function activate(index, focus = false) {
+      tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
+      panels.forEach((panel, i) => {
+        panel.hidden = i !== index;
+        panel.classList.toggle('is-entering', i === index);
+      });
+      if (focus) tabs[index].focus();
+    }
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => activate(index));
+      tab.addEventListener('keydown', event => {
+        const keys = {ArrowRight: (index + 1) % tabs.length, ArrowLeft: (index - 1 + tabs.length) % tabs.length, Home: 0, End: tabs.length - 1};
+        if (event.key in keys) { event.preventDefault(); activate(keys[event.key], true); }
+      });
+    });
+    switcher.classList.add('enhanced'); activate(0);
   });
+  if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('has-entered'); observer.unobserve(entry.target); }
+    }), {threshold: 0.08});
+    document.querySelectorAll('[data-reveal]').forEach(element => observer.observe(element));
+  }
+  window.addEventListener('pagehide', closeMenu);
+
   document.querySelectorAll('form[data-draft]').forEach(form => {
     const key = 'acedex-preview-draft-v1-' + form.dataset.draft;
     const status = form.querySelector('.draft-status');
@@ -80,3 +143,4 @@
     });
   });
 })();
+
