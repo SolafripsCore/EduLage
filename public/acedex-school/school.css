@@ -255,3 +255,8 @@ header .nav{gap:32px}header .menu{justify-content:flex-end;gap:12px}header .nav-
 @media(prefers-reduced-motion:reduce){.utility-nav .dropdown{transition:none}}
 
 .utility.nav-enhanced .nav-item:not(.expanded) .dropdown{visibility:hidden;opacity:0}
+
+
+/* AIS network context without changing the approved campus logo or page layout. */
+.campus-context{display:flex;gap:18px;align-items:center;min-height:40px;font-size:11px;color:#d9e5e8}.campus-context>a{color:#efd296;font-size:10px;font-weight:650;letter-spacing:.05em}.campus-context>.nav-item{min-height:40px;padding-left:18px;border-left:1px solid #567080}.campus-context .dropdown{width:250px;min-width:250px;max-width:calc(100vw - 35px);left:0}.campus-context .dropdown a{color:#294454}.campus-context .dropdown a:hover{color:#8e6b2e}.campus-context .submenu-toggle{font-size:11px;color:#eff3f4;gap:10px}.campus-context button:focus-visible,.campus-context>a:focus-visible{outline-color:#efd296}
+@media(max-width:600px){.campus-context{gap:13px;font-size:10px;min-height:35px}.campus-context>.nav-item{min-height:35px;padding-left:13px}.campus-context .submenu-toggle{font-size:10px;min-height:35px}.campus-context .dropdown{left:auto;right:0}}
