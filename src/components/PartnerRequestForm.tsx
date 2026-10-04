@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { learnUrl } from "@/lib/site";
 
@@ -27,6 +27,19 @@ const FIELDS: Record<string, string> = {
 export function PartnerRequestForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [problem, setProblem] = useState("");
+  const [formToken, setFormToken] = useState("");
+
+  // Signed render-time token the LMS checks (too-fast or stale submissions are refused).
+  const loadFormToken = useCallback(() => {
+    fetch(`${learnUrl}/edulage/api/v1/partner-requests/`, { headers: { Accept: "application/json" }, cache: "no-store" })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data: { form_token?: string } | null) => setFormToken(data?.form_token ?? ""))
+      .catch(() => setFormToken(""));
+  }, []);
+
+  useEffect(() => {
+    loadFormToken();
+  }, [loadFormToken]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -56,9 +69,11 @@ export function PartnerRequestForm() {
         setProblem("Something went wrong on our side. Please try again or e-mail admin@edulage.org.");
       }
       setStatus("error");
+      loadFormToken();
     } catch {
       setProblem("We couldn't reach the server. Check your connection and try again.");
       setStatus("error");
+      loadFormToken();
     }
   }
 
@@ -115,10 +130,11 @@ export function PartnerRequestForm() {
           <label htmlFor="pr-message" className={labelClass}>Programmes you intend to offer <span className="font-normal text-ink-400">(optional)</span></label>
           <textarea id="pr-message" name="message" rows={4} maxLength={4000} className={`${inputClass} mt-2 py-3`} placeholder="Short courses, degree programmes, professional certificates…" />
         </div>
-        <div className="hidden" aria-hidden="true">
+        <div aria-hidden="true" style={{ position: "absolute", left: "-10000px", top: "auto", width: 1, height: 1, overflow: "hidden" }}>
           <label htmlFor="pr-company">Company</label>
           <input id="pr-company" name="company" tabIndex={-1} autoComplete="off" />
         </div>
+        <input type="hidden" name="form_token" value={formToken} />
       </div>
       {problem && <p className="mt-5 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800" role="alert">{problem}</p>}
       <button
