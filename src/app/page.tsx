@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Playfair_Display } from "next/font/google";
 import {
   BookOpen,
   GraduationCap,
@@ -20,6 +21,14 @@ import { learnLinks } from "@/lib/site";
 import "./home.css";
 import { ProgrammeExplorer } from "@/components/home/ProgrammeExplorer";
 import { InstitutionShowcase } from "@/components/home/InstitutionShowcase";
+
+const heroDisplay = Playfair_Display({
+  subsets: ["latin"],
+  weight: "500",
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-hero-display",
+});
 
 export const metadata = {
   title: "EduLage — Accredited education, opened to the world",
@@ -85,7 +94,7 @@ export default async function Home() {
   const courses = catalogue?.open_courses ?? [];
   return (
     <div className="ed-home">
-      <section className="ed-hero" aria-labelledby="hero-title">
+      <section className={`ed-hero ${heroDisplay.variable}`} aria-labelledby="hero-title">
         <div className="ed-wrap ed-hero-grid">
           <div className="ed-hero-copy">
             <p className="ed-eyebrow">

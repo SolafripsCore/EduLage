@@ -1733,3 +1733,68 @@
     transform: none;
   }
 }
+
+/* Reference-inspired hero typography, scoped to the homepage introduction. */
+.ed-hero {
+  border-top: 2px solid #789d92;
+}
+.ed-hero-copy .ed-eyebrow {
+  width: fit-content;
+  max-width: 100%;
+  padding: 9px 12px;
+  border-left: 3px solid #aa8847;
+  background: #eaf0ea;
+  color: #31564d;
+  font-size: 0.6875rem;
+  letter-spacing: 0.13em;
+  margin-bottom: 24px;
+}
+.ed-hero-copy .ed-eyebrow > span {
+  display: none;
+}
+.ed-hero h1 {
+  font-family: var(--font-hero-display), Georgia, serif;
+  font-size: clamp(2.6rem, 4.4vw, 4rem);
+  font-weight: 500;
+  line-height: 1.13;
+  letter-spacing: -0.04em;
+  margin-bottom: 26px;
+}
+.ed-hero h1 em {
+  display: inline-block;
+  margin-top: 0.13em;
+  font-size: 0.88em;
+  font-weight: 500;
+  line-height: 1.17;
+  letter-spacing: -0.035em;
+  color: #08705f;
+}
+.ed-hero-copy .ed-intro {
+  max-width: 510px;
+  padding-left: 18px;
+  border-left: 2px solid #b59a62;
+  font-size: clamp(1rem, 1.25vw, 1.0625rem);
+  line-height: 1.75;
+  color: #425a59;
+  text-wrap: pretty;
+}
+.ed-hero-copy .ed-actions {
+  margin-top: 30px;
+}
+.ed-hero-copy .ed-hero-note {
+  margin-top: 26px;
+  line-height: 1.6;
+}
+@media (max-width: 520px) {
+  .ed-hero h1 {
+    font-size: clamp(2.125rem, 8.6vw, 2.75rem);
+    letter-spacing: -0.035em;
+  }
+  .ed-hero-copy .ed-eyebrow {
+    font-size: 0.625rem;
+    letter-spacing: 0.1em;
+  }
+  .ed-hero-copy .ed-intro {
+    padding-left: 14px;
+  }
+}
