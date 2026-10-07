@@ -15,14 +15,14 @@ import {
   Check,
   Award,
 } from "lucide-react";
-import { getCatalogue, enrolUrl, priceLabel } from "@/lib/liveCatalogue";
-import { getFeaturedProgrammes } from "@/lib/catalog";
+import { getCatalogue } from "@/lib/liveCatalogue";
 import { learnLinks } from "@/lib/site";
 import "./home.css";
-import { ProgrammeCard } from "@/components/ProgrammeCard";
+import { ProgrammeExplorer } from "@/components/home/ProgrammeExplorer";
+import { InstitutionShowcase } from "@/components/home/InstitutionShowcase";
 
 export const metadata = {
-  title: "EduLage — Quality education, within your reach",
+  title: "EduLage — Accredited education, opened to the world",
   description:
     "Explore degrees, professional programmes and short courses. Discover institution-led learning with flexible study options and local support through GOE Centers.",
 };
@@ -82,8 +82,7 @@ const steps = [
 
 export default async function Home() {
   const catalogue = await getCatalogue();
-  const courses = catalogue?.open_courses.slice(0, 3) ?? [];
-  const featured = getFeaturedProgrammes(Math.max(0, 3 - courses.length));
+  const courses = catalogue?.open_courses ?? [];
   return (
     <div className="ed-home">
       <section className="ed-hero" aria-labelledby="hero-title">
@@ -93,21 +92,17 @@ export default async function Home() {
               <span /> THE GLOBAL EDUCATION VILLAGE
             </p>
             <h1 id="hero-title">
-              Quality education
+              Accredited education,
               <br />
-              and training from
-              <br />
-              reputable institutions.
-              <br />
-              <em>Wherever you are.</em>
+              <em>opened to the world.</em>
             </h1>
             <p className="ed-intro">
-              Discover degrees, professional programmes and short courses.
-              Connect with institutions, explore your options and find a way to
-              learn that fits your life.
+              Compare degree, postgraduate and professional programmes from
+              accredited institutions worldwide — then study fully online or at
+              an accredited Open Education Center near you.
             </p>
             <div className="ed-actions">
-              <Link className="ed-btn" href="/programmes">
+              <Link className="ed-btn" href="#programmes-courses">
                 Explore programmes
               </Link>
               <Link className="ed-text-link" href="#how-it-works">
@@ -158,32 +153,36 @@ export default async function Home() {
           </form>
           <div
             className="ed-hero-editorial"
-            aria-label="Learning wherever life takes you"
+            aria-label="A global learning community"
           >
             <div className="ed-photo ed-photo-primary">
               <Image
-                src="/media/study-online.jpg"
-                alt="Learner attending an online class from her study space"
+                src="/media/hero-learner-alt.jpg"
+                alt="Student holding a tablet in a bright campus building"
                 fill
                 priority
-                sizes="(max-width: 800px) 100vw, 48vw"
+                sizes="(max-width: 700px) 58vw, 320px"
               />
-            </div>
-            <div className="ed-editorial-caption">
-              <span>YOUR WORLD. YOUR EDUCATION.</span>
-              <p>
-                A place for ambition.
-                <br />A path to possibility.
-              </p>
-              <Link href="/study-types">Find your way to learn</Link>
             </div>
             <div className="ed-photo ed-photo-secondary">
               <Image
-                src="/media/hero-learner-alt.jpg"
-                alt="Student on campus holding a tablet"
+                src="/media/hero-learner.jpg"
+                alt="Student with a laptop in a university library"
                 fill
-                sizes="(max-width: 800px) 35vw, 185px"
+                priority
+                sizes="(max-width: 700px) 40vw, 245px"
               />
+            </div>
+            <div className="ed-editorial-caption">
+              <span>YOUR AMBITION. YOUR NEXT CHAPTER.</span>
+              <p>
+                Learning brings
+                <br />
+                possibility closer.
+              </p>
+            </div>
+            <div className="ed-image-index" aria-hidden="true">
+              EDUCATION WITHOUT DISTANCE
             </div>
           </div>
         </div>
@@ -191,22 +190,22 @@ export default async function Home() {
 
       <section className="ed-assurance" aria-label="The EduLage approach">
         <div className="ed-wrap">
-          <div>
+          <Link href="/institutions">
             <Landmark />
             <span>Institution-led education</span>
-          </div>
-          <div>
+          </Link>
+          <Link href="/study-types">
             <Monitor />
             <span>Flexible study options</span>
-          </div>
-          <div>
+          </Link>
+          <Link href="/verify">
             <ShieldCheck />
             <span>Institution-issued credentials</span>
-          </div>
-          <div>
+          </Link>
+          <Link href="/open-education-centers">
             <MapPin />
             <span>Local learning support</span>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -242,156 +241,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="ed-catalogue" aria-labelledby="programmes-title">
-        <div className="ed-wrap ed-section">
-          <div className="ed-section-head">
-            <div>
-              <p className="ed-eyebrow">EXPLORE THE POSSIBILITIES</p>
-              <h2 id="programmes-title">Find something that moves you.</h2>
-            </div>
-            <Link className="ed-outline-btn" href="/programmes">
-              Browse all programmes
-            </Link>
-          </div>
-          <div className="ed-programmes">
-            {courses.map((course) => (
-              <article className="ed-programme" key={course.course_id}>
-                <div className="ed-programme-image">
-                  {course.image ? (
-                    <Image
-                      src={course.image}
-                      alt=""
-                      fill
-                      sizes="(max-width:700px) 100vw, 33vw"
-                      unoptimized
-                    />
-                  ) : (
-                    <BookOpen size={52} strokeWidth={1} />
-                  )}
-                  <span>Open enrolment</span>
-                </div>
-                <div className="ed-programme-body">
-                  <p className="ed-institution">{course.institution_name}</p>
-                  <h3>{course.title}</h3>
-                  <p className="ed-programme-type">
-                    {course.classification === "professional"
-                      ? "Professional certificate"
-                      : "Certificate of completion"}
-                  </p>
-                  <div className="ed-programme-meta">
-                    <span>Online learning</span>
-                    <span>Open course</span>
-                  </div>
-                  <div className="ed-programme-bottom">
-                    <div>
-                      <small>Course fee</small>
-                      <strong>{priceLabel(course)}</strong>
-                    </div>
-                    <a href={enrolUrl(course)}>Enrol now</a>
-                  </div>
-                </div>
-              </article>
-            ))}
-            {featured.map((p) => (
-              <ProgrammeCard
-                key={p.id}
-                programme={p}
-                enrolmentLabel="Catalogue preview"
-              />
-            ))}
-          </div>
-          {featured.length > 0 && (
-            <p className="ed-catalogue-note">
-              Catalogue previews illustrate the study options. Institutional
-              participation, programme availability and fees must be confirmed
-              before applying.
-            </p>
-          )}
-          <div className="ed-subjects">
-            <span>Explore by interest</span>
-            {[
-              "Business & Management",
-              "Data & AI",
-              "Health & Medical Sciences",
-              "Education",
-            ].map((s) => (
-              <Link
-                href={`/programmes?discipline=${encodeURIComponent(s)}`}
-                key={s}
-              >
-                {s === "Health & Medical Sciences" ? "Health sciences" : s}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section
-        className="ed-wrap ed-subject-section"
-        aria-labelledby="subjects-title"
-      >
-        <div className="ed-section-head">
-          <div>
-            <p className="ed-eyebrow">FOLLOW YOUR CURIOSITY</p>
-            <h2 id="subjects-title">Big ideas start with an interest.</h2>
-          </div>
-          <Link className="ed-text-link" href="/programmes">
-            Explore every subject
-          </Link>
-        </div>
-        <div className="ed-subject-grid">
-          {[
-            {
-              name: "Business & Management",
-              caption: "Lead teams. Build enterprises.",
-              image: "business",
-            },
-            {
-              name: "Data & AI",
-              caption: "Make sense of a changing world.",
-              image: "data",
-            },
-            {
-              name: "Computer Science & IT",
-              caption: "Create what comes next.",
-              image: "computing",
-            },
-            {
-              name: "Health & Medical Sciences",
-              caption: "Put knowledge to work for people.",
-              image: "health",
-            },
-            {
-              name: "Education",
-              caption: "Help others discover their potential.",
-              image: "education",
-            },
-            {
-              name: "Engineering",
-              caption: "Turn complex challenges into progress.",
-              image: "engineering",
-            },
-          ].map((subject) => (
-            <Link
-              href={`/programmes?discipline=${encodeURIComponent(subject.name)}`}
-              key={subject.name}
-            >
-              <div className="ed-subject-photo">
-                <Image
-                  src={`/media/discipline-${subject.image}.jpg`}
-                  alt=""
-                  fill
-                  sizes="(max-width:520px) 90vw, (max-width:800px) 45vw, 30vw"
-                />
-              </div>
-              <div>
-                <h3>{subject.name}</h3>
-                <p>{subject.caption}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
+      <ProgrammeExplorer courses={courses} />
+      <InstitutionShowcase live={catalogue?.institutions ?? []} />
 
       <section
         className="ed-section ed-wrap ed-experience"
@@ -416,27 +267,30 @@ export default async function Home() {
           {[
             {
               icon: Landmark,
+              href: "/institutions",
               title: "Learn with an institution",
               text: "Teaching, admissions and assessments remain with the institution you choose.",
             },
             {
               icon: BookOpen,
+              href: "/study-types",
               title: "Choose a path that fits",
               text: "Compare qualifications, schedules and delivery formats before you commit.",
             },
             {
               icon: Award,
+              href: "/quality-and-trust",
               title: "Make your learning count",
               text: "Understand who awards your credential and how it can be verified.",
             },
-          ].map(({ icon: Icon, title, text }) => (
-            <div className="ed-principle" key={title}>
+          ].map(({ icon: Icon, title, text, href }) => (
+            <Link href={href} className="ed-principle" key={title}>
               <Icon size={25} strokeWidth={1.4} />
               <div>
                 <h3>{title}</h3>
                 <p>{text}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
