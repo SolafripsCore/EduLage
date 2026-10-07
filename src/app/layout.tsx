@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import "./catalogue.css";
 import { SiteChrome } from "@/components/SiteChrome";
 import { isProduction, siteUrl } from "@/lib/site";
 
