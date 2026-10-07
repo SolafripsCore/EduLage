@@ -1,9 +1,43 @@
 import { Suspense } from "react";
-import { PageIntro } from "@/components/PageIntro";
+import Link from "next/link";
 import { ProgrammesBrowser } from "@/components/ProgrammesBrowser";
-import { Container } from "@/components/ui/Container";
-
-export const metadata = { title: "Browse programmes", description: "Compare degree and professional programmes from accredited institutions." };
+export const metadata = {
+  title: "Find your next programme",
+  description:
+    "Explore and compare programmes by subject, institution, qualification and study format.",
+};
 export default function ProgrammesPage() {
-  return <><PageIntro eyebrow="The catalogue" title="Browse programmes" description="Compare degree and professional programmes from accredited institutions. Admissions decisions remain with each institution." /><section className="section-space bg-surface"><Container><Suspense fallback={<div className="rounded-xl border border-line bg-white p-8 text-sm text-ink-600">Loading programmes…</div>}><ProgrammesBrowser /></Suspense></Container></section></>;
+  return (
+    <div className="programmes-page">
+      <section className="catalog-intro">
+        <div className="container-page">
+          <nav aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span>/</span>
+            <span>Programmes</span>
+          </nav>
+          <p className="catalog-eyebrow">EXPLORE. COMPARE. FIND YOUR PATH.</p>
+          <h1>
+            Invest in your <em>next chapter.</em>
+          </h1>
+          <p>
+            Discover programmes that connect your interests with your ambitions.
+          </p>
+        </div>
+      </section>
+      <section className="catalog-surface">
+        <div className="container-page">
+          <Suspense
+            fallback={
+              <p role="status" className="p-8">
+                Loading the programme catalogue…
+              </p>
+            }
+          >
+            <ProgrammesBrowser />
+          </Suspense>
+        </div>
+      </section>
+    </div>
+  );
 }
