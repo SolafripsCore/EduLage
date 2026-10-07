@@ -30,7 +30,7 @@ const studyTypeLinks = [
   ["Doctoral / PhD", "/programmes?level=Doctoral"],
   ["Professional diplomas & certificates", "/programmes?level=Professional"],
   ["Fully online", "/programmes?mode=Fully+online"],
-  ["Online + OEC exams", "/programmes?mode=Online+%2B+OEC+exams"],
+  ["Online + GOE Center exams", "/programmes?mode=Online+%2B+OEC+exams"],
 ];
 
 export function Header() {
@@ -81,7 +81,7 @@ export function Header() {
 
   return (
     <>
-      <div className="hidden h-9 bg-navy-900 text-xs text-white/70 lg:block">
+      <div className="hidden h-9 bg-[#102f36] text-xs text-white/80 lg:block">
         <div className="container-page flex h-full items-center justify-between">
           <span>The Global Education Village</span>
           <div className="flex items-center divide-x divide-white/20">
@@ -101,9 +101,9 @@ export function Header() {
       </div>
       <header
         ref={headerRef}
-        className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur-md"
+        className="sticky top-0 z-40 border-b border-[#e0e7e2] bg-white/95 backdrop-blur-md"
       >
-        <div className="container-page flex h-[72px] items-center justify-between gap-5">
+        <div className="container-page flex h-[82px] items-center justify-between gap-5">
           <Link href="/" aria-label="EduLage home" className="shrink-0">
             <Image
               src="/brand/edulage-logo.png"
@@ -169,7 +169,7 @@ export function Header() {
                       onClick={() => setStudyOpen(false)}
                       className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-teal-600 hover:bg-teal-500/10 focus-visible:bg-teal-500/10 focus-visible:outline-none"
                     >
-                      Compare all study types <span aria-hidden>→</span>
+                      Compare all study types
                     </Link>
                   </div>
                 </div>
