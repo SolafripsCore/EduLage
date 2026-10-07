@@ -101,9 +101,8 @@ export default async function Home() {
               <span /> THE GLOBAL EDUCATION VILLAGE
             </p>
             <h1 id="hero-title">
-              Accredited education,
-              <br />
-              <em>opened to the world.</em>
+              Quality education and training from reputable institutions globally{" "}
+              <em>— within your reach.</em>
             </h1>
             <p className="ed-intro">
               Compare degree, postgraduate and professional programmes from

@@ -1754,7 +1754,7 @@
 }
 .ed-hero h1 {
   font-family: var(--font-hero-display), Georgia, serif;
-  font-size: clamp(2.6rem, 4.4vw, 4rem);
+  font-size: clamp(2.4rem, 3.5vw, 3.25rem);
   font-weight: 500;
   line-height: 1.13;
   letter-spacing: -0.04em;
