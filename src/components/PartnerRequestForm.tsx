@@ -32,6 +32,14 @@ export function PartnerRequestForm() {
     event.preventDefault();
     const form = event.currentTarget;
     const payload = Object.fromEntries(new FormData(form));
+    if (!form.checkValidity()) {
+      const missing = Array.from(form.elements)
+        .filter((el): el is HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement => "validity" in el && !(el as HTMLInputElement).validity.valid)
+        .map((el) => FIELDS[el.name] ?? el.name);
+      setStatus("error");
+      setProblem(`Please check: ${Array.from(new Set(missing)).join(", ")}.`);
+      return;
+    }
     setStatus("sending");
     setProblem("");
     try {

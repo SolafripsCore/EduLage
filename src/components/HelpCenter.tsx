@@ -22,7 +22,7 @@ export function HelpCenter({ entries }: { entries: HelpEntry[] }) {
   return (
     <div>
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <label className="relative flex-1">
+        <label className="relative min-w-0 flex-1 basis-72">
           <span className="sr-only">Search help articles</span>
           <Search size={18} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-ink-400" />
           <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search help, e.g. “refund”, “certificate”, “sign in”" className="min-h-12 w-full rounded-md border border-line bg-white pl-11 pr-4 text-sm text-ink-900 placeholder:text-ink-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20" />
