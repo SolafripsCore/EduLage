@@ -1,107 +1,293 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Check, Clock3, Languages, Monitor, ShieldCheck } from "lucide-react";
+import {
+  Clock3,
+  Languages,
+  Monitor,
+  Award,
+  ShieldCheck,
+  Check,
+} from "lucide-react";
 import { notFound } from "next/navigation";
 import { getInstitutionProgrammes, getProgrammeBySlug } from "@/lib/catalog";
 import { institutionById } from "@/data/institutions";
 import { programmes } from "@/data/programmes";
-import { Container } from "@/components/ui/Container";
-import { Pill } from "@/components/ui/Pill";
-import { Checklist } from "@/components/ui/Checklist";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { learnLinks } from "@/lib/site";
 import { EnrolCta } from "@/components/EnrolCta";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const programme = getProgrammeBySlug((await params).slug);
-  return { title: programme?.title ?? "Programme", description: programme ? `Study ${programme.title} at an accredited institution.` : "Programme details" };
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const p = getProgrammeBySlug((await params).slug);
+  return {
+    title: p?.title ?? "Programme",
+    description: p
+      ? `Explore ${p.title}: structure, entry requirements, study format and listed fees.`
+      : "Programme details",
+  };
 }
-
 export function generateStaticParams() {
-  return programmes.map((programme) => ({ slug: programme.slug }));
+  return programmes.map((p) => ({ slug: p.slug }));
 }
-
-export default async function ProgrammeDetail({ params }: { params: Promise<{ slug: string }> }) {
-  const programme = getProgrammeBySlug((await params).slug);
-  if (!programme) notFound();
-  const institution = institutionById.get(programme.institutionId);
+export default async function ProgrammeDetail({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const p = getProgrammeBySlug((await params).slug);
+  if (!p) notFound();
+  const institution = institutionById.get(p.institutionId);
   if (!institution) notFound();
-
-  const tuition = new Intl.NumberFormat(undefined, {
+  const tuition = new Intl.NumberFormat("en-GB", {
     style: "currency",
-    currency: programme.tuitionCurrency,
+    currency: p.tuitionCurrency,
     currencyDisplay: "code",
     maximumFractionDigits: 0,
-  }).format(programme.tuitionFrom);
+  }).format(p.tuitionFrom);
   const siblings = getInstitutionProgrammes(institution.id)
-    .filter((item) => item.slug !== programme.slug)
+    .filter((s) => s.id !== p.id)
     .slice(0, 3);
-
-  return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({ "@context": "https://schema.org", "@type": "Course", name: programme.title, provider: { "@type": "CollegeOrUniversity", name: institution.name } }) }} />
-    <div className="group relative isolate overflow-hidden bg-navy-900 py-14 text-white">
-      <Image src={programme.image} alt="" fill sizes="100vw" className="image-zoom absolute inset-0 -z-20 object-cover" />
-      <div className="hero-media-overlay absolute inset-0 -z-10" />
-      <Container>
-        <Link href="/programmes" className="text-sm text-white/75 hover:text-white focus-visible:ring-2 focus-visible:ring-teal-400">← All programmes</Link>
-        <div className="mt-9 flex items-start gap-4">
-            <span className="flex h-14 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border-4 border-white bg-white p-2">
-            <Image src={institution.logo} alt={`${institution.shortName} mark`} width={68} height={44} className="size-full object-contain" />
-          </span>
-          <div>
-            <p className="text-sm text-teal-400">{institution.name} · {institution.city}, {institution.country}</p>
-            <h1 className="mt-2 text-3xl font-bold text-white md:text-5xl">{programme.title}</h1>
-            <p className="mt-3 text-white/75">{programme.credential} · {programme.level}</p>
+  return (
+    <div className="programme-detail">
+      <section className="detail-hero">
+        <div className="container-page">
+          <nav className="detail-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span>/</span>
+            <Link href="/programmes">Programmes</Link>
+            <span>/</span>
+            <span aria-current="page">{p.title}</span>
+          </nav>
+          <div className="detail-hero-grid">
+            <div>
+              <Link
+                href={`/institutions/${institution.slug}`}
+                className="detail-institution"
+              >
+                <Image src={institution.logo} alt="" width={46} height={46} />
+                <span>
+                  {institution.name}
+                  <small>
+                    {institution.city}, {institution.country}
+                  </small>
+                </span>
+              </Link>
+              <p className="detail-eyebrow">
+                {p.level} · {p.credential}
+              </p>
+              <h1>{p.title}</h1>
+              <p className="detail-hero-description">
+                Explore the curriculum, understand the requirements and decide
+                whether this programme fits your next step.
+              </p>
+              <div className="detail-hero-tags">
+                <span>{p.studyMode}</span>
+                <span>{p.deliveryMode.replace("OEC", "GOE Center")}</span>
+              </div>
+            </div>
+            <div className="detail-photo">
+              <Image
+                src={p.image}
+                alt={`Subject imagery for ${p.title}`}
+                fill
+                priority
+                sizes="(max-width:800px) 100vw, 42vw"
+              />
+            </div>
           </div>
         </div>
-      </Container>
-    </div>
-    <Container>
-      <div className="grid gap-10 py-14 lg:grid-cols-[1fr_340px]">
-        <div>
-          <section>
-            <h2 className="text-2xl font-bold text-navy-800">Programme overview</h2>
-            <p className="mt-4 leading-7 text-ink-600">This programme is delivered by {institution.name}. Review the institution’s programme information and entry requirements before applying.</p>
+      </section>
+      <div className="detail-nav">
+        <nav className="container-page" aria-label="Programme sections">
+          <a href="#overview">Overview</a>
+          <a href="#curriculum">Curriculum</a>
+          <a href="#requirements">Entry requirements</a>
+          <a href="#assessment">Assessment</a>
+          <a href="#fees">Fees & next steps</a>
+        </nav>
+      </div>
+      <div className="container-page detail-layout">
+        <div className="detail-main">
+          {!p.courseId && (
+            <div className="detail-preview">
+              <ShieldCheck size={22} />
+              <div>
+                <strong>Programme catalogue preview</strong>
+                <p>
+                  This is a sample listing. Institutional participation,
+                  curriculum, fees and intake dates need confirmation before you
+                  apply.
+                </p>
+              </div>
+            </div>
+          )}
+          <section id="overview">
+            <p className="detail-section-number">01 / THE OPPORTUNITY</p>
+            <h2>See the bigger picture.</h2>
+            <p>
+              This listing brings together key information about {p.title},
+              including its study format, curriculum and entry requirements.
+              Review the details with {institution.name} before making an
+              application.
+            </p>
+            <div className="detail-facts">
+              {[
+                { icon: Award, label: "Qualification", value: p.credential },
+                {
+                  icon: Clock3,
+                  label: "Duration",
+                  value: `${p.durationMonths} months`,
+                },
+                { icon: Monitor, label: "Schedule", value: p.studyMode },
+                {
+                  icon: Languages,
+                  label: "Teaching language",
+                  value: p.language,
+                },
+              ].map(({ icon: Icon, label, value }) => (
+                <div key={label}>
+                  <Icon size={21} />
+                  <span>{label}</span>
+                  <strong>{value}</strong>
+                </div>
+              ))}
+            </div>
           </section>
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold text-navy-800">Structure</h2>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">{programme.modules.map((module) => <div key={module} className="flex gap-3 rounded-lg border border-line p-4 text-sm text-ink-600"><Check size={17} className="shrink-0 text-teal-600" />{module}</div>)}</div>
+          <section id="curriculum">
+            <p className="detail-section-number">02 / WHAT YOU WILL STUDY</p>
+            <h2>A closer look at the curriculum.</h2>
+            <p>
+              Explore the listed areas of study. The institution confirms the
+              final module structure and learning requirements.
+            </p>
+            <ol className="detail-modules">
+              {p.modules.map((m, i) => (
+                <li key={m}>
+                  <span>{String(i + 1).padStart(2, "0")}</span>
+                  <h3>{m}</h3>
+                  <BookMark />
+                </li>
+              ))}
+            </ol>
           </section>
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold text-navy-800">Entry requirements</h2>
-            <div className="mt-5"><Checklist items={programme.entryRequirements} /></div>
+          <section id="requirements">
+            <p className="detail-section-number">03 / YOUR STARTING POINT</p>
+            <h2>Entry requirements.</h2>
+            <ul className="detail-checklist">
+              {p.entryRequirements.map((r) => (
+                <li key={r}>
+                  <Check size={19} />
+                  <span>{r}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="detail-note">
+              Admissions decisions and any additional eligibility requirements
+              remain with the institution.
+            </p>
           </section>
-          <section className="mt-12">
-            <h2 className="text-2xl font-bold text-navy-800">Assessment</h2>
-            <p className="mt-4 leading-7 text-ink-600">{programme.assessmentNote} {programme.requiresOecExam ? "Some institution-required examinations take place at an accredited Open Education Center." : ""}</p>
+          <section id="assessment">
+            <p className="detail-section-number">
+              04 / HOW LEARNING IS ASSESSED
+            </p>
+            <h2>Demonstrate what you know.</h2>
+            <p>{p.assessmentNote}</p>
+            {p.requiresOecExam && (
+              <div className="detail-support">
+                <ShieldCheck size={25} />
+                <div>
+                  <h3>Local assessment support</h3>
+                  <p>
+                    Check whether a GOE Center is required for examinations and
+                    which locations are approved for this programme.
+                  </p>
+                  <Link href="/open-education-centers">
+                    Explore GOE Centers
+                  </Link>
+                </div>
+              </div>
+            )}
           </section>
-          <section className="mt-12 rounded-2xl bg-surface p-7">
-            <h2 className="text-2xl font-bold text-navy-800">Before you apply</h2>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">{["Confirm the official entry requirements","Review tuition and additional institutional fees","Check the application deadline and intake","Verify technology, language and attendance requirements"].map(item=><div key={item} className="flex gap-3 text-sm leading-6 text-ink-600"><ShieldCheck size={17} className="mt-1 shrink-0 text-teal-700"/>{item}</div>)}</div>
+          <section className="detail-faq">
+            <h2>Before you take the next step.</h2>
+            {[
+              [
+                "Who awards the qualification?",
+                `Confirm the awarding institution and the qualification’s recognition directly with ${institution.name}. EduLage connects learners with institutions; admissions, teaching and qualifications remain institution-led.`,
+              ],
+              [
+                "What costs should I confirm?",
+                "Ask for current tuition, application and assessment fees, payment terms and any additional study costs before paying.",
+              ],
+              [
+                "How do I apply?",
+                "Use the enrolment or admissions option shown for the programme. If a confirmed application link is unavailable, request guidance before creating an application.",
+              ],
+            ].map(([q, a]) => (
+              <details key={q}>
+                <summary>{q}</summary>
+                <p>{a}</p>
+              </details>
+            ))}
           </section>
         </div>
-        <aside className="card-hover h-fit rounded-xl border border-line p-6 lg:sticky lg:top-28">
-          <div className="grid grid-cols-3 gap-3 border-b border-line pb-5 text-center">
-            <div><Clock3 size={18} className="mx-auto text-teal-600" /><p className="mt-2 text-xs text-ink-400">Duration</p><p className="mt-1 text-sm font-semibold text-navy-800">{programme.durationMonths} months</p></div>
-            <div><Monitor size={18} className="mx-auto text-teal-600" /><p className="mt-2 text-xs text-ink-400">Study mode</p><p className="mt-1 text-sm font-semibold text-navy-800">{programme.studyMode}</p></div>
-            <div><Languages size={18} className="mx-auto text-teal-600" /><p className="mt-2 text-xs text-ink-400">Language</p><p className="mt-1 text-sm font-semibold text-navy-800">{programme.language}</p></div>
+        <aside id="fees" className="detail-enrol">
+          <p className="detail-eyebrow">PLAN YOUR NEXT STEP</p>
+          <h2>Programme at a glance</h2>
+          <div className="detail-price">
+            <span>Listed tuition from</span>
+            <strong>{p.tuitionFrom > 0 ? tuition : "To be confirmed"}</strong>
+            <small>per {p.tuitionPeriod} · subject to confirmation</small>
           </div>
-          <div className="mt-5 flex flex-wrap gap-2"><Pill accent>{programme.credential}</Pill><Pill>{programme.deliveryMode}</Pill></div>
-          <div className="mt-5 space-y-3 border-y border-line py-4">
-            <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Tuition from</span><span className="font-semibold text-navy-800">{programme.tuitionFrom > 0 ? `${tuition} / ${programme.tuitionPeriod}` : "Set by the institution"}</span></div>
-            <div className="flex items-center justify-between gap-4 text-sm"><span className="text-ink-400">Next intake</span><span className="font-semibold text-navy-800">{programme.nextIntake}</span></div>
+          <dl>
+            <div>
+              <dt>Qualification</dt>
+              <dd>{p.credential}</dd>
+            </div>
+            <div>
+              <dt>Duration</dt>
+              <dd>{p.durationMonths} months</dd>
+            </div>
+            <div>
+              <dt>Format</dt>
+              <dd>{p.deliveryMode.replace("OEC", "GOE Center")}</dd>
+            </div>
+            <div>
+              <dt>Listed intake</dt>
+              <dd>{p.nextIntake}</dd>
+            </div>
+          </dl>
+          <p className="detail-note">{p.tuitionNote}</p>
+          <EnrolCta courseId={p.courseId} institutionName={institution.name} />
+          <div className="detail-already">
+            <span>Already admitted?</span>
+            <a href={learnLinks.signIn}>Sign in to your classroom</a>
           </div>
-          <p className="mt-5 text-sm leading-6 text-ink-600">{programme.tuitionNote}</p>
-          <EnrolCta courseId={programme.courseId} institutionName={institution.name} />
-          <p className="mt-5 border-t border-line pt-4 text-sm text-ink-600">Already admitted? <a href={learnLinks.signIn} className="font-bold text-teal-700 hover:text-navy-800">Sign in to start learning →</a></p>
         </aside>
       </div>
-    </Container>
-    {siblings.length > 0 && <section className="border-t border-line bg-surface py-16">
-      <Container>
-        <h2 className="mb-8 text-3xl font-bold text-navy-800">More programmes from {institution.name}</h2>
-        <div className="grid gap-4 md:grid-cols-3">{siblings.map((sibling) => <ProgrammeCard key={sibling.id} programme={sibling} />)}</div>
-      </Container>
-    </section>}
-  </>;
+      {siblings.length > 0 && (
+        <section className="detail-related">
+          <div className="container-page">
+            <p className="detail-eyebrow">KEEP EXPLORING</p>
+            <h2>More from {institution.name}.</h2>
+            <div>
+              {siblings.map((s) => (
+                <ProgrammeCard key={s.id} programme={s} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+function BookMark() {
+  return (
+    <span className="detail-module-mark" aria-hidden="true">
+      MODULE
+    </span>
+  );
 }

@@ -2,47 +2,153 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useMemo, useState } from "react";
-import { getInstitutions } from "@/lib/catalog";
+import { useState } from "react";
+import { Search, Landmark } from "lucide-react";
+import { institutions } from "@/data/institutions";
+import type { CatalogueInstitution } from "@/lib/liveCatalogue";
 
-export function InstitutionDirectory() {
+export function InstitutionDirectory({
+  live = [],
+}: {
+  live?: CatalogueInstitution[];
+}) {
   const [query, setQuery] = useState("");
-  const items = useMemo(() => getInstitutions(query), [query]);
-  const grouped = useMemo(() => items.reduce<Record<string, typeof items>>((groups, institution) => {
-    (groups[institution.region] ??= []).push(institution);
-    return groups;
-  }, {}), [items]);
-
-  return <>
-    <label htmlFor="institution-query" className="sr-only">Search institutions</label>
-    <input id="institution-query" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search by institution or country" className="mb-10 min-h-11 w-full rounded-md border border-line px-4 py-3 text-sm focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 md:max-w-md" />
-    <div className="space-y-12">
-      {Object.entries(grouped).map(([region, regionItems]) => <section key={region} aria-labelledby={`region-${region}`}>
-        <div className="mb-5 flex items-baseline justify-between border-b border-line pb-3">
-          <h2 id={`region-${region}`} className="text-xl font-bold text-navy-800">{region}</h2>
-          <span className="text-xs text-ink-400">{regionItems.length} {regionItems.length === 1 ? "institution" : "institutions"}</span>
-        </div>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {regionItems.map((institution) => <Link key={institution.id} href={`/institutions/${institution.slug}`} className="group card-hover flex min-h-48 flex-col justify-between overflow-hidden rounded-xl border border-line bg-white focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2">
-            <div className="relative h-32 w-full">
-              <Image src={institution.campusImage} alt={`${institution.name} campus`} fill sizes="(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 33vw" className="image-zoom object-cover" />
+  const [country, setCountry] = useState("");
+  const [source, setSource] = useState("");
+  const entries = [
+    ...live.map((i) => ({
+      id: i.code,
+      name: i.name,
+      country: i.country,
+      logo: i.logo,
+      href: `/institutions/${i.code.toLowerCase()}`,
+      live: true,
+    })),
+    ...institutions
+      .filter(
+        (i) => !live.some((l) => l.name.toLowerCase() === i.name.toLowerCase()),
+      )
+      .map((i) => ({
+        id: i.id,
+        name: i.name,
+        country: i.country,
+        logo: i.logo,
+        href: `/institutions/${i.slug}`,
+        live: false,
+      })),
+  ];
+  const countries = [
+    ...new Set(entries.map((i) => i.country).filter(Boolean)),
+  ].sort();
+  const items = entries.filter(
+    (i) =>
+      (!query.trim() ||
+        `${i.name} ${i.country}`
+          .toLowerCase()
+          .includes(query.trim().toLowerCase())) &&
+      (!country || i.country === country) &&
+      (!source || (source === "connected" ? i.live : !i.live)),
+  );
+  const reset = () => {
+    setQuery("");
+    setCountry("");
+    setSource("");
+  };
+  return (
+    <div className="ed-directory">
+      <div className="ed-directory-toolbar">
+        <label>
+          <span>Institution or country</span>
+          <div className="ed-directory-search">
+            <Search size={18} />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search the directory"
+            />
+          </div>
+        </label>
+        <label>
+          <span>Country</span>
+          <select value={country} onChange={(e) => setCountry(e.target.value)}>
+            <option value="">All countries</option>
+            {countries.map((c) => (
+              <option key={c}>{c}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>Profile type</span>
+          <select value={source} onChange={(e) => setSource(e.target.value)}>
+            <option value="">All profiles</option>
+            <option value="connected">Learning-platform profiles</option>
+            <option value="sample">Sample profiles</option>
+          </select>
+        </label>
+      </div>
+      <div className="ed-directory-count">
+        <p role="status">
+          {items.length} {items.length === 1 ? "profile" : "profiles"} found
+        </p>
+        {(query || country || source) && (
+          <button onClick={reset}>Clear filters</button>
+        )}
+      </div>
+      <div className="ed-data-notice">
+        <strong>Know what you’re viewing</strong>
+        <p>
+          Learning-platform profiles come from the connected catalogue. Sample
+          profiles illustrate the directory and do not confirm institutional
+          participation. Confirm recognition and programme availability with the
+          institution.
+        </p>
+      </div>
+      <div className="ed-directory-grid">
+        {items.map((i) => (
+          <Link href={i.href} key={i.id} className="ed-directory-card">
+            <div className="ed-directory-logo">
+              {i.logo ? (
+                <Image
+                  src={i.logo}
+                  alt=""
+                  width={150}
+                  height={70}
+                  unoptimized={i.logo.startsWith("http")}
+                />
+              ) : (
+                <Landmark size={34} />
+              )}
             </div>
-            <div className="flex flex-1 flex-col justify-between p-5">
-              <span className="flex items-center gap-3">
-                <span className="flex h-12 w-16 items-center justify-center overflow-hidden rounded-md border border-line bg-white p-1">
-                  <Image src={institution.logo} alt={`${institution.shortName} mark`} width={40} height={40} className="logo-muted size-full object-contain" />
-                </span>
-                <span className="text-xs font-semibold text-teal-600">{institution.tenantStatus === "active" ? "Participating institution" : "Participation in review"}</span>
-              </span>
-              <span className="mt-5">
-                <span className="block font-semibold leading-5 text-navy-800">{institution.name}</span>
-                <span className="mt-1 block text-sm text-ink-600">{institution.city}, {institution.country}</span>
-                <span className="mt-3 block text-xs text-ink-600">{institution.accreditationBody} · {institution.accreditationStatus}</span>
-              </span>
-            </div>
-          </Link>)}
+            <span className="ed-profile-type">
+              {i.live ? "Learning-platform profile" : "Sample profile"}
+            </span>
+            <h2>{i.name}</h2>
+            <p>{i.country || "Location not supplied"}</p>
+            <span className="ed-directory-action">
+              View institution profile
+            </span>
+          </Link>
+        ))}
+      </div>
+      {!items.length && (
+        <div className="ed-directory-empty">
+          <Landmark size={32} />
+          <h2>No matching institutions</h2>
+          <p>Try another name or country, or clear your filters.</p>
+          <button onClick={reset}>Show all profiles</button>
         </div>
-      </section>)}
+      )}
+      <div className="ed-directory-support">
+        <div>
+          <h2>Represent an institution or training organisation?</h2>
+          <p>
+            Explore participation and the information needed to introduce your
+            programmes.
+          </p>
+        </div>
+        <Link href="/for-institutions">Explore partnership</Link>
+      </div>
     </div>
-  </>;
+  );
 }
