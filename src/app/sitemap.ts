@@ -20,6 +20,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms",
     "/accessibility",
     "/data-protection",
+    "/refunds",
+    "/cookies",
+    "/sign-in",
   ];
   return routes.map((route) => ({
     url: `${siteUrl}${route}`,
