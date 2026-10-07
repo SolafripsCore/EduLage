@@ -186,7 +186,7 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
           ))}
         </div>
         <div className="ed-explorer-layout">
-          <aside className="ed-discipline-sidebar">
+          <div className="ed-discipline-sidebar" role="group" aria-label="Disciplines">
             <button
               className="ed-discipline-toggle"
               type="button"
@@ -230,7 +230,7 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
             <Link className="ed-explorer-help" href="/study-types">
               Not sure which qualification to choose?
             </Link>
-          </aside>
+          </div>
           <div
             id="qualification-results"
             role="tabpanel"
