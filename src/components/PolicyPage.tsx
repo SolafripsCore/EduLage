@@ -13,11 +13,11 @@ export function PolicyPage({ eyebrow, title, description, updated, sections, con
   return <><PageIntro eyebrow={eyebrow} title={title} description={description} />
     <section className="py-16 md:py-20"><Container>
       <div className="grid gap-10 lg:grid-cols-[260px_1fr] lg:items-start">
-        <aside className="lg:sticky lg:top-28">
+        <div className="lg:sticky lg:top-28">
           {updated && <p className="text-xs font-semibold uppercase tracking-[0.14em] text-ink-400">Last updated {updated}</p>}
           <nav aria-label="On this page" className="mt-4 rounded-2xl border border-line bg-white p-5"><p className="text-sm font-bold text-navy-800">On this page</p><ol className="mt-3 space-y-2 text-sm">{sections.map((s, i) => <li key={s.title}><a href={`#${slug(s.title)}`} className="text-ink-600 hover:text-teal-700"><span className="mr-2 text-ink-400">{i + 1}.</span>{s.title}</a></li>)}</ol></nav>
           <nav aria-label="Related policies" className="mt-4 rounded-2xl bg-surface p-5"><p className="text-sm font-bold text-navy-800">Related</p><ul className="mt-3 space-y-2 text-sm">{related.filter(([l]) => l !== title).map(([label, href]) => <li key={href}><Link href={href} className="text-ink-600 hover:text-teal-700">{label}</Link></li>)}</ul></nav>
-        </aside>
+        </div>
         <div className="max-w-3xl space-y-6">
           {sections.map((section, i) => <article key={section.title} id={slug(section.title)} className="scroll-mt-28 rounded-2xl border border-line bg-white p-6 md:p-8">
             <h2 className="text-xl font-bold text-navy-800"><span className="mr-2 text-teal-700">{i + 1}.</span>{section.title}</h2>

@@ -15,6 +15,7 @@ import { programmes } from "@/data/programmes";
 import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { learnLinks } from "@/lib/site";
 import { EnrolCta } from "@/components/EnrolCta";
+import { JsonLdScript, programmeJsonLd } from "@/lib/jsonLd";
 
 export async function generateMetadata({
   params,
@@ -27,6 +28,8 @@ export async function generateMetadata({
     description: p
       ? `Explore ${p.title}: structure, entry requirements, study format and listed fees.`
       : "Programme details",
+    alternates: p ? { canonical: `/programmes/${p.slug}` } : undefined,
+    openGraph: p ? { title: p.title, description: `${p.credential} · ${p.discipline}`, images: [p.image] } : undefined,
   };
 }
 export function generateStaticParams() {
@@ -52,6 +55,7 @@ export default async function ProgrammeDetail({
     .slice(0, 3);
   return (
     <div className="programme-detail">
+      <JsonLdScript data={programmeJsonLd(p, institution)} />
       <section className="detail-hero">
         <div className="container-page">
           <nav className="detail-breadcrumb" aria-label="Breadcrumb">

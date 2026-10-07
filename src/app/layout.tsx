@@ -4,6 +4,8 @@ import "./globals.css";
 import "./catalogue.css";
 import { SiteChrome } from "@/components/SiteChrome";
 import { isProduction, siteUrl } from "@/lib/site";
+import { JsonLdScript, organisationJsonLd, websiteJsonLd } from "@/lib/jsonLd";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -28,7 +30,10 @@ export const metadata: Metadata = {
     description: "A trusted global education ecosystem connecting learners with quality open and online education.",
     type: "website",
     url: siteUrl,
+    siteName: "EduLage",
+    locale: "en_GB",
   },
+  twitter: { card: "summary_large_image", title: "EduLage | The Global Education Village", description: "Quality education and training from reputable institutions — wherever you are." },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -36,6 +41,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${inter.variable} ${jakarta.variable}`}>
       <body className="min-h-screen flex flex-col">
         <SiteChrome>{children}</SiteChrome>
+        <JsonLdScript data={organisationJsonLd} />
+        <JsonLdScript data={websiteJsonLd} />
+        {isProduction && <Analytics />}
       </body>
     </html>
   );

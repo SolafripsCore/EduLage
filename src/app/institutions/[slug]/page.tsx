@@ -9,6 +9,7 @@ import { ProgrammeCard } from "@/components/ProgrammeCard";
 import { Checklist } from "@/components/ui/Checklist";
 import { LiveInstitutionPage } from "@/components/LiveInstitutionPage";
 import { getLiveInstitution } from "@/lib/liveInstitution";
+import { JsonLdScript, institutionJsonLd } from "@/lib/jsonLd";
 export async function generateMetadata({
   params,
 }: {
@@ -17,7 +18,12 @@ export async function generateMetadata({
   const slug = (await params).slug;
   const institution = getInstitutionBySlug(slug);
   if (institution)
-    return { title: institution.name, description: institution.about };
+    return {
+      title: institution.name,
+      description: institution.about,
+      alternates: { canonical: `/institutions/${institution.slug}` },
+      openGraph: { title: institution.name, description: institution.about, images: [institution.campusImage] },
+    };
   const live = await getLiveInstitution(slug);
   return {
     title: live?.name ?? "Institution",
@@ -42,6 +48,7 @@ export default async function Page({
   const programmes = getInstitutionProgrammes(institution.id);
   return (
     <>
+      <JsonLdScript data={institutionJsonLd(institution)} />
       <div className="relative isolate overflow-hidden bg-navy-900 py-14 text-white">
         <Image
           src={institution.campusImage}

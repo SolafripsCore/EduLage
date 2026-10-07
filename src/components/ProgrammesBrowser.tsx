@@ -242,8 +242,10 @@ export function ProgrammesBrowser({
         ))}
       </div>
       <div className="catalog-layout">
-        <aside
+        <div
           id="catalog-filters"
+          role="group"
+          aria-label="Programme filters"
           className={`catalog-filters ${filtersOpen ? "is-open" : ""}`}
         >
           <div className="catalog-filter-heading">
@@ -274,7 +276,7 @@ export function ProgrammesBrowser({
             <p>Understand qualifications and study formats before choosing.</p>
             <Link href="/study-types">Explore study options</Link>
           </div>
-        </aside>
+        </div>
         <div className="catalog-results">
           <div className="catalog-result-bar">
             <p role="status" aria-live="polite">

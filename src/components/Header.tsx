@@ -102,7 +102,7 @@ export function Header() {
 
   return (
     <>
-      <div className="hidden h-9 bg-[#102f36] text-xs text-white/80 lg:block">
+      <div role="region" aria-label="Site utility" className="hidden h-9 bg-[#102f36] text-xs text-white/80 lg:block">
         <div className="container-page flex h-full items-center justify-between">
           <span>The Global Education Village</span>
           <div className="flex items-center divide-x divide-white/20">
