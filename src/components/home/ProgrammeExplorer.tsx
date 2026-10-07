@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useMemo, useState, type KeyboardEvent } from "react";
 import { BookOpen, Search, X } from "lucide-react";
 import { programmes } from "@/data/programmes";
@@ -34,10 +35,27 @@ const qualifications = [
   },
 ];
 export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
-  const [qualification, setQualification] = useState("all");
-  const [discipline, setDiscipline] = useState("");
-  const [query, setQuery] = useState("");
-  const [limit, setLimit] = useState(6);
+  const params = useSearchParams();
+  const qualification = qualifications.some(
+    (q) => q.id === params.get("qualification"),
+  )
+    ? params.get("qualification")!
+    : "all";
+  const discipline = params.get("subject") || "";
+  const query = params.get("search") || "";
+  const limit = Math.max(6, Math.min(100, Number(params.get("shown")) || 6));
+  function setDiscovery(updates: Record<string, string>) {
+    const next = new URLSearchParams(params.toString());
+    for (const [name, value] of Object.entries(updates)) {
+      if (value) next.set(name, value);
+      else next.delete(name);
+    }
+    window.history.replaceState(
+      null,
+      "",
+      `/${next.size ? `?${next}` : ""}${window.location.hash}`,
+    );
+  }
   const [subjectsOpen, setSubjectsOpen] = useState(false);
   const entries = useMemo(
     () => [
@@ -89,13 +107,14 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
           .includes(query.trim().toLowerCase())),
   );
   function chooseQualification(id: string) {
-    setQualification(id);
-    setDiscipline("");
-    setLimit(6);
+    setDiscovery({
+      qualification: id === "all" ? "" : id,
+      subject: "",
+      shown: "",
+    });
   }
   function chooseSubject(subject: string) {
-    setDiscipline(subject);
-    setLimit(6);
+    setDiscovery({ subject, shown: "" });
     setSubjectsOpen(false);
   }
   function tabKeys(event: KeyboardEvent<HTMLButtonElement>) {
@@ -119,11 +138,7 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
     tabs?.[next]?.focus();
   }
   return (
-    <section
-      id="programmes-courses"
-      className="ed-discovery"
-      aria-labelledby="discovery-title"
-    >
+    <section className="ed-discovery" aria-labelledby="discovery-title">
       <div className="ed-wrap ed-section">
         <div className="ed-section-head">
           <div>
@@ -139,6 +154,10 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
           </Link>
         </div>
         <p className="ed-filter-caption">1. Choose your qualification</p>
+        <p className="ed-filter-hint">
+          Select a tab to see matching programmes. On smaller screens, swipe the
+          qualification row for more options.
+        </p>
         <div
           className="ed-qualification-tabs"
           role="tablist"
@@ -231,14 +250,26 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
                   placeholder="Search these programmes"
                   value={query}
                   onChange={(e) => {
-                    setQuery(e.target.value);
-                    setLimit(6);
+                    setDiscovery({ search: e.target.value, shown: "" });
                   }}
                 />
               </label>
             </div>
-            {(discipline || query) && (
+            {(qualification !== "all" || discipline || query) && (
               <div className="ed-applied-filters">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setDiscovery({
+                      qualification: "",
+                      subject: "",
+                      search: "",
+                      shown: "",
+                    })
+                  }
+                >
+                  Reset all selections <X size={14} />
+                </button>
                 {discipline && (
                   <button
                     onClick={() => chooseSubject("")}
@@ -253,8 +284,7 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
                   <button
                     type="button"
                     onClick={() => {
-                      setQuery("");
-                      setLimit(6);
+                      setDiscovery({ search: "", shown: "" });
                     }}
                     aria-label="Clear programme search"
                   >
@@ -297,6 +327,7 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
                       <div className="ed-explorer-facts">
                         <p>{e.duration}</p>
                         <p>{e.format}</p>
+                        {e.live && <p>Continues on the learning platform</p>}
                       </div>
                       <div className="ed-explorer-card-end">
                         <div>
@@ -325,8 +356,12 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
                 <button
                   type="button"
                   onClick={() => {
-                    chooseQualification("all");
-                    setQuery("");
+                    setDiscovery({
+                      qualification: "",
+                      subject: "",
+                      search: "",
+                      shown: "",
+                    });
                   }}
                 >
                   Reset selections
@@ -341,7 +376,7 @@ export function ProgrammeExplorer({ courses }: { courses: CatalogueCourse[] }) {
                 <button
                   type="button"
                   className="ed-outline-btn"
-                  onClick={() => setLimit((n) => n + 6)}
+                  onClick={() => setDiscovery({ shown: String(limit + 6) })}
                 >
                   Show more programmes
                 </button>

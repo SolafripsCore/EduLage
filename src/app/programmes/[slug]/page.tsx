@@ -59,7 +59,7 @@ export default async function ProgrammeDetail({
             <span>/</span>
             <Link href="/programmes">Programmes</Link>
             <span>/</span>
-            <span>{p.credential}</span>
+            <span aria-current="page">{p.title}</span>
           </nav>
           <div className="detail-hero-grid">
             <div>

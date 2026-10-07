@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { Suspense } from "react";
+import { LearnerFaq } from "@/components/LearnerFaq";
 import Link from "next/link";
 import { Playfair_Display } from "next/font/google";
 import {
@@ -31,7 +33,7 @@ const heroDisplay = Playfair_Display({
 });
 
 export const metadata = {
-  title: "EduLage — Accredited education, opened to the world",
+  title: "EduLage — Quality education and training within your reach",
   description:
     "Explore degrees, professional programmes and short courses. Discover institution-led learning with flexible study options and local support through GOE Centers.",
 };
@@ -72,20 +74,34 @@ const pathways = [
 ];
 const steps = [
   [
-    "Find your programme",
-    "Explore subjects, institutions and qualifications that fit your goals.",
+    "Explore",
+    "Choose a qualification and discipline that match your goals.",
+    "/#programmes-courses",
+    "Find a programme",
   ],
   [
-    "Enrol or apply",
-    "Join an open course, or apply through the institution’s admissions process.",
+    "Compare",
+    "Review duration, format and listed fees side by side.",
+    "/programmes",
+    "Compare your options",
   ],
   [
-    "Make learning part of life",
-    "Access your courses and follow your institution’s study schedule.",
+    "Choose",
+    "Check entry requirements, recognition and the full cost with the institution.",
+    "/study-types",
+    "Understand study options",
   ],
   [
-    "Earn your credential",
-    "Complete the requirements for an institution-issued qualification.",
+    "Apply or enrol",
+    "Follow the confirmed admissions or open-course enrolment pathway.",
+    "/help",
+    "Get application guidance",
+  ],
+  [
+    "Learn",
+    "Sign in to your classroom and follow your institution’s study schedule.",
+    learnLinks.signIn,
+    "Go to your classroom",
   ],
 ];
 
@@ -94,15 +110,18 @@ export default async function Home() {
   const courses = catalogue?.open_courses ?? [];
   return (
     <div className="ed-home">
-      <section className={`ed-hero ${heroDisplay.variable}`} aria-labelledby="hero-title">
+      <section
+        className={`ed-hero ${heroDisplay.variable}`}
+        aria-labelledby="hero-title"
+      >
         <div className="ed-wrap ed-hero-grid">
           <div className="ed-hero-copy">
             <p className="ed-eyebrow">
               <span /> THE GLOBAL EDUCATION VILLAGE
             </p>
             <h1 id="hero-title">
-              Quality education and training from reputable institutions globally{" "}
-              <em>— within your reach.</em>
+              Quality education and training from reputable institutions
+              globally <em>— within your reach.</em>
             </h1>
             <p className="ed-intro">
               Compare degree, postgraduate and professional programmes from
@@ -140,7 +159,7 @@ export default async function Home() {
               <span>What would you like to learn?</span>
               <input
                 name="query"
-                placeholder="Subject, programme or institution"
+                placeholder="Try business, computing or an institution"
                 type="search"
               />
             </label>
@@ -247,9 +266,41 @@ export default async function Home() {
             </Link>
           ))}
         </div>
+        <div className="ed-short-path">
+          <div>
+            <strong>Looking for a shorter learning commitment?</strong>
+            <p>
+              Explore focused courses with open enrolment on the learning
+              platform.
+            </p>
+          </div>
+          <Link className="ed-text-link" href="/programmes?level=Short+courses">
+            Explore short courses
+          </Link>
+        </div>
       </section>
 
-      <ProgrammeExplorer courses={courses} />
+      <nav className="ed-section-nav" aria-label="Explore this page">
+        <div className="ed-wrap">
+          <span>Explore EduLage</span>
+          <a href="#programmes-courses">Programmes & courses</a>
+          <a href="#institutions-trainers">Institutions & trainers</a>
+          <a href="#centers-title">Local support</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#learner-questions">Common questions</a>
+        </div>
+      </nav>
+      <div id="programmes-courses" className="ed-discovery-anchor">
+        <Suspense
+          fallback={
+            <p className="ed-wrap ed-section" role="status">
+              Loading programme discovery…
+            </p>
+          }
+        >
+          <ProgrammeExplorer courses={courses} />
+        </Suspense>
+      </div>
       <InstitutionShowcase live={catalogue?.institutions ?? []} />
 
       <section
@@ -322,7 +373,8 @@ export default async function Home() {
           <p>
             Online learning, with a place to connect. Explore GOE Centers for
             study facilities, learner support and institution-required
-            assessments.
+            assessments. Availability and approved services must be confirmed
+            for your programme and location.
           </p>
           <ul>
             <li>
@@ -366,16 +418,20 @@ export default async function Home() {
             <h2 id="how-title">From curiosity to achievement.</h2>
           </div>
           <p>
-            One account to begin.
-            <br />A simple path to your learning journey.
+            Explore freely. Check the details.
+            <br />
+            Take the next step when you’re ready.
           </p>
         </div>
         <ol className="ed-steps">
-          {steps.map(([title, text], i) => (
+          {steps.map(([title, text, href, label], i) => (
             <li key={title}>
               <span className="ed-step-number">0{i + 1}</span>
               <h3>{title}</h3>
               <p>{text}</p>
+              <Link className="ed-step-link" href={href}>
+                {label}
+              </Link>
             </li>
           ))}
         </ol>
@@ -417,6 +473,8 @@ export default async function Home() {
           </Link>
         </div>
       </section>
+
+      <LearnerFaq />
 
       <section className="ed-final">
         <div className="ed-wrap">

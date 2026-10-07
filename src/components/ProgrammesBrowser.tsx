@@ -15,6 +15,8 @@ import type {
 import { institutions, institutionById } from "@/data/institutions";
 import { programmes } from "@/data/programmes";
 import { ProgrammeCard } from "./ProgrammeCard";
+import { LiveCourseCard } from "./LiveCourseCard";
+import type { CatalogueCourse } from "@/lib/liveCatalogue";
 
 const levels: StudyLevel[] = [
   "Undergraduate",
@@ -69,9 +71,12 @@ const labels: Record<keyof Filters, string> = {
 };
 const displayMode = (mode: string) => mode.replace("OEC", "GOE Center");
 
-export function ProgrammesBrowser() {
+export function ProgrammesBrowser({
+  courses = [],
+}: {
+  courses?: CatalogueCourse[];
+}) {
   const params = useSearchParams();
-  const key = params.toString();
   const urlFilters: Filters = {
     ...empty,
     query: params.get("q") ?? params.get("query") ?? "",
@@ -84,12 +89,21 @@ export function ProgrammesBrowser() {
     mode: params.get("mode") ?? params.get("deliveryMode") ?? "",
     institutionId: params.get("institution") ?? "",
   };
-  const [local, setLocal] = useState<{ key: string; values: Filters } | null>(
-    null,
-  );
-  const filters = local?.key === key ? local.values : urlFilters;
-  const [count, setCount] = useState(9);
-  const [sort, setSort] = useState("recommended");
+  const filters = urlFilters;
+  const count = Math.max(9, Math.min(99, Number(params.get("shown")) || 9));
+  const sort = params.get("sort") || "recommended";
+  function writeParams(updates: Record<string, string>) {
+    const next = new URLSearchParams(params.toString());
+    for (const [name, value] of Object.entries(updates)) {
+      if (value) next.set(name, value);
+      else next.delete(name);
+    }
+    window.history.replaceState(
+      null,
+      "",
+      `/programmes${next.size ? `?${next}` : ""}`,
+    );
+  }
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   const [comparing, setComparing] = useState(false);
@@ -100,13 +114,16 @@ export function ProgrammesBrowser() {
     else if (!comparing && dialog?.open) dialog.close();
   }, [comparing]);
   const update = (name: keyof Filters, value: string) => {
-    setLocal({ key, values: { ...filters, [name]: value } });
-    setCount(9);
+    const urlName =
+      name === "query" ? "q" : name === "institutionId" ? "institution" : name;
+    writeParams({
+      [urlName]: value,
+      shown: "",
+      ...(name === "query" ? { query: "" } : {}),
+      ...(name === "mode" ? { deliveryMode: "" } : {}),
+    });
   };
-  const reset = () => {
-    setLocal({ key, values: { ...empty } });
-    setCount(9);
-  };
+  const reset = () => window.history.replaceState(null, "", "/programmes");
   const results = useMemo(() => {
     const items = getProgrammes({
       query: filters.query.trim() || undefined,
@@ -127,6 +144,25 @@ export function ProgrammesBrowser() {
           : Number(Boolean(b.trending)) - Number(Boolean(a.trending)),
     );
   }, [filters, sort]);
+  const openCourses = courses.filter((c) => {
+    const search = filters.query.trim().toLowerCase();
+    return (
+      (!search ||
+        `${c.title} ${c.institution_name}`.toLowerCase().includes(search)) &&
+      (!filters.level ||
+        (filters.level === "Professional" &&
+          c.classification === "professional") ||
+        (filters.level === "Short courses" &&
+          c.classification !== "professional")) &&
+      (!filters.mode || filters.mode === "Fully online") &&
+      !filters.discipline &&
+      !filters.credential &&
+      !filters.country &&
+      !filters.language &&
+      !filters.studyMode &&
+      !filters.institutionId
+    );
+  });
   const active = (Object.entries(filters) as [keyof Filters, string][]).filter(
     ([, v]) => v,
   );
@@ -195,7 +231,7 @@ export function ProgrammesBrowser() {
         role="group"
         aria-label="Filter by study level"
       >
-        {["", ...levels].map((level) => (
+        {["", ...levels, "Short courses"].map((level) => (
           <button
             key={level}
             aria-pressed={filters.level === level}
@@ -231,7 +267,7 @@ export function ProgrammesBrowser() {
             className="catalog-filter-done"
             onClick={() => setFiltersOpen(false)}
           >
-            Show {results.length} results
+            Show {results.length + openCourses.length} results
           </button>
           <div className="catalog-help">
             <h3>Need a little guidance?</h3>
@@ -242,13 +278,19 @@ export function ProgrammesBrowser() {
         <div className="catalog-results">
           <div className="catalog-result-bar">
             <p role="status" aria-live="polite">
-              <strong>{results.length}</strong>{" "}
-              {results.length === 1 ? "programme" : "programmes"} to explore
+              <strong>{results.length + openCourses.length}</strong>{" "}
+              {results.length + openCourses.length === 1 ? "result" : "results"}{" "}
+              to explore
             </p>
             <label>
               Sort by
-              <select value={sort} onChange={(e) => setSort(e.target.value)}>
-                <option value="recommended">Recommended</option>
+              <select
+                value={sort}
+                onChange={(e) =>
+                  writeParams({ sort: e.target.value, shown: "" })
+                }
+              >
+                <option value="recommended">Featured first</option>
                 <option value="duration">Shortest duration</option>
                 <option value="title">Programme name</option>
               </select>
@@ -271,6 +313,29 @@ export function ProgrammesBrowser() {
               <button onClick={reset}>Clear all</button>
             </div>
           )}
+          {openCourses.length > 0 && (
+            <section
+              id="open-courses"
+              className="ed-open-courses"
+              aria-labelledby="open-courses-title"
+            >
+              <h2 id="open-courses-title">
+                Open courses on the learning platform
+              </h2>
+              <p>
+                Current open-enrolment listings. Continue to the learning
+                platform for full details and enrolment.
+              </p>
+              <div className="catalog-grid">
+                {openCourses.map((c) => (
+                  <LiveCourseCard key={c.course_id} course={c} />
+                ))}
+              </div>
+            </section>
+          )}
+          <h2 className="ed-catalog-section-title">
+            Programme catalogue preview
+          </h2>
           <p className="catalog-notice">
             Explore the catalogue preview. Confirm institutional participation,
             current fees and availability before applying.
@@ -301,7 +366,9 @@ export function ProgrammesBrowser() {
                   programmes
                 </p>
                 {count < results.length && (
-                  <button onClick={() => setCount((c) => c + 9)}>
+                  <button
+                    onClick={() => writeParams({ shown: String(count + 9) })}
+                  >
                     Show more programmes
                   </button>
                 )}
@@ -320,11 +387,16 @@ export function ProgrammesBrowser() {
         </div>
       </div>
       {selected.length > 0 && (
-        <div className="catalog-compare-bar">
+        <div
+          className="catalog-compare-bar"
+          role="region"
+          aria-label="Selected programmes"
+        >
           <div>
             <Scale size={21} />
             <span>
-              <strong>{selected.length} of 3</strong> selected for comparison
+              <strong>{selected.length} of 3</strong> selected for comparison ·
+              choose 2–3
             </span>
           </div>
           <button

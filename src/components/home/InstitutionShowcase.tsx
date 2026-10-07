@@ -76,7 +76,7 @@ export function InstitutionShowcase({
             <h3>{i.name}</h3>
             <p>{i.country || "View institution profile"}</p>
             <span className="ed-institution-status">
-              {i.sample ? "Catalogue preview" : "Institution profile"}
+              {i.sample ? "Sample profile" : "Learning-platform profile"}
             </span>
           </Link>
         ))}

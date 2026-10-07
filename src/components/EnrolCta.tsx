@@ -41,18 +41,30 @@ export function EnrolCta({
   useEffect(() => {
     if (!courseId) return;
     const controller = new AbortController();
-    fetch(`${learnUrl}/edulage/api/v1/runs/?course_id=${encodeURIComponent(courseId)}`, {
-      signal: controller.signal,
-      headers: { Accept: "application/json" },
-    })
+    fetch(
+      `${learnUrl}/edulage/api/v1/runs/?course_id=${encodeURIComponent(courseId)}`,
+      {
+        signal: controller.signal,
+        headers: { Accept: "application/json" },
+      },
+    )
       .then((res) => (res.ok ? res.json() : null))
-      .then((data: { runs?: RunPolicy[] } | null) => setRun(data?.runs?.[0] ?? null))
+      .then((data: { runs?: RunPolicy[] } | null) =>
+        setRun(data?.runs?.[0] ?? null),
+      )
       .catch(() => setRun(null));
     return () => controller.abort();
   }, [courseId]);
 
   if (run === undefined) {
-    return <div className={`${buttonClass} animate-pulse bg-navy-800/60`} aria-busy="true">Checking enrolment…</div>;
+    return (
+      <div
+        className={`${buttonClass} animate-pulse bg-navy-800/60`}
+        aria-busy="true"
+      >
+        Checking enrolment…
+      </div>
+    );
   }
 
   if (courseId && run && run.enrolment_policy !== "admission") {
@@ -60,10 +72,15 @@ export function EnrolCta({
     const href = `${learnUrl}/edulage/${paid ? "pay" : "enrol"}/${courseId}/`;
     return (
       <>
-        <a href={href} className={buttonClass}>{paid ? `Enrol now — ${formatPrice(run)}` : "Enrol now — free"}</a>
-        <p className="mt-4 text-xs leading-5 text-ink-400">
-          Open enrolment: no admission step. You will be asked to sign in or create a free EduLage account first
-          {paid ? "; payment is processed securely by Paystack and collected on behalf of " : ". Enrolment is confirmed by "}
+        <a href={href} className={buttonClass}>
+          {paid ? `Enrol now — ${formatPrice(run)}` : "Enrol now — free"}
+        </a>
+        <p className="mt-4 text-sm leading-6 text-ink-600">
+          Open enrolment: no admission step. You will be asked to sign in or
+          create a free EduLage account first
+          {paid
+            ? "; payment is processed securely by Paystack and collected on behalf of "
+            : ". Enrolment is confirmed by "}
           {institutionName}.
         </p>
       </>
@@ -73,9 +90,17 @@ export function EnrolCta({
   if (courseId && run) {
     return (
       <>
-        <a href={`${learnUrl}/edulage/apply/${courseId}/`} className={buttonClass}>Apply</a>
-        <p className="mt-4 text-xs leading-5 text-ink-400">
-          Admission required. You will be asked to sign in or create a free EduLage account; your application then appears on your My learning dashboard and {institutionName} records its decision there. Once admitted, the programme is activated automatically.
+        <a
+          href={`${learnUrl}/edulage/apply/${courseId}/`}
+          className={buttonClass}
+        >
+          Apply
+        </a>
+        <p className="mt-4 text-sm leading-6 text-ink-600">
+          Admission required. You will be asked to sign in or create a free
+          EduLage account; your application then appears on your My learning
+          dashboard and {institutionName} records its decision there. Once
+          admitted, the programme is activated automatically.
         </p>
       </>
     );
@@ -83,12 +108,23 @@ export function EnrolCta({
 
   return (
     <>
-      <Link href="/contact" className={buttonClass}>Request admissions guidance</Link>
-      <p className="mt-4 text-xs leading-5 text-ink-400">
-        The official institutional application link is published after it has been confirmed by {institutionName}. Admission decisions remain solely with the institution; once admitted, the programme is activated on your My learning dashboard.
+      <Link href="/contact" className={buttonClass}>
+        Request admissions guidance
+      </Link>
+      <p className="mt-4 text-sm leading-6 text-ink-600">
+        A confirmed application route is not available for this listing. Ask for
+        guidance and verify current availability with {institutionName} before
+        applying.
       </p>
-      <p className="mt-3 text-xs leading-5 text-ink-400">
-        No account yet? <a href={learnLinks.register} className="font-semibold text-teal-700 hover:text-navy-800">Create a free account</a> to track your application.
+      <p className="mt-3 text-sm leading-6 text-ink-600">
+        No account yet?{" "}
+        <a
+          href={learnLinks.register}
+          className="font-semibold text-teal-700 hover:text-navy-800"
+        >
+          Create a free account
+        </a>{" "}
+        when you are ready to access the learning platform.
       </p>
     </>
   );

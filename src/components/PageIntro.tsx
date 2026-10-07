@@ -1,5 +1,29 @@
+import Link from "next/link";
 import { Container } from "./ui/Container";
 
-export function PageIntro({ eyebrow, title, description }: { eyebrow?: string; title: string; description: string }) {
-  return <div className="border-b border-line bg-surface py-12 md:py-16"><Container><div className="max-w-4xl">{eyebrow && <p className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-teal-600">{eyebrow}</p>}<h1 className="text-4xl font-bold text-navy-800 md:text-5xl">{title}</h1><p className="mt-5 max-w-3xl text-lg leading-8 text-ink-600">{description}</p></div></Container></div>;
+export function PageIntro({
+  eyebrow,
+  title,
+  description,
+}: {
+  eyebrow?: string;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="ed-page-intro">
+      <Container>
+        <nav aria-label="Breadcrumb" className="ed-breadcrumb">
+          <Link href="/">Home</Link>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{eyebrow || title}</span>
+        </nav>
+        <div className="max-w-4xl">
+          {eyebrow && <p className="section-kicker">{eyebrow}</p>}
+          <h1>{title}</h1>
+          <p className="ed-page-description">{description}</p>
+        </div>
+      </Container>
+    </div>
+  );
 }

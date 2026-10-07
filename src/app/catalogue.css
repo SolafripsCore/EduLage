@@ -1082,3 +1082,77 @@
     transform: none;
   }
 }
+
+/* Carry the light editorial identity through discovery and details. */
+.catalog-intro {
+  background: #f3f6f2;
+  border-color: #d9e3dc;
+}
+.catalog-intro h1 {
+  font-family: Georgia, serif;
+  font-weight: 400;
+  color: #102d36;
+}
+.catalog-surface {
+  background: #fafbf9;
+}
+.catalog-notice {
+  line-height: 1.75;
+}
+.detail-breadcrumb {
+  flex-wrap: wrap;
+  line-height: 1.65;
+}
+.detail-breadcrumb [aria-current="page"] {
+  max-width: 50ch;
+}
+.catalog-comparison {
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+}
+.catalog-compare-bar {
+  bottom: max(16px, env(safe-area-inset-bottom));
+}
+.catalog-app:has(.catalog-compare-bar) {
+  padding-bottom: 110px;
+}
+.ed-open-courses {
+  margin: 25px 0 40px;
+}
+.ed-open-courses > h2,
+.ed-catalog-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.ed-open-courses > p {
+  color: #53695f;
+  line-height: 1.75;
+  font-size: 0.9375rem;
+  margin-bottom: 22px;
+}
+.ed-course-handoff {
+  color: #596b64;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  margin: 12px 0;
+}
+.premium-card-image > svg {
+  position: absolute;
+  left: calc(50% - 20px);
+  top: calc(50% - 20px);
+  color: #6c9786;
+}
+.detail-main > section,
+.detail-enrol {
+  scroll-margin-top: 160px;
+}
+@media (max-width: 650px) {
+  .catalog-compare-bar {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .catalog-app:has(.catalog-compare-bar) {
+    padding-bottom: 160px;
+  }
+}

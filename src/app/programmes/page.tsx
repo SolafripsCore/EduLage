@@ -1,3 +1,4 @@
+import { getCatalogue } from "@/lib/liveCatalogue";
 import { Suspense } from "react";
 import Link from "next/link";
 import { ProgrammesBrowser } from "@/components/ProgrammesBrowser";
@@ -6,7 +7,8 @@ export const metadata = {
   description:
     "Explore and compare programmes by subject, institution, qualification and study format.",
 };
-export default function ProgrammesPage() {
+export default async function ProgrammesPage() {
+  const catalogue = await getCatalogue();
   return (
     <div className="programmes-page">
       <section className="catalog-intro">
@@ -14,7 +16,7 @@ export default function ProgrammesPage() {
           <nav aria-label="Breadcrumb">
             <Link href="/">Home</Link>
             <span>/</span>
-            <span>Programmes</span>
+            <span aria-current="page">Programmes</span>
           </nav>
           <p className="catalog-eyebrow">EXPLORE. COMPARE. FIND YOUR PATH.</p>
           <h1>
@@ -34,7 +36,7 @@ export default function ProgrammesPage() {
               </p>
             }
           >
-            <ProgrammesBrowser />
+            <ProgrammesBrowser courses={catalogue?.open_courses ?? []} />
           </Suspense>
         </div>
       </section>

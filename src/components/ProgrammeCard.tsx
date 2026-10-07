@@ -43,7 +43,12 @@ export function ProgrammeCard({
           <Image src={institution.logo} alt="" width={32} height={32} />
           <span>{institution.name}</span>
         </div>
-        <p className="premium-card-credential">{programme.credential}</p>
+        <p className="premium-card-credential">
+          {programme.credential}
+          {!programme.courseId && (
+            <span className="ed-sample-label">Sample listing</span>
+          )}
+        </p>
         <h3>{programme.title}</h3>
         <div className="premium-card-facts">
           <span>
