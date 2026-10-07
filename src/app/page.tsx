@@ -1,539 +1,595 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
+import { Playfair_Display } from "next/font/google";
 import {
-  ArrowRight,
-  Building2,
-  CheckCircle2,
-  Globe2,
-  Landmark,
-  MapPin,
-  Award,
-  Laptop2,
+  BookOpen,
+  GraduationCap,
+  BriefcaseBusiness,
+  Microscope,
   Search,
-  UserPlus,
+  Globe2,
   ShieldCheck,
+  Landmark,
+  Monitor,
+  MapPin,
+  Wifi,
+  Award,
+  Compass,
+  Scale,
+  ListChecks,
+  Send,
+  Sparkles,
+  MessageCircle,
+  Laptop,
+  Orbit,
 } from "lucide-react";
-import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
-import { Pill } from "@/components/ui/Pill";
-import { getCatalogue, enrolUrl, priceLabel } from "@/lib/liveCatalogue";
+import { getCatalogue } from "@/lib/liveCatalogue";
 import { learnLinks } from "@/lib/site";
-import { centers } from "@/data/centers";
-import { institutions as sampleInstitutions } from "@/data/institutions";
-import { getFeaturedProgrammes } from "@/lib/catalog";
-import { ProgrammeCard } from "@/components/ProgrammeCard";
-import { ProgrammeDiscoveryShowcase } from "@/components/ProgrammeDiscoveryShowcase";
+import { ProgrammeExplorer } from "@/components/home/ProgrammeExplorer";
+import { InstitutionShowcase } from "@/components/home/InstitutionShowcase";
+import { LearnerFaq } from "@/components/LearnerFaq";
+import "./home.css";
 
-const studyLevels = [
-  ["Undergraduate", "Undergraduate degrees"],
-  ["Postgraduate", "Postgraduate degrees"],
-  ["Doctoral", "Doctoral programmes"],
-  ["Professional", "Professional programmes & courses"],
-] as const;
-
-const journey = [
-  [
-    Search,
-    "Discover",
-    "Browse programmes and courses by qualification, discipline and institution.",
-  ],
-  [
-    UserPlus,
-    "Enrol or apply",
-    "Open courses start with a free account; degree programmes go through the institution's admissions review.",
-  ],
-  [
-    Laptop2,
-    "Learn",
-    "Study with the institution's own teaching team — online, with GOE Center support where you need it.",
-  ],
-  [
-    Award,
-    "Get certified",
-    "Your credential is awarded by the institution, recorded by EduLage and verifiable by anyone.",
-  ],
-] as const;
-
-const trust = [
-  [Landmark, "Institution-led", "Admissions, teaching, assessment and qualifications stay with the institution."],
-  [ShieldCheck, "Verifiable credentials", "Every credential has an ID employers can check on EduLage in seconds."],
-  [CheckCircle2, "Clear fees", "Fees are set by the institution and shown before you enrol."],
-] as const;
-
+const heroDisplay = Playfair_Display({
+  subsets: ["latin"],
+  weight: "500",
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-hero-display",
+});
 export const metadata = {
-  title: "EduLage — Quality education and training from reputable institutions, wherever you are",
+  title: "EduLage — Quality education and training within your reach",
   description:
-    "Pursue degrees, professional programmes and short courses from accredited universities and organisations worldwide. Learn flexibly and earn credentials awarded directly by the institution you choose.",
+    "Explore degrees, professional programmes and short courses. Discover institution-led learning with flexible study options and local support through GOE Centers.",
 };
+const pathways = [
+  {
+    level: "Undergraduate",
+    title: "Undergraduate",
+    detail: "BEGIN WITH POSSIBILITY",
+    text: "Build a foundation for the future you want.",
+    icon: GraduationCap,
+    companion: BookOpen,
+    label: "Explore degrees",
+    colour: "mint",
+  },
+  {
+    level: "Postgraduate",
+    title: "Postgraduate",
+    detail: "DEEPEN YOUR EXPERTISE",
+    text: "Take your knowledge and ambition further.",
+    icon: BookOpen,
+    companion: Award,
+    label: "Explore postgraduate study",
+    colour: "blue",
+  },
+  {
+    level: "Doctoral",
+    title: "Doctoral research",
+    detail: "ASK THE NEXT QUESTION",
+    text: "Discover research-led paths to new knowledge.",
+    icon: Microscope,
+    companion: Orbit,
+    label: "Explore doctoral study",
+    colour: "peach",
+  },
+  {
+    level: "Professional",
+    title: "Professional learning",
+    detail: "GROW WITH YOUR INDUSTRY",
+    text: "Develop practical skills for your working life.",
+    icon: BriefcaseBusiness,
+    companion: Sparkles,
+    label: "Explore professional courses",
+    colour: "gold",
+  },
+];
+const steps = [
+  {
+    title: "Explore",
+    text: "Find a qualification and discipline that match your goals.",
+    href: "/#programmes-courses",
+    label: "Find a programme",
+    icon: Compass,
+  },
+  {
+    title: "Compare",
+    text: "Look at the study format, duration and listed fees.",
+    href: "/programmes",
+    label: "Compare your options",
+    icon: Scale,
+  },
+  {
+    title: "Choose",
+    text: "Confirm requirements, recognition and costs with the institution.",
+    href: "/study-types",
+    label: "Understand your options",
+    icon: ListChecks,
+  },
+  {
+    title: "Apply or enrol",
+    text: "Follow the programme’s confirmed application pathway.",
+    href: "/help",
+    label: "Get application guidance",
+    icon: Send,
+  },
+  {
+    title: "Learn",
+    text: "Enter your classroom and make learning part of your life.",
+    href: learnLinks.signIn,
+    label: "Go to your classroom",
+    icon: Laptop,
+  },
+];
 
 export default async function Home() {
   const catalogue = await getCatalogue();
-  const liveCourses = catalogue?.open_courses.slice(0, 4) ?? [];
-  const featured = getFeaturedProgrammes(8 - liveCourses.length);
-  const liveInstitutions = catalogue?.institutions ?? [];
-  const centerCountries = new Set(centers.map((c) => c.country)).size;
-  const partnerLogos = [
-    ...liveInstitutions.map((i) => ({ key: i.code, href: `/institutions/${i.code.toLowerCase()}`, name: i.name, logo: i.logo, mark: i.code })),
-    ...sampleInstitutions.map((i) => ({ key: i.id, href: `/institutions/${i.slug}`, name: i.name, logo: i.logo, mark: i.shortName })),
-  ].slice(0, 12);
-
   return (
-    <main>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            name: "EduLage",
-            url: "https://edulage.org",
-            slogan: "The Global Education Village",
-            description:
-              "A trusted global education ecosystem for quality open and online education from tertiary institutions worldwide.",
-          }),
-        }}
-      />
-
-      {/* Hero */}
-      <section className="hero-premium relative isolate overflow-hidden bg-navy-900 text-white">
-        <div className="hero-grid absolute inset-0 -z-20 opacity-20" />
-        <div className="hero-aurora absolute inset-0 -z-20" />
-        <Container>
-          <div className="grid gap-9 pb-8 pt-12 lg:grid-cols-[1.06fr_0.94fr] lg:items-center lg:gap-14 lg:pb-9 lg:pt-14">
-            <div className="relative z-10 max-w-3xl">
-              <p className="flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-teal-400">
-                <span className="h-px w-8 bg-teal-400" />
-                The Global Education Village
-              </p>
-              <h1 className="mt-5 max-w-[24ch] text-[2.15rem] font-bold leading-[1.1] tracking-[-0.025em] text-white sm:text-[2.6rem] lg:text-[3rem]">
-                Quality education and training from reputable institutions &mdash;&nbsp;wherever you&nbsp;are.
-              </h1>
-              <p className="mt-5 max-w-xl text-[0.98rem] leading-7 text-white/72 sm:text-base sm:leading-7">
-                Degrees, professional programmes and short courses from accredited universities and
-                organisations worldwide &mdash; learn at a pace that fits your life and earn credentials
-                awarded directly by the institution you choose.
-              </p>
-              <div className="mt-7 flex flex-wrap items-center gap-3">
-                <Button href="/programmes" variant="teal">
-                  Explore programmes &amp; courses
-                </Button>
-                <Button href={learnLinks.register} variant="ghost">
-                  Create free account
-                </Button>
-                <Link
-                  href="/open-education-centers"
-                  className="group inline-flex items-center gap-2 px-2 py-3 text-sm font-semibold text-white/75 transition hover:text-white"
-                >
-                  Find a GOE Center{" "}
-                  <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
-                </Link>
-              </div>
-              <ul
-                className="mt-8 grid max-w-2xl gap-3 border-t border-white/15 pt-5 sm:grid-cols-3"
-                aria-label="EduLage benefits"
-              >
-                <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
-                  <ShieldCheck size={17} className="mt-0.5 shrink-0 text-teal-400" />
-                  <span>Institution-issued, verifiable credentials</span>
-                </li>
-                <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
-                  <Globe2 size={17} className="mt-0.5 shrink-0 text-teal-400" />
-                  <span>Open to learners in every country</span>
-                </li>
-                <li className="flex items-start gap-2.5 text-xs leading-5 text-white/70">
-                  <MapPin size={17} className="mt-0.5 shrink-0 text-teal-400" />
-                  <span>Local exam and support centres</span>
-                </li>
-              </ul>
+    <div className={`ed-home ${heroDisplay.variable}`}>
+      <section className="ed-hero" aria-labelledby="hero-title">
+        <div className="ed-wrap ed-hero-grid">
+          <div className="ed-hero-copy">
+            <p className="ed-eyebrow">
+              <span />
+              THE GLOBAL EDUCATION VILLAGE
+            </p>
+            <h1 id="hero-title">
+              <span className="ed-headline-lead">Quality education{" "}<br />and training</span>{" "}
+              <span className="ed-headline-context">from reputable institutions globally</span>{" "}
+              <em className="ed-headline-promise"><span className="ed-headline-dash">— </span>within your reach.</em>
+            </h1>
+            <p className="ed-intro">
+              Explore degree, postgraduate and professional programmes. Compare
+              institutions and study options, then choose an online or locally
+              supported learning pathway.
+            </p>
+            <div className="ed-actions">
+              <Link className="ed-btn" href="#programmes-courses">
+                Explore programmes <Search size={17} />
+              </Link>
+              <Link className="ed-text-link" href="#how-it-works">
+                How EduLage works
+              </Link>
             </div>
-            <div className="relative mx-auto w-full max-w-[430px] lg:justify-self-end">
-              <div className="hero-portrait relative aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/15 bg-navy-800">
-                <Image
-                  src="/media/hero-learner.jpg"
-                  alt="Learner studying online with an EduLage partner institution"
-                  fill
-                  priority
-                  sizes="(max-width:1023px) 90vw,430px"
-                  className="object-cover object-[center_20%]"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-900/10 via-transparent to-white/5" />
-              </div>
+            <div className="ed-hero-note">
+              <span className="ed-note-icon">
+                <Globe2 size={19} />
+              </span>
+              <span>
+                Your ambition.
+                <br />
+                <strong>A world of possibility.</strong>
+              </span>
+            </div>
+          </div>
+          <figure className="ed-hero-artwork">
+            <Image
+              src="/illustrations/hero-global-learners.webp"
+              alt="Illustrative collage of a confident learner holding a laptop, a multicultural study group and a university graduate"
+              width={1254}
+              height={1254}
+              preload
+              sizes="(max-width: 800px) 92vw, (max-width: 1400px) 45vw, 600px"
+            />
+            <figcaption>
+              <span className="ed-hero-artwork-icon" aria-hidden="true">
+                <BookOpen size={23} />
+              </span>
+              <span>
+                <span className="ed-hero-artwork-kicker">LEARNING OPENS DOORS</span>
+                <strong>Your next chapter starts with you.</strong>
+              </span>
+              <Globe2 className="ed-hero-artwork-globe" size={30} aria-hidden="true" />
+            </figcaption>
+          </figure>
+          <form
+            className="ed-search"
+            action="/programmes"
+            role="search"
+            aria-label="Find a programme"
+          >
+            <div className="ed-search-title">
+              <Compass size={26} />
+              <span>
+                FIND YOUR
+                <br />
+                <strong>next chapter</strong>
+              </span>
+            </div>
+            <label className="ed-search-query">
+              <span>What would you like to learn?</span>
+              <input
+                name="query"
+                placeholder="Try business, computing or an institution"
+                type="search"
+              />
+            </label>
+            <label>
+              <span>Study level</span>
+              <select name="level" defaultValue="">
+                <option value="">All study levels</option>
+                {pathways.map((p) => (
+                  <option key={p.level} value={p.level}>
+                    {p.title}
+                  </option>
+                ))}
+                <option value="Short courses">Short courses</option>
+              </select>
+            </label>
+            <button className="ed-btn" type="submit">
+              Find programmes <Search size={17} />
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <section className="ed-assurance" aria-label="The EduLage approach">
+        <div className="ed-wrap">
+          {[
+            [Landmark, "Institution-led education", "/institutions"],
+            [Monitor, "Flexible study options", "/study-types"],
+            [ShieldCheck, "Institution-issued credentials", "/verify"],
+            [MapPin, "Local learning support", "/open-education-centers"],
+          ].map(([Icon, label, href]) => {
+            const I = Icon as typeof Landmark;
+            return (
+              <Link href={href as string} key={label as string}>
+                <I size={22} />
+                <span>{label as string}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="ed-pathways-section" aria-labelledby="pathways-title">
+        <div className="ed-wrap ed-section">
+          <div className="ed-section-head">
+            <div>
+              <p className="ed-eyebrow">01 / MAKE YOUR NEXT MOVE</p>
+              <h2 id="pathways-title">
+                Different ambitions.
+                <br />
+                <em>Extraordinary possibilities.</em>
+              </h2>
+            </div>
+            <p>
+              Starting out, specialising or changing direction.
+              <br />
+              Find the path that feels right for you.
+            </p>
+          </div>
+          <div className="ed-pathways">
+            {pathways.map(({ icon: Icon, companion: Companion, ...p }, i) => (
               <Link
-                href="/verify/87ec13ac13c443dc844c124088d09121"
-                className="absolute -left-3 top-5 z-10 w-[178px] rounded-xl border border-white/70 bg-white p-4 text-navy-800 shadow-[0_18px_45px_rgba(5,18,53,0.24)] transition hover:-translate-y-0.5 sm:-left-7 sm:top-6 sm:w-[198px]"
-                aria-label="See a verified EduLage credential"
+                href={`/programmes?level=${p.level}`}
+                className={`ed-pathway ed-pathway-${p.colour}`}
+                key={p.level}
               >
-                <span className="flex items-center gap-2 text-xs font-bold">
-                  <ShieldCheck size={14} className="text-teal-600" />
-                  Credential verified
+                <div className="ed-pathway-art" aria-hidden="true">
+                  <span className="ed-art-disc" />
+                  <span className="ed-art-grid" />
+                  <span className="ed-art-main">
+                    <Icon size={66} strokeWidth={1.3} />
+                  </span>
+                  <span className="ed-art-companion">
+                    <Companion size={25} strokeWidth={1.4} />
+                  </span>
+                  <span className="ed-art-index">0{i + 1}</span>
+                </div>
+                <div className="ed-pathway-body">
+                  <p className="ed-small-label">{p.detail}</p>
+                  <h3>{p.title}</h3>
+                  <p>{p.text}</p>
+                  <span className="ed-pathway-link">
+                    {p.label}
+                    <span aria-hidden="true">+</span>
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="ed-short-path">
+            <span className="ed-short-icon">
+              <Sparkles size={25} />
+            </span>
+            <div>
+              <strong>Small steps. Meaningful progress.</strong>
+              <p>Explore focused courses for your next skill or interest.</p>
+            </div>
+            <Link
+              href="/programmes?level=Short+courses"
+              className="ed-text-link"
+            >
+              Discover short courses
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <nav className="ed-section-nav" aria-label="Explore this page">
+        <div className="ed-wrap">
+          <span>KEEP EXPLORING</span>
+          <a href="#programmes-courses">Programmes & courses</a>
+          <a href="#institutions-trainers">Institutions & trainers</a>
+          <a href="#centers-title">Local support</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="#learner-questions">Common questions</a>
+        </div>
+      </nav>
+      <div id="programmes-courses" className="ed-discovery-anchor">
+        <Suspense
+          fallback={
+            <div className="ed-discovery">
+              <p className="ed-wrap ed-section" role="status">
+                Loading programme discovery…
+              </p>
+            </div>
+          }
+        >
+          <ProgrammeExplorer courses={catalogue?.open_courses ?? []} />
+        </Suspense>
+      </div>
+      <InstitutionShowcase live={catalogue?.institutions ?? []} />
+
+      <section
+        className="ed-experience-section"
+        aria-labelledby="experience-title"
+      >
+        <div className="ed-wrap ed-section ed-experience">
+          <div className="ed-experience-art">
+            <Image
+              src="/illustrations/connected-learners.webp"
+              alt="Illustrative collage of an adult learner studying online and a diverse group collaborating, connected by a world map"
+              width={1254}
+              height={1254}
+              sizes="(max-width:800px) 100vw, 48vw"
+            />
+            <span className="ed-art-caption">
+              <Globe2 size={19} /> A WORLD OF LEARNING, CONNECTED.
+            </span>
+          </div>
+          <div className="ed-experience-copy">
+            <p className="ed-eyebrow">03 / THE EDULAGE EXPERIENCE</p>
+            <h2 id="experience-title">
+              Your education.
+              <br />
+              <em>A wider world.</em>
+            </h2>
+            <p className="ed-section-description">
+              Learning is personal. Opportunity should be global. Discover an
+              easier way to connect your ambition with the right education.
+            </p>
+            <div className="ed-principles">
+              {[
+                {
+                  icon: Landmark,
+                  href: "/institutions",
+                  title: "Learn with an institution",
+                  text: "Explore the provider behind your programme, teaching and qualification.",
+                },
+                {
+                  icon: Compass,
+                  href: "/study-types",
+                  title: "Find your own direction",
+                  text: "Choose qualifications, schedules and formats that fit your next step.",
+                },
+                {
+                  icon: Award,
+                  href: "/quality-and-trust",
+                  title: "Understand your qualification",
+                  text: "Know who awards it, what it means and how to check recognition.",
+                },
+              ].map(({ icon: Icon, ...p }) => (
+                <Link className="ed-principle" href={p.href} key={p.title}>
+                  <span>
+                    <Icon size={23} />
+                  </span>
+                  <div>
+                    <h3>{p.title}</h3>
+                    <p>{p.text}</p>
+                  </div>
+                  <span className="ed-principle-plus" aria-hidden="true">
+                    +
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="ed-center" aria-labelledby="centers-title">
+        <div className="ed-wrap ed-center-grid">
+          <div className="ed-center-content">
+            <p className="ed-eyebrow">04 / OPPORTUNITY, CLOSER TO HOME</p>
+            <h2 id="centers-title">
+              Global learning.
+              <br />
+              <em>Local connection.</em>
+            </h2>
+            <p>
+              Online learning, with a place to connect. Explore Global Open
+              Education Centers for study facilities, guidance and
+              institution-required assessments.
+            </p>
+            <div className="ed-center-services">
+              <div>
+                <Wifi size={24} />
+                <span>
+                  Connected
+                  <br />
+                  study spaces
                 </span>
-                <span className="mt-2 block text-xs text-ink-500">Issued by the institution</span>
-                <span className="mt-1 block text-xs font-bold tracking-[0.06em] text-navy-800">87EC13AC</span>
-                <span className="mt-3 inline-flex text-[11px] font-bold uppercase tracking-[0.06em] text-teal-700">
-                  Verified on EduLage
+              </div>
+              <div>
+                <MessageCircle size={24} />
+                <span>
+                  Local learner
+                  <br />
+                  guidance
                 </span>
+              </div>
+              <div>
+                <ShieldCheck size={24} />
+                <span>
+                  Assessment
+                  <br />
+                  support
+                </span>
+              </div>
+            </div>
+            <p className="ed-center-note">
+              Services, operational locations and examination approval must be
+              confirmed for your programme.
+            </p>
+            <div className="ed-actions">
+              <Link
+                href="/open-education-centers"
+                className="ed-btn ed-btn-light"
+              >
+                Explore GOE Centers
+              </Link>
+              <Link
+                href="/open-education-centers#operate"
+                className="ed-light-link"
+              >
+                Become a center partner
               </Link>
             </div>
           </div>
-          <div className="relative z-10 pb-8">
-            <div className="rounded-2xl border border-white/15 bg-white p-5 text-navy-800 shadow-2xl md:p-6">
-              <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-                <div>
-                  <p className="font-bold text-navy-800">Find your programme</p>
-                  <p className="mt-1 text-xs text-ink-600">
-                    Search by subject, qualification, institution or delivery
-                    format.
-                  </p>
-                </div>
-                <Link
-                  href="/programmes"
-                  className="group inline-flex items-center gap-1.5 text-xs font-semibold text-teal-700"
-                >
-                  Advanced search and filters{" "}
-                  <ArrowRight
-                    size={13}
-                    className="transition-transform group-hover:translate-x-0.5"
-                  />
-                </Link>
-              </div>
-              <form
-                action="/programmes"
-                className="grid gap-3 lg:grid-cols-[1.5fr_1fr_1fr_auto]"
-                role="search"
-              >
-                <label className="relative">
-                  <span className="sr-only">
-                    Programme, subject or institution
-                  </span>
-                  <Search
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-ink-400"
-                    size={18}
-                  />
-                  <input
-                    name="query"
-                    placeholder="Programme, subject or institution"
-                    className="h-12 w-full rounded-xl border border-line pl-11 pr-4 text-sm outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
-                  />
-                </label>
-                <label>
-                  <span className="sr-only">Study level</span>
-                  <select
-                    name="level"
-                    defaultValue=""
-                    className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
-                  >
-                    <option value="">All study levels</option>
-                    {studyLevels.map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <label>
-                  <span className="sr-only">Delivery mode</span>
-                  <select
-                    name="mode"
-                    defaultValue=""
-                    className="h-12 w-full rounded-xl border border-line bg-white px-4 text-sm text-navy-800 outline-none transition focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20"
-                  >
-                    <option value="">All delivery modes</option>
-                    <option>Fully online</option>
-                    <option>Online + GOE Center exams</option>
-                  </select>
-                </label>
-                <button className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-teal-600 px-7 text-sm font-bold text-white transition hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
-                  <Search size={17} />
-                  Search programmes
-                </button>
-              </form>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-
-      {/* Featured programmes and courses */}
-      <section className="bg-white py-20 md:py-24">
-        <Container>
-          <div className="flex flex-wrap items-end justify-between gap-5">
-            <div>
-              <p className="section-kicker">Featured</p>
-              <h2 className="section-title">Programmes and courses worth your attention</h2>
-              <p className="section-lead">
-                Strategic offerings from partner institutions — each showing the qualification, institution, fee and
-                how to join.
+          <div className="ed-center-photo">
+            <Image
+              src="/media/oec-lab.jpg"
+              alt="Learners using computers in a shared study space"
+              fill
+              sizes="(max-width:800px) 100vw, 50vw"
+            />
+            <div className="ed-center-photo-caption">
+              <span className="ed-center-pin">
+                <MapPin size={25} />
+              </span>
+              <p>
+                Connected spaces.
+                <br />
+                <strong>Real human support.</strong>
               </p>
             </div>
-            <Link href="/programmes" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
-              View all programmes <ArrowRight size={16} />
-            </Link>
+            <div className="ed-center-image-corner" aria-hidden="true">
+              <Wifi size={34} />
+            </div>
           </div>
-          <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {liveCourses.map((course) => (
-              <article
-                key={course.course_id}
-                className="group card-hover flex h-full flex-col overflow-hidden rounded-xl border border-line bg-white"
-              >
-                <div className="relative aspect-video overflow-visible bg-navy-800">
-                  <div className="absolute inset-0 overflow-hidden rounded-t-xl">
-                    {course.image && (
-                      <Image src={course.image} alt={course.title} fill sizes="(max-width:767px) 100vw, 25vw" className="image-zoom object-cover" unoptimized />
-                    )}
-                    <div className="image-scrim absolute inset-0" />
-                  </div>
-                  <span className="absolute left-3 top-3 rounded-full bg-navy-800/90 px-2.5 py-1 text-[11px] font-bold text-white shadow-sm">
-                    Open enrolment{course.enrolment_policy === "open_free" ? " · Free" : ""}
-                  </span>
-                  <div className="absolute right-3 top-3">
-                    <Pill image>{course.classification === "professional" ? "Professional Certificate" : "Certificate of completion"}</Pill>
-                  </div>
-                  <span className="absolute -bottom-5 left-4 flex h-11 w-14 items-center justify-center overflow-hidden rounded-md border-4 border-white bg-white p-1 text-xs font-bold text-navy-800 shadow-sm">
-                    {course.institution_logo ? (
-                      <Image src={course.institution_logo} alt={`${course.institution_name} logo`} width={48} height={36} className="size-full object-contain" unoptimized />
-                    ) : (
-                      course.institution
-                    )}
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col p-5 pt-8">
-                  <p className="text-xs font-semibold text-teal-600">{course.institution_name}</p>
-                  <h3 className="line-clamp-2 mt-2 min-h-12 text-[17px] font-semibold leading-6 text-navy-800 group-hover:text-teal-600">{course.title}</h3>
-                  <div className="mt-3 flex min-h-7 flex-wrap gap-1.5">
-                    <span className="rounded-full bg-teal-500/10 px-2.5 py-1 text-xs font-bold text-teal-700">Fully online</span>
-                    <span className="rounded-full bg-surface px-2.5 py-1 text-xs font-bold text-ink-600">Self-paced</span>
-                  </div>
-                  <p className="mt-3 text-xs text-ink-600">
-                    {course.start ? `Starts ${new Date(course.start).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}` : "Rolling enrolment"}
-                  </p>
-                  <div className="mt-auto flex items-end justify-between gap-3 border-t border-line pt-4">
-                    <div>
-                      <p className="text-xs text-ink-400">Course fee</p>
-                      <p className="mt-1 text-sm font-bold text-navy-800">{priceLabel(course)}</p>
-                    </div>
-                    <a href={enrolUrl(course)} className="inline-flex items-center gap-1 text-sm font-semibold text-teal-600">
-                      Enrol now <ArrowRight size={14} />
-                    </a>
-                  </div>
-                </div>
-              </article>
-            ))}
-            {featured.map((programme) => (
-              <ProgrammeCard
-                key={programme.id}
-                programme={programme}
-                discovery
-                enrolmentLabel={programme.level === "Professional" ? "Open enrolment" : "Admission required"}
-              />
-            ))}
-          </div>
-        </Container>
+        </div>
       </section>
 
-      <ProgrammeDiscoveryShowcase />
-
-      {/* Partner institutions */}
-      <section className="bg-white py-20 md:py-24">
-        <Container>
-          <div className="flex flex-wrap items-end justify-between gap-5">
+      <section id="how-it-works" className="ed-how" aria-labelledby="how-title">
+        <div className="ed-wrap ed-section">
+          <div className="ed-section-head">
             <div>
-              <p className="section-kicker">Our partners</p>
-              <h2 className="section-title">Institutions teaching on EduLage</h2>
-              <p className="section-lead">
-                Universities and training providers that publish programmes, admit learners and award credentials on
-                their own EduLage campus.
-              </p>
+              <p className="ed-eyebrow">05 / A CLEAR WAY FORWARD</p>
+              <h2 id="how-title">
+                Big ambitions.
+                <br />
+                <em>Simple next steps.</em>
+              </h2>
             </div>
-            <Link href="/institutions" className="arrow-slide inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
-              All institutions <ArrowRight size={16} />
-            </Link>
+            <p>
+              You don’t need every answer to begin.
+              <br />
+              Start exploring. We’ll help you find your way.
+            </p>
           </div>
-          <ul className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {partnerLogos.map((institution) => (
-              <li key={institution.key}>
-                <Link
-                  href={institution.href}
-                  title={institution.name}
-                  className="group flex h-24 items-center justify-center rounded-xl border border-line bg-white p-4 transition hover:border-teal-500 hover:shadow-md"
-                >
-                  {institution.logo ? (
-                    <Image
-                      src={institution.logo}
-                      alt={`${institution.name} logo`}
-                      width={140}
-                      height={56}
-                      className="max-h-14 w-auto object-contain grayscale opacity-70 transition group-hover:grayscale-0 group-hover:opacity-100"
-                      unoptimized={institution.logo.startsWith("http")}
-                    />
-                  ) : (
-                    <span className="grid size-12 place-items-center rounded-lg bg-navy-800 text-sm font-bold tracking-wide text-white">{institution.mark}</span>
-                  )}
+          <ol className="ed-steps">
+            {steps.map(({ icon: Icon, ...s }, i) => (
+              <li key={s.title}>
+                <div className="ed-step-visual">
+                  <span className="ed-step-number">0{i + 1}</span>
+                  <Icon size={32} strokeWidth={1.5} />
+                </div>
+                <h3>{s.title}</h3>
+                <p>{s.text}</p>
+                <Link className="ed-step-link" href={s.href}>
+                  {s.label}
                 </Link>
               </li>
             ))}
-          </ul>
-        </Container>
+          </ol>
+        </div>
       </section>
 
-      {/* How it works + trust */}
-      <section className="bg-surface py-20 md:py-24" aria-labelledby="how-edulage-works">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start lg:gap-16">
-            <div>
-              <p className="section-kicker">How it works</p>
-              <h2 id="how-edulage-works" className="section-title">
-                Four steps from discovery to a verified credential
-              </h2>
-              <p className="section-lead">
-                Create a free account, join a course or apply for admission, learn with the institution&rsquo;s own
-                teaching team, and receive a credential anyone can verify.
-              </p>
-              <div className="mt-8 grid gap-3">
-                {trust.map(([Icon, title, text]) => (
-                  <div key={title} className="flex gap-4 rounded-2xl border border-line bg-white p-5">
-                    <Icon className="shrink-0 text-teal-600" size={22} />
-                    <div>
-                      <h3 className="font-bold text-navy-800">{title}</h3>
-                      <p className="mt-1 text-sm leading-6 text-ink-600">{text}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <ol
-              className="relative grid gap-3 before:absolute before:bottom-8 before:left-[1.55rem] before:top-8 before:w-px before:bg-gradient-to-b before:from-teal-500 before:via-teal-500/60 before:to-line"
-              aria-label="The EduLage learner journey"
-            >
-              {journey.map(([Icon, title, text], index) => (
-                <li key={title} className="relative flex gap-4 rounded-2xl border border-line bg-white p-5 transition hover:border-teal-500 hover:shadow-lg">
-                  <span className="relative z-10 grid size-12 shrink-0 place-items-center rounded-full border-4 border-white bg-navy-800 text-white shadow-sm">
-                    <Icon size={19} />
-                  </span>
-                  <div className="pt-0.5">
-                    <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Step {index + 1}</p>
-                    <h3 className="mt-1 text-lg font-bold text-navy-800">{title}</h3>
-                    <p className="mt-2 text-sm leading-6 text-ink-600">{text}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
+      <section className="ed-partners-section" aria-labelledby="partner-title">
+        <div className="ed-wrap ed-partners">
+          <div className="ed-partner-graphic" aria-hidden="true">
+            <Landmark size={62} strokeWidth={1.1} />
+            <span />
+            <Globe2 size={44} strokeWidth={1.1} />
           </div>
-        </Container>
-      </section>
-
-      {/* OEC */}
-      <section className="overflow-hidden bg-white py-20 md:py-24">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="section-kicker">Global Open Education Centers (GOE Centers)</p>
-              <h2 className="section-title">Local support for your online studies</h2>
-              <p className="section-lead">
-                Accredited centres near you provide connectivity, study space, learner support and secure venues for
-                institution-required exams.
-              </p>
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                {[
-                  "Connected devices and reliable internet",
-                  "Suitable spaces for focused learning",
-                  "Trained local learner support",
-                  "Secure computer-based assessment",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-3 text-sm font-semibold text-navy-800">
-                    <CheckCircle2 size={17} className="shrink-0 text-teal-600" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button href="/open-education-centers">Find a GOE Center</Button>
-                <Button href="/open-education-centers#operate" variant="secondary">
-                  Operate a GOE Center
-                </Button>
-              </div>
-            </div>
-            <div className="relative min-h-[320px] overflow-hidden rounded-[2rem] shadow-xl sm:min-h-[420px]">
-              <Image
-                src="/media/oec-lab.jpg"
-                alt="Learners working at computers in a GOE Center"
-                fill
-                sizes="(max-width:1023px) 100vw, 50vw"
-                className="object-cover"
-              />
-              <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-xs font-bold text-navy-800 shadow-md">
-                <MapPin size={14} className="text-teal-600" />
-                {centers.length} centres · {centerCountries} countries
-              </div>
-            </div>
+          <div className="ed-partner-copy">
+            <p className="ed-eyebrow">BUILD POSSIBILITY TOGETHER</p>
+            <h2 id="partner-title">
+              Your expertise.
+              <br />
+              <em>A greater reach.</em>
+            </h2>
+            <p>
+              Bring your institution, training organisation or partnership into
+              a wider world of learning.
+            </p>
           </div>
-        </Container>
-      </section>
-
-      {/* Institutions & partners */}
-      <section className="bg-surface py-20 md:py-24">
-        <Container>
-          <div className="grid gap-5 lg:grid-cols-3">
-            <div className="lg:col-span-3">
-              <p className="section-kicker">For institutions and partners</p>
-              <h2 className="section-title">Bring your programmes to a global audience</h2>
-            </div>
-            <div className="relative overflow-hidden rounded-2xl bg-navy-900 p-7 text-white lg:col-span-2">
-              <div className="relative z-10 max-w-xl">
-                <Landmark className="text-teal-400" size={27} />
-                <h3 className="mt-5 text-2xl font-bold text-white">Tertiary institutions &amp; training providers</h3>
-                <p className="mt-3 leading-7 text-white/70">
-                  Register, get approved and your branded campus is live the same day — publish courses, set fees or
-                  admission rules, issue your own credentials.
-                </p>
-                <div className="mt-7 flex flex-wrap gap-3">
-                  <Button href="/for-institutions#register" variant="teal">
-                    Register your institution
-                  </Button>
-                  <Link href="/for-institutions" className="inline-flex items-center gap-2 px-2 py-2.5 text-sm font-semibold text-teal-400">
-                    How it works for institutions <ArrowRight size={15} />
-                  </Link>
-                </div>
+          <div className="ed-partner-options">
+            <Link href="/for-institutions">
+              <Landmark size={25} />
+              <div>
+                <h3>Institutions & training providers</h3>
+                <p>Explore becoming a learning partner</p>
               </div>
-              <div className="hero-grid absolute inset-0 opacity-15" />
-            </div>
-            <div className="rounded-2xl border border-line bg-white p-7">
-              <Building2 className="text-teal-600" size={27} />
-              <h3 className="mt-5 text-xl font-bold text-navy-800">Governments &amp; development partners</h3>
-              <p className="mt-3 text-sm leading-6 text-ink-600">
-                Strengthen institutional readiness, build GOE Center networks and coordinate national participation
-                through the GOE Initiative.
-              </p>
-              <Link href="/goe" className="mt-7 inline-flex items-center gap-2 text-sm font-semibold text-teal-600">
-                About the GOE Initiative <ArrowRight size={15} />
+              <span aria-hidden="true">+</span>
+            </Link>
+            <Link href="/goe">
+              <Globe2 size={25} />
+              <div>
+                <h3>Governments & development partners</h3>
+                <p>Discover the Global Open Education Initiative</p>
+              </div>
+              <span aria-hidden="true">+</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+      <LearnerFaq />
+      <section className="ed-final">
+        <div className="ed-wrap ed-final-grid">
+          <div>
+            <p className="ed-eyebrow">THE NEXT CHAPTER IS YOURS</p>
+            <h2>
+              Make room for
+              <br />
+              <em>what’s possible.</em>
+            </h2>
+            <p>One new skill. A different direction. A bigger ambition.</p>
+            <div className="ed-actions">
+              <Link href="/programmes" className="ed-btn">
+                Explore programmes
               </Link>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Final CTA */}
-      <section className="bg-surface pb-20">
-        <Container>
-          <div className="grid gap-6 rounded-[2rem] bg-navy-800 p-8 text-white md:grid-cols-[1fr_auto] md:items-center md:p-12">
-            <div>
-              <p className="section-kicker text-teal-400">Get started</p>
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold text-white md:text-4xl">Start learning today</h2>
-              <p className="mt-4 max-w-2xl text-white/70">
-                Create your free account, choose a programme or course, and manage everything from one My learning
-                dashboard.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3 md:justify-end">
-              <Button href={learnLinks.register} variant="teal">
+              <a href={learnLinks.register} className="ed-outline-btn">
                 Create free account
-              </Button>
-              <Button href="/programmes" variant="ghost">
-                Browse programmes
-              </Button>
+              </a>
             </div>
           </div>
-        </Container>
+          <div className="ed-final-art" aria-hidden="true">
+            <div className="ed-final-arch" />
+            <div className="ed-final-orbit" />
+            <GraduationCap size={130} strokeWidth={0.9} />
+            <span>
+              YOUR WORLD
+              <br />
+              OF POSSIBILITY.
+            </span>
+            <Sparkles className="ed-final-star" size={42} />
+          </div>
+        </div>
       </section>
-    </main>
+    </div>
   );
 }

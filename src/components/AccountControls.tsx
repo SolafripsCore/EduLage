@@ -16,6 +16,7 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
   const session = useLearnerSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -25,7 +26,10 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
       }
     };
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        triggerRef.current?.focus();
+      }
     };
     document.addEventListener("pointerdown", close);
     document.addEventListener("keydown", onKey);
@@ -89,7 +93,7 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
       <div ref={ref} className="relative">
         <button
           type="button"
-          aria-haspopup="menu"
+          ref={triggerRef}
           aria-expanded={menuOpen}
           aria-controls="account-menu"
           onClick={() => setMenuOpen((value) => !value)}
@@ -110,13 +114,13 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
         {menuOpen && (
           <div
             id="account-menu"
-            role="menu"
+            role="navigation"
+            aria-label="Your account"
             className="absolute right-0 top-full z-50 mt-3 w-56 rounded-xl border border-line bg-white p-2 shadow-xl"
           >
             {[...learnerItems, ...staffItems].map(([label, href]) => (
               <a
                 key={label}
-                role="menuitem"
                 href={href}
                 className="block rounded-lg px-3 py-2.5 text-sm text-ink-600 hover:bg-surface hover:text-navy-800 focus-visible:bg-surface focus-visible:text-navy-800 focus-visible:outline-none"
               >
@@ -125,7 +129,6 @@ export function AccountControls({ mobile = false }: { mobile?: boolean }) {
             ))}
             <div className="mt-2 border-t border-line pt-2">
               <a
-                role="menuitem"
                 href={learnLinks.signOut}
                 className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-navy-800 hover:bg-surface focus-visible:bg-surface focus-visible:outline-none"
               >
