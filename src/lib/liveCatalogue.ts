@@ -32,7 +32,7 @@ export type Catalogue = {
 /** Live institutions and open-enrolment courses from the LMS; null when it cannot be reached. */
 export async function getCatalogue(): Promise<Catalogue | null> {
   try {
-    const res = await fetch(`${learnUrl}/edulage/api/v1/catalogue/`, { next: { revalidate: 300 } });
+    const res = await fetch(`${learnUrl}/edulage/api/v1/catalogue/`, { next: { revalidate: 300 }, signal: AbortSignal.timeout(8000) });
     if (!res.ok) return null;
     return (await res.json()) as Catalogue;
   } catch {

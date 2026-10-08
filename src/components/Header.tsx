@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { AccountControls } from "./AccountControls";
@@ -19,18 +20,19 @@ const catalogueLinks = [
 
 const utilityLinks = [
   ["GOE Centers", "/open-education-centers"],
-  ["Global Network", "/institutions"],
+  ["Quality & trust", "/quality-and-trust"],
   ["Help & Support", "/help"],
   ["Verify a credential", "/verify"],
 ];
 
 const studyTypeLinks = [
   ["Bachelor's degrees", "/programmes?level=Undergraduate"],
-  ["Master's degrees", "/programmes?level=Postgraduate"],
+  ["Postgraduate study", "/programmes?level=Postgraduate"],
   ["Doctoral / PhD", "/programmes?level=Doctoral"],
   ["Professional diplomas & certificates", "/programmes?level=Professional"],
+  ["Short courses", "/programmes?level=Short+courses"],
   ["Fully online", "/programmes?mode=Fully+online"],
-  ["Online + OEC exams", "/programmes?mode=Online+%2B+OEC+exams"],
+  ["Online + GOE Center exams", "/programmes?mode=Online+%2B+OEC+exams"],
 ];
 
 export function Header() {
@@ -38,10 +40,29 @@ export function Header() {
   const [studyOpen, setStudyOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+  const mobileRef = useRef<HTMLDialogElement>(null);
+  const studyTriggerRef = useRef<HTMLButtonElement>(null);
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
+  const isActive = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
+  const closePanels = () => {
+    setOpen(false);
+    setStudyOpen(false);
+    setSearchOpen(false);
+  };
+
+  useEffect(() => {
+    const dialog = mobileRef.current;
+    if (open && !dialog?.open) dialog?.showModal();
+    else if (!open && dialog?.open) dialog.close();
+  }, [open]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        if (studyOpen) studyTriggerRef.current?.focus();
+        else if (searchOpen) searchTriggerRef.current?.focus();
         setStudyOpen(false);
         setSearchOpen(false);
         setOpen(false);
@@ -62,7 +83,7 @@ export function Header() {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("pointerdown", handlePointerDown);
     };
-  }, []);
+  }, [studyOpen, searchOpen]);
 
   useEffect(() => {
     if (!open) return;
@@ -81,7 +102,7 @@ export function Header() {
 
   return (
     <>
-      <div className="hidden h-9 bg-navy-900 text-xs text-white/70 lg:block">
+      <div role="region" aria-label="Site utility" className="hidden h-9 bg-[#102f36] text-xs text-white/80 lg:block">
         <div className="container-page flex h-full items-center justify-between">
           <span>The Global Education Village</span>
           <div className="flex items-center divide-x divide-white/20">
@@ -101,9 +122,9 @@ export function Header() {
       </div>
       <header
         ref={headerRef}
-        className="sticky top-0 z-40 border-b border-line bg-white/95 backdrop-blur-md"
+        className="sticky top-0 z-40 border-b border-[#e0e7e2] bg-white/95 backdrop-blur-md"
       >
-        <div className="container-page flex h-[72px] items-center justify-between gap-5">
+        <div className="container-page flex h-[82px] items-center justify-between gap-5">
           <Link href="/" aria-label="EduLage home" className="shrink-0">
             <Image
               src="/brand/edulage-logo.png"
@@ -122,17 +143,19 @@ export function Header() {
               <Link
                 key={href}
                 href={href}
-                className="rounded-sm text-sm font-medium text-ink-600 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
+                aria-current={isActive(href) ? "page" : undefined}
+                onClick={closePanels}
+                className="ed-nav-link rounded-sm text-sm font-medium text-ink-600 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
               >
                 {label}
               </Link>
             ))}
             <div className="relative">
               <button
+                ref={studyTriggerRef}
                 type="button"
                 className="flex items-center gap-1 rounded-sm text-sm font-medium text-ink-600 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
                 aria-expanded={studyOpen}
-                aria-haspopup="menu"
                 aria-controls="study-types-menu"
                 onClick={() => {
                   setStudyOpen((value) => !value);
@@ -148,12 +171,10 @@ export function Header() {
               {studyOpen && (
                 <div
                   id="study-types-menu"
-                  role="menu"
                   className="absolute left-1/2 top-full z-50 mt-4 w-72 -translate-x-1/2 rounded-xl border border-line bg-white p-2 shadow-xl"
                 >
                   {studyTypeLinks.map(([label, href]) => (
                     <Link
-                      role="menuitem"
                       key={href}
                       href={href}
                       onClick={() => setStudyOpen(false)}
@@ -164,12 +185,11 @@ export function Header() {
                   ))}
                   <div className="mt-2 border-t border-line pt-2">
                     <Link
-                      role="menuitem"
                       href="/study-types"
                       onClick={() => setStudyOpen(false)}
                       className="block rounded-lg px-3 py-2.5 text-sm font-semibold text-teal-600 hover:bg-teal-500/10 focus-visible:bg-teal-500/10 focus-visible:outline-none"
                     >
-                      Compare all study types <span aria-hidden>→</span>
+                      Compare all study types
                     </Link>
                   </div>
                 </div>
@@ -179,7 +199,9 @@ export function Header() {
               <Link
                 key={href}
                 href={href}
-                className="rounded-sm text-sm font-medium text-ink-600 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
+                aria-current={isActive(href) ? "page" : undefined}
+                onClick={closePanels}
+                className="ed-nav-link rounded-sm text-sm font-medium text-ink-600 hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
               >
                 {label}
               </Link>
@@ -187,22 +209,28 @@ export function Header() {
           </nav>
           <div className="hidden items-center gap-2 lg:flex">
             <button
+              ref={searchTriggerRef}
               type="button"
               aria-label="Search programmes"
               aria-expanded={searchOpen}
               aria-controls="header-search-panel"
               onClick={showSearch}
-              className="rounded-md p-2 text-ink-600 hover:bg-surface hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
+              className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-ink-600 hover:bg-surface hover:text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
             >
               <Search size={19} />
             </button>
             <AccountControls />
           </div>
           <button
-            className="rounded-md p-2 text-navy-800 lg:hidden"
+            className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-navy-800 lg:hidden"
             aria-label="Open navigation"
             aria-expanded={open}
-            onClick={() => setOpen(true)}
+            aria-controls="mobile-navigation"
+            onClick={() => {
+              setStudyOpen(false);
+              setSearchOpen(false);
+              setOpen(true);
+            }}
           >
             <Menu size={24} />
           </button>
@@ -229,8 +257,14 @@ export function Header() {
             </div>
           </div>
         )}
-        {open && (
-          <div className="fixed inset-0 z-50 min-h-dvh overflow-y-auto bg-white p-5 sm:p-6 lg:hidden">
+        <dialog
+          ref={mobileRef}
+          id="mobile-navigation"
+          aria-label="Navigation"
+          onClose={() => setOpen(false)}
+          className="ed-mobile-dialog"
+        >
+          <div className="p-5 sm:p-6">
             <div className="flex items-center justify-between">
               <Link href="/" onClick={() => setOpen(false)}>
                 <Image
@@ -244,7 +278,7 @@ export function Header() {
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close navigation"
-                className="rounded-md p-2 text-navy-800"
+                className="flex min-h-11 min-w-11 items-center justify-center rounded-md p-2 text-navy-800"
               >
                 <X size={25} />
               </button>
@@ -257,6 +291,7 @@ export function Header() {
                 <Link
                   key={`${label}-${href}`}
                   href={href}
+                  aria-current={isActive(href) ? "page" : undefined}
                   onClick={() => setOpen(false)}
                   className="border-b border-line pb-3 text-lg font-semibold text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
                 >
@@ -266,10 +301,11 @@ export function Header() {
               <p className="pt-2 text-xs font-bold uppercase tracking-[0.16em] text-teal-600">
                 Study options
               </p>
-              {studyTypeLinks.slice(0, 4).map(([label, href]) => (
+              {studyTypeLinks.map(([label, href]) => (
                 <Link
                   key={href}
                   href={href}
+                  aria-current={isActive(href) ? "page" : undefined}
                   onClick={() => setOpen(false)}
                   className="-mt-1 border-b border-line pb-3 text-base font-semibold text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
                 >
@@ -283,6 +319,7 @@ export function Header() {
                 <Link
                   key={`${label}-${href}`}
                   href={href}
+                  aria-current={isActive(href) ? "page" : undefined}
                   onClick={() => setOpen(false)}
                   className="-mt-1 border-b border-line pb-3 text-base font-semibold text-navy-800 focus-visible:ring-2 focus-visible:ring-teal-500"
                 >
@@ -301,7 +338,7 @@ export function Header() {
               <AccountControls mobile />
             </div>
           </div>
-        )}
+        </dialog>
       </header>
     </>
   );
